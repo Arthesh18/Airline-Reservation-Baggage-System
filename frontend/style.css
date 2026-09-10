@@ -2111,3 +2111,454 @@ nav {
 .sidebar-footer {
     flex-shrink: 0;
 }
+/* =========================================================
+   EER / RELATIONSHIPS
+========================================================= */
+
+.eer-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.eer-stat-card {
+    background: #ffffff;
+    border: 1px solid #e4e9f2;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 8px rgba(20, 35, 70, 0.03);
+}
+
+.eer-stat-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #eef4ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.eer-stat-card span {
+    display: block;
+    color: #71809a;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.eer-stat-card strong {
+    display: block;
+    color: #172033;
+    font-size: 22px;
+}
+
+
+/* Diagram Panel */
+
+.eer-panel {
+    padding: 0;
+    overflow: hidden;
+}
+
+.eer-panel-header {
+    padding: 24px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #e7ebf2;
+}
+
+.eer-panel-header h3 {
+    margin: 0 0 5px;
+    color: #172033;
+    font-size: 18px;
+}
+
+.eer-panel-header p {
+    margin: 0;
+    color: #71809a;
+    font-size: 13px;
+}
+
+
+/* Legend */
+
+.eer-legend {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 26px;
+    border-bottom: 1px solid #edf0f5;
+    background: #fafbfd;
+    flex-wrap: wrap;
+}
+
+.eer-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #61708a;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.eer-legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.eer-legend-dot.pk {
+    background: #2563eb;
+}
+
+.eer-legend-dot.fk {
+    background: #8b5cf6;
+}
+
+.eer-legend-line {
+    width: 22px;
+    height: 2px;
+    background: #94a3b8;
+    display: inline-block;
+}
+
+.eer-legend-composite {
+    width: 10px;
+    height: 10px;
+    border: 2px solid #f59e0b;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+
+/* Diagram */
+
+.eer-diagram {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(190px, 1fr));
+    gap: 20px;
+    align-items: start;
+    background:
+        radial-gradient(
+            circle at 1px 1px,
+            #dfe5ef 1px,
+            transparent 1px
+        );
+    background-size: 22px 22px;
+}
+
+
+/* Table Cards */
+
+.eer-table {
+    background: #ffffff;
+    border: 1px solid #dfe5ec;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+    box-shadow: 0 3px 10px rgba(20, 35, 70, 0.05);
+}
+
+.eer-table:hover {
+    transform: translateY(-3px);
+    border-color: #9bb8ef;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.10);
+}
+
+.eer-table-header {
+    background: #172554;
+    color: #ffffff;
+    padding: 13px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.eer-field {
+    min-height: 34px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #edf0f5;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #52627b;
+    font-size: 12px;
+}
+
+.eer-field:last-child {
+    border-bottom: none;
+}
+
+.eer-field.pk-field {
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+.eer-field.fk-field {
+    color: #7c3aed;
+    font-weight: 600;
+}
+
+.key-icon {
+    font-size: 8px;
+    font-weight: 800;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef4ff;
+    color: #2563eb;
+}
+
+.fk-field .key-icon {
+    background: #f3eefe;
+    color: #7c3aed;
+}
+
+.fk-mini {
+    margin-left: auto;
+    font-size: 8px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: #f3eefe;
+    color: #7c3aed;
+    font-weight: 800;
+}
+
+
+/* Selected / Related */
+
+.eer-table.eer-selected {
+    border-color: #2563eb;
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.15),
+        0 12px 25px rgba(37, 99, 235, 0.13);
+    transform: translateY(-4px);
+}
+
+.eer-table.eer-related {
+    border-color: #8b5cf6;
+    box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.10),
+        0 7px 18px rgba(139, 92, 246, 0.08);
+}
+
+.eer-diagram:has(.eer-selected) .eer-table:not(.eer-selected):not(.eer-related) {
+    opacity: 0.48;
+}
+
+
+/* Relationship Information */
+
+.eer-relationship-info {
+    grid-column: span 4;
+    background: #ffffff;
+    border: 1px solid #dfe5ec;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(20, 35, 70, 0.04);
+}
+
+.eer-info-header {
+    padding: 15px 18px;
+    border-bottom: 1px solid #e7ebf2;
+    background: #f8fafc;
+    color: #172033;
+    font-weight: 800;
+    font-size: 13px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.eer-relationship-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.eer-relationship {
+    padding: 16px 18px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.eer-relationship:nth-child(odd) {
+    border-right: 1px solid #edf0f5;
+}
+
+.eer-relationship strong {
+    color: #172033;
+    font-size: 12px;
+}
+
+.eer-relationship > span {
+    float: right;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: #eef4ff;
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.eer-relationship p {
+    margin: 7px 0 0;
+    color: #71809a;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* Mapping */
+
+.eer-mapping-panel {
+    margin-top: 22px;
+    padding: 0;
+}
+
+.mapping-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+
+.mapping-card {
+    padding: 24px;
+    border-right: 1px solid #e7ebf2;
+}
+
+.mapping-card:last-child {
+    border-right: none;
+}
+
+.mapping-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #eef4ff;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 13px;
+}
+
+.mapping-card h4 {
+    margin: 0 0 8px;
+    color: #172033;
+    font-size: 14px;
+}
+
+.mapping-card p {
+    margin: 0;
+    color: #71809a;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+
+    .eer-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .eer-diagram {
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+    }
+
+    .eer-relationship-info {
+        grid-column: span 3;
+    }
+
+    .mapping-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mapping-card:nth-child(2) {
+        border-right: none;
+    }
+
+    .mapping-card:nth-child(-n + 2) {
+        border-bottom: 1px solid #e7ebf2;
+    }
+}
+
+
+@media (max-width: 750px) {
+
+    .eer-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .eer-diagram {
+        grid-template-columns: repeat(2, minmax(170px, 1fr));
+        padding: 20px;
+    }
+
+    .eer-relationship-info {
+        grid-column: span 2;
+    }
+
+    .eer-relationship-list {
+        grid-template-columns: 1fr;
+    }
+
+    .eer-relationship:nth-child(odd) {
+        border-right: none;
+    }
+
+    .mapping-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mapping-card {
+        border-right: none;
+        border-bottom: 1px solid #e7ebf2;
+    }
+
+    .mapping-card:last-child {
+        border-bottom: none;
+    }
+
+    .eer-panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .eer-diagram {
+        grid-template-columns: 1fr;
+    }
+
+    .eer-relationship-info {
+        grid-column: span 1;
+    }
+}

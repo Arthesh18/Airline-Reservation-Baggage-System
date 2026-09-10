@@ -8529,6 +8529,120 @@ async function deletePassengerPhone(
         );
     }
 }
+/* =========================================================
+   EER / RELATIONSHIPS
+========================================================= */
+
+function selectEERTable(tableName) {
+
+    const tables =
+        document.querySelectorAll(".eer-table");
+
+    tables.forEach(table => {
+        table.classList.remove("eer-selected");
+        table.classList.remove("eer-related");
+    });
+
+
+    const selected =
+        document.querySelector(
+            `.eer-table[data-table="${tableName}"]`
+        );
+
+    if (!selected) {
+        return;
+    }
+
+
+    selected.classList.add("eer-selected");
+
+
+    const relationships = {
+
+        AIRLINES: ["FLIGHT"],
+
+        FLIGHT: ["AIRLINES"],
+
+        PASSENGER: [
+            "RESERVATION",
+            "PASSENGER_PHONE"
+        ],
+
+        RESERVATION: [
+            "PASSENGER",
+            "AIRPORT",
+            "TICKET",
+            "PAYMENT",
+            "TICKET_BAGGAGE"
+        ],
+
+        AIRPORT: ["RESERVATION"],
+
+        TICKET: [
+            "RESERVATION",
+            "PAYMENT",
+            "TICKET_BAGGAGE"
+        ],
+
+        PAYMENT: [
+            "RESERVATION",
+            "TICKET"
+        ],
+
+        BAGGAGE: [
+            "BAGGAGE_TRACKING",
+            "TICKET_BAGGAGE"
+        ],
+
+        BAGGAGE_TRACKING: [
+            "BAGGAGE"
+        ],
+
+        TICKET_BAGGAGE: [
+            "TICKET",
+            "BAGGAGE",
+            "RESERVATION"
+        ],
+
+        PASSENGER_PHONE: [
+            "PASSENGER"
+        ],
+
+        EMPLOYEE: []
+    };
+
+
+    const relatedTables =
+        relationships[tableName] || [];
+
+
+    relatedTables.forEach(relatedName => {
+
+        const related =
+            document.querySelector(
+                `.eer-table[data-table="${relatedName}"]`
+            );
+
+        if (related) {
+            related.classList.add("eer-related");
+        }
+
+    });
+}
+
+
+function resetEERDiagram() {
+
+    document
+        .querySelectorAll(".eer-table")
+        .forEach(table => {
+
+            table.classList.remove("eer-selected");
+            table.classList.remove("eer-related");
+
+        });
+
+}
 /* =========================
    INITIAL LOAD
 ========================= */

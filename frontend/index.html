@@ -2549,18 +2549,638 @@
     </div>
 
 </div>
-            <section id="relationships" class="content-section">
-                <div class="section-header">
-                    <div>
-                        <h2>EER / Relationships</h2>
-                        <p>Explore the database structure</p>
-                    </div>
+           <!-- =====================================================
+     EER / RELATIONSHIPS
+===================================================== -->
+
+<section id="relationships" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>EER / Relationships</h2>
+            <p>Explore the database structure and table relationships</p>
+        </div>
+    </div>
+
+
+    <!-- Schema Statistics -->
+
+    <div class="eer-stats">
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">▦</div>
+            <div>
+                <span>Tables</span>
+                <strong>12</strong>
+            </div>
+        </div>
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">🔗</div>
+            <div>
+                <span>Relationships</span>
+                <strong>11</strong>
+            </div>
+        </div>
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">🔑</div>
+            <div>
+                <span>Composite Keys</span>
+                <strong>4</strong>
+            </div>
+        </div>
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">↔</div>
+            <div>
+                <span>Foreign Keys</span>
+                <strong>11</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Diagram -->
+
+    <div class="panel eer-panel">
+
+        <div class="eer-panel-header">
+
+            <div>
+                <h3>Entity Relationship Diagram</h3>
+                <p>
+                    Click a table to highlight its connected relationships.
+                </p>
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="resetEERDiagram()">
+                ↺ Reset View
+            </button>
+
+        </div>
+
+
+        <div class="eer-legend">
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-dot pk"></span>
+                Primary Key
+            </div>
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-dot fk"></span>
+                Foreign Key
+            </div>
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-line"></span>
+                Relationship
+            </div>
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-composite"></span>
+                Composite Key
+            </div>
+
+        </div>
+
+
+        <div id="eer-diagram" class="eer-diagram">
+
+
+            <!-- AIRLINES -->
+
+            <div
+                class="eer-table"
+                data-table="AIRLINES"
+                onclick="selectEERTable('AIRLINES')">
+
+                <div class="eer-table-header">
+                    <span>✈</span>
+                    AIRLINES
                 </div>
 
-                <div class="panel">
-                    Interactive EER diagram coming next.
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    AirlineID
                 </div>
-            </section>
+
+                <div class="eer-field">
+                    AirlineName
+                </div>
+
+                <div class="eer-field">
+                    IATA_Code
+                </div>
+
+            </div>
+
+
+            <!-- AIRPORT -->
+
+            <div
+                class="eer-table"
+                data-table="AIRPORT"
+                onclick="selectEERTable('AIRPORT')">
+
+                <div class="eer-table-header">
+                    <span>⌖</span>
+                    AIRPORT
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    AirportID
+                </div>
+
+                <div class="eer-field">
+                    AirportName
+                </div>
+
+                <div class="eer-field">
+                    City
+                </div>
+
+                <div class="eer-field">
+                    Country
+                </div>
+
+            </div>
+
+
+            <!-- PASSENGER -->
+
+            <div
+                class="eer-table"
+                data-table="PASSENGER"
+                onclick="selectEERTable('PASSENGER')">
+
+                <div class="eer-table-header">
+                    <span>♟</span>
+                    PASSENGER
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    PassengerID
+                </div>
+
+                <div class="eer-field">
+                    Name
+                </div>
+
+                <div class="eer-field">
+                    Email
+                </div>
+
+                <div class="eer-field">
+                    DOB
+                </div>
+
+                <div class="eer-field">
+                    Street
+                </div>
+
+                <div class="eer-field">
+                    City
+                </div>
+
+                <div class="eer-field">
+                    PIN
+                </div>
+
+            </div>
+
+
+            <!-- EMPLOYEE -->
+
+            <div
+                class="eer-table"
+                data-table="EMPLOYEE"
+                onclick="selectEERTable('EMPLOYEE')">
+
+                <div class="eer-table-header">
+                    <span>♙</span>
+                    EMPLOYEE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    EmployeeID
+                </div>
+
+                <div class="eer-field">
+                    Name
+                </div>
+
+                <div class="eer-field">
+                    Designation
+                </div>
+
+                <div class="eer-field">
+                    Phone
+                </div>
+
+            </div>
+
+
+            <!-- FLIGHT -->
+
+            <div
+                class="eer-table"
+                data-table="FLIGHT"
+                onclick="selectEERTable('FLIGHT')">
+
+                <div class="eer-table-header">
+                    <span>➤</span>
+                    FLIGHT
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    FlightID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    AirlineID
+                </div>
+
+                <div class="eer-field">
+                    DepartureTime
+                </div>
+
+            </div>
+
+
+            <!-- RESERVATION -->
+
+            <div
+                class="eer-table"
+                data-table="RESERVATION"
+                onclick="selectEERTable('RESERVATION')">
+
+                <div class="eer-table-header">
+                    <span>▣</span>
+                    RESERVATION
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    ReservationID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    PassengerID
+                </div>
+
+                <div class="eer-field">
+                    BookingStatus
+                </div>
+
+                <div class="eer-field">
+                    Class
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    DepartureAirportID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    ArrivalAirportID
+                </div>
+
+            </div>
+
+
+            <!-- TICKET -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="TICKET"
+                onclick="selectEERTable('TICKET')">
+
+                <div class="eer-table-header">
+                    <span>🎫</span>
+                    TICKET
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    ReservationID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    TicketNo
+                </div>
+
+                <div class="eer-field">
+                    SeatNo
+                </div>
+
+                <div class="eer-field">
+                    Fare
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div
+                class="eer-table"
+                data-table="PAYMENT"
+                onclick="selectEERTable('PAYMENT')">
+
+                <div class="eer-table-header">
+                    <span>₹</span>
+                    PAYMENT
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    PaymentID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    ReservationID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    TicketNo
+                </div>
+
+                <div class="eer-field">
+                    Amount
+                </div>
+
+                <div class="eer-field">
+                    PaymentMethod
+                </div>
+
+            </div>
+
+
+            <!-- BAGGAGE -->
+
+            <div
+                class="eer-table"
+                data-table="BAGGAGE"
+                onclick="selectEERTable('BAGGAGE')">
+
+                <div class="eer-table-header">
+                    <span>🧳</span>
+                    BAGGAGE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    BaggageID
+                </div>
+
+                <div class="eer-field">
+                    NoOfPieces
+                </div>
+
+                <div class="eer-field">
+                    Weight
+                </div>
+
+            </div>
+
+
+            <!-- BAGGAGE TRACKING -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="BAGGAGE_TRACKING"
+                onclick="selectEERTable('BAGGAGE_TRACKING')">
+
+                <div class="eer-table-header">
+                    <span>◉</span>
+                    BAGGAGE_TRACKING
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    BaggageID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    TrackingID
+                </div>
+
+                <div class="eer-field">
+                    ScanLocation
+                </div>
+
+                <div class="eer-field">
+                    ScanTime
+                </div>
+
+            </div>
+
+
+            <!-- TICKET BAGGAGE -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="TICKET_BAGGAGE"
+                onclick="selectEERTable('TICKET_BAGGAGE')">
+
+                <div class="eer-table-header">
+                    <span>🔗</span>
+                    TICKET_BAGGAGE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    ReservationID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    TicketNo
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    BaggageID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field">
+                    CheckedInDate
+                </div>
+
+            </div>
+
+
+            <!-- PASSENGER PHONE -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="PASSENGER_PHONE"
+                onclick="selectEERTable('PASSENGER_PHONE')">
+
+                <div class="eer-table-header">
+                    <span>☎</span>
+                    PASSENGER_PHONE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    PassengerID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    Phone
+                </div>
+
+            </div>
+
+
+            <!-- RELATIONSHIP INFORMATION -->
+
+            <div class="eer-relationship-info">
+
+                <div class="eer-info-header">
+                    <span>↔</span>
+                    Relationship Map
+                </div>
+
+                <div class="eer-relationship-list">
+
+                    <div class="eer-relationship">
+                        <strong>AIRLINES → FLIGHT</strong>
+                        <span>1 : N</span>
+                        <p>One airline operates multiple flights.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>PASSENGER → RESERVATION</strong>
+                        <span>1 : N</span>
+                        <p>One passenger can make multiple reservations.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>AIRPORT → RESERVATION</strong>
+                        <span>1 : N</span>
+                        <p>Departure and arrival airports are referenced by reservations.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>RESERVATION → TICKET</strong>
+                        <span>1 : N</span>
+                        <p>A reservation can contain multiple tickets.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>RESERVATION + TICKET → PAYMENT</strong>
+                        <span>1 : N</span>
+                        <p>Payments reference the ticket composite key.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>BAGGAGE → BAGGAGE_TRACKING</strong>
+                        <span>1 : N</span>
+                        <p>A baggage item can have multiple tracking scans.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>TICKET ↔ BAGGAGE</strong>
+                        <span>M : N</span>
+                        <p>Mapped through the TICKET_BAGGAGE relation table.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>PASSENGER → PASSENGER_PHONE</strong>
+                        <span>1 : N</span>
+                        <p>A passenger can have multiple phone numbers.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Relational Mapping -->
+
+    <div class="panel eer-mapping-panel">
+
+        <div class="eer-panel-header">
+            <div>
+                <h3>Relational Mapping</h3>
+                <p>How EER concepts are represented in the relational schema</p>
+            </div>
+        </div>
+
+        <div class="mapping-grid">
+
+            <div class="mapping-card">
+                <span class="mapping-number">01</span>
+                <h4>Multivalued Attribute</h4>
+                <p>
+                    The multivalued <strong>Phone</strong> attribute of
+                    PASSENGER is mapped to the
+                    <strong>PASSENGER_PHONE</strong> relation.
+                </p>
+            </div>
+
+            <div class="mapping-card">
+                <span class="mapping-number">02</span>
+                <h4>M:N Relationship</h4>
+                <p>
+                    The <strong>TICKET ↔ BAGGAGE</strong> many-to-many
+                    relationship is represented using
+                    <strong>TICKET_BAGGAGE</strong>.
+                </p>
+            </div>
+
+            <div class="mapping-card">
+                <span class="mapping-number">03</span>
+                <h4>Composite Keys</h4>
+                <p>
+                    TICKET, BAGGAGE_TRACKING, TICKET_BAGGAGE and
+                    PASSENGER_PHONE use composite primary keys.
+                </p>
+            </div>
+
+            <div class="mapping-card">
+                <span class="mapping-number">04</span>
+                <h4>Foreign Keys</h4>
+                <p>
+                    Foreign keys maintain referential integrity between
+                    related relations.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 
             <section id="sql" class="content-section">
