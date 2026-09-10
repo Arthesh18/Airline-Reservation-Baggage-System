@@ -1,0 +1,2587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Airline Reservation & Baggage Tracking</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">✈</div>
+                <div>
+                    <h2>AirTrack</h2>
+                    <span>Airline Operations</span>
+                </div>
+            </div>
+
+            <nav>
+                <button class="nav-item active" onclick="showSection('dashboard')">
+                    <span>▦</span>
+                    Dashboard
+                </button>
+
+                <button class="nav-item" onclick="showSection('passengers')">
+                    <span>👤</span>
+                    Passengers
+                </button>
+
+                <button class="nav-item" onclick="showSection('reservations')">
+                    <span>▣</span>
+                    Reservations
+                </button>
+
+                <button class="nav-item" onclick="showSection('flights')">
+                    <span>✈</span>
+                    Flights
+                </button>
+
+                <button class="nav-item" onclick="showSection('tickets')">
+                    <span>🎫</span>
+                    Tickets
+                </button>
+
+                <button class="nav-item" onclick="showSection('baggage')">
+                    <span>🧳</span>
+                    Baggage
+                </button>
+
+                <button class="nav-item" onclick="showSection('payments')">
+                    <span>₹</span>
+                    Payments
+                </button>
+
+                <div class="nav-divider"></div>
+
+                <button class="nav-item" onclick="showSection('airports')">
+                    <span>⌖</span>
+                    Airports
+                </button>
+
+                <button class="nav-item" onclick="showSection('airlines')">
+                    <span>◈</span>
+                    Airlines
+                </button>
+
+                <button class="nav-item" onclick="showSection('employees')">
+                    <span>♙</span>
+                    Employees
+                </button>
+
+                <button class="nav-item" onclick="showSection('tracking')">
+                    <span>◉</span>
+                    Baggage Tracking
+                </button>
+
+                <button class="nav-item" onclick="showSection('ticket-baggage')">
+                <span>🔗</span>
+                    Ticket-Baggage
+                </button>
+                
+                <button class="nav-item" onclick="showSection('passenger-phones')">
+                    <span>☎</span>
+                    Passenger Phones
+
+                </button>
+
+                <button class="nav-item" onclick="showSection('relationships')">
+                    <span>⌘</span>
+                    EER / Relationships
+                </button>
+
+                <button class="nav-item" onclick="showSection('sql')">
+                    <span>▤</span>
+                    SQL Console
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="status-dot"></span>
+                Database Connected
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle">
+                        Airline Reservation & Baggage Tracking System
+                    </p>
+                </div>
+
+                <div class="topbar-right">
+                    <span class="system-status">
+                        ● API Online
+                    </span>
+
+                    <div class="user-avatar">
+                        AR
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="content-section active">
+
+                <div class="welcome-card">
+
+                    <div>
+                        <span class="eyebrow">AIRLINE OPERATIONS</span>
+
+                        <h2>
+                            Welcome to your
+                            <span>operations dashboard</span>
+                        </h2>
+
+                        <p>
+                            Monitor passengers, reservations, flights,
+                            tickets and baggage from one place.
+                        </p>
+                    </div>
+
+                    <div class="plane-decoration">
+                        ✈
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon">👤</div>
+                        <div>
+                            <p>Passengers</p>
+                            <h3 id="passenger-count">—</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">▣</div>
+                        <div>
+                            <p>Reservations</p>
+                            <h3 id="reservation-count">—</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🎫</div>
+                        <div>
+                            <p>Tickets</p>
+                            <h3 id="ticket-count">—</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🧳</div>
+                        <div>
+                            <p>Baggage</p>
+                            <h3 id="baggage-count">—</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h3>System Overview</h3>
+                                <p>Live database information</p>
+                            </div>
+                        </div>
+
+                        <div class="overview-list">
+
+                            <div>
+                                <span>Airlines</span>
+                                <strong id="airline-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Airports</span>
+                                <strong id="airport-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Flights</span>
+                                <strong id="flight-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Employees</span>
+                                <strong id="employee-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Payments</span>
+                                <strong id="payment-count">—</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h3>Quick Actions</h3>
+                                <p>Manage the system</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+
+                            <button onclick="showSection('passengers')">
+                                <span>+</span>
+                                Add Passenger
+                            </button>
+
+                            <button onclick="showSection('reservations')">
+                                <span>+</span>
+                                New Reservation
+                            </button>
+
+                            <button onclick="showSection('flights')">
+                                <span>✈</span>
+                                View Flights
+                            </button>
+
+                            <button onclick="showSection('tracking')">
+                                <span>◉</span>
+                                Track Baggage
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Placeholder sections -->
+            <section id="passengers" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Passengers</h2>
+            <p>Manage passenger records</p>
+        </div>
+
+        <button class="primary-btn" onclick="openPassengerModal()">
+            + Add Passenger
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="passenger-search"
+                    placeholder="Search passengers..."
+                    oninput="filterPassengers()"
+                >
+
+            </div>
+
+            <button class="refresh-btn" onclick="loadPassengers()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="passenger-table-container">
+
+            <div class="loading-state">
+                Loading passengers...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Passenger Modal -->
+
+<div id="passenger-modal" class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+                <h3 id="passenger-modal-title">Add Passenger</h3>
+                <p id="passenger-modal-subtitle">
+                    Enter passenger details
+                </p>
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closePassengerModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="passenger-form" onsubmit="savePassenger(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Passenger ID</label>
+
+                    <input
+                        type="text"
+                        id="passengerID"
+                        required
+                        placeholder="Example: P006"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Name</label>
+
+                    <input
+                        type="text"
+                        id="passengerName"
+                        required
+                        placeholder="Passenger name"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        id="passengerEmail"
+                        required
+                        placeholder="example@mail.com"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Date of Birth</label>
+
+                    <input
+                        type="date"
+                        id="passengerDOB"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Street</label>
+
+                    <input
+                        type="text"
+                        id="passengerStreet"
+                        placeholder="Street"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input
+                        type="text"
+                        id="passengerCity"
+                        placeholder="City"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>PIN</label>
+
+                    <input
+                        type="text"
+                        id="passengerPIN"
+                        placeholder="PIN"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closePassengerModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="passenger-save-btn">
+                    Save Passenger
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Toast -->
+
+<div id="toast" class="toast"></div>
+
+
+            <section id="reservations" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Reservations</h2>
+            <p>Manage flight reservations</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openReservationModal()">
+            + Add Reservation
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="reservation-search"
+                    placeholder="Search reservations..."
+                    oninput="filterReservations()"
+                >
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadReservations()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="reservation-table-container">
+
+            <div class="loading-state">
+                Loading reservations...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     RESERVATION MODAL
+========================= -->
+
+<div
+    id="reservation-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="reservation-modal-title">
+                    Add Reservation
+                </h3>
+
+                <p id="reservation-modal-subtitle">
+                    Enter reservation details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeReservationModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="reservation-form"
+            onsubmit="saveReservation(event)">
+
+            <div class="form-grid">
+
+
+                <!-- Reservation ID -->
+
+                <div class="form-group">
+
+                    <label>Reservation ID</label>
+
+                    <input
+                        type="text"
+                        id="reservationID"
+                        required
+                        placeholder="Example: R006"
+                    >
+
+                </div>
+
+
+                <!-- Passenger -->
+
+                <div class="form-group">
+
+                    <label>Passenger</label>
+
+                    <select
+                        id="reservationPassenger"
+                        required>
+
+                        <option value="">
+                            Select passenger
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Booking Status -->
+
+                <div class="form-group">
+
+                    <label>Booking Status</label>
+
+                    <select
+                        id="reservationStatus"
+                        required>
+
+                        <option value="">
+                            Select status
+                        </option>
+
+                        <option value="Confirmed">
+                            Confirmed
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="Cancelled">
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Class -->
+
+                <div class="form-group">
+
+                    <label>Class</label>
+
+                    <select
+                        id="reservationClass"
+                        required>
+
+                        <option value="">
+                            Select class
+                        </option>
+
+                        <option value="Economy">
+                            Economy
+                        </option>
+
+                        <option value="Business">
+                            Business
+                        </option>
+
+                        <option value="First">
+                            First
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Departure Airport -->
+
+                <div class="form-group">
+
+                    <label>Departure Airport</label>
+
+                    <select
+                        id="departureAirport"
+                        required>
+
+                        <option value="">
+                            Select departure airport
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Arrival Airport -->
+
+                <div class="form-group">
+
+                    <label>Arrival Airport</label>
+
+                    <select
+                        id="arrivalAirport"
+                        required>
+
+                        <option value="">
+                            Select arrival airport
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeReservationModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="reservation-save-btn">
+
+                    Save Reservation
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<section id="flights" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Flights</h2>
+            <p>Manage scheduled flights</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openFlightModal()">
+            + Add Flight
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="flight-search"
+                    placeholder="Search flights..."
+                    oninput="filterFlights()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadFlights()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="flight-table-container">
+
+            <div class="loading-state">
+                Loading flights...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FLIGHT MODAL
+========================= -->
+
+<div
+    id="flight-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="flight-modal-title">
+                    Add Flight
+                </h3>
+
+                <p id="flight-modal-subtitle">
+                    Enter flight details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeFlightModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="flight-form"
+            onsubmit="saveFlight(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Flight ID</label>
+
+                    <input
+                        type="text"
+                        id="flightID"
+                        required
+                        placeholder="Example: F006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Airline</label>
+
+                    <select
+                        id="flightAirline"
+                        required>
+
+                        <option value="">
+                            Select airline
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Departure Time</label>
+
+                    <input
+                        type="time"
+                        id="flightDepartureTime"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeFlightModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="flight-save-btn">
+
+                    Save Flight
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div><section id="tickets" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Tickets</h2>
+            <p>Manage passenger tickets</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openTicketModal()">
+            + Add Ticket
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="ticket-search"
+                    placeholder="Search tickets..."
+                    oninput="filterTickets()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadTickets()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="ticket-table-container">
+
+            <div class="loading-state">
+                Loading tickets...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     TICKET MODAL
+========================= -->
+
+<div
+    id="ticket-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="ticket-modal-title">
+                    Add Ticket
+                </h3>
+
+                <p id="ticket-modal-subtitle">
+                    Enter ticket details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeTicketModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="ticket-form"
+            onsubmit="saveTicket(event)">
+
+            <div class="form-grid">
+
+
+                <!-- Reservation -->
+
+                <div class="form-group">
+
+                    <label>Reservation</label>
+
+                    <select
+                        id="ticketReservation"
+                        required>
+
+                        <option value="">
+                            Select reservation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Ticket Number -->
+
+                <div class="form-group">
+
+                    <label>Ticket Number</label>
+
+                    <input
+                        type="text"
+                        id="ticketNo"
+                        required
+                        placeholder="Example: T006">
+
+                </div>
+
+
+                <!-- Seat -->
+
+                <div class="form-group">
+
+                    <label>Seat Number</label>
+
+                    <input
+                        type="text"
+                        id="ticketSeatNo"
+                        placeholder="Example: 15A">
+
+                </div>
+
+
+                <!-- Fare -->
+
+                <div class="form-group">
+
+                    <label>Fare</label>
+
+                    <input
+                        type="number"
+                        id="ticketFare"
+                        required
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 3500.00">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeTicketModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="ticket-save-btn">
+
+                    Save Ticket
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="baggage" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Baggage</h2>
+            <p>Manage passenger baggage records</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openBaggageModal()">
+            + Add Baggage
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="baggage-search"
+                    placeholder="Search baggage..."
+                    oninput="filterBaggage()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadBaggage()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="baggage-table-container">
+
+            <div class="loading-state">
+                Loading baggage...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     BAGGAGE MODAL
+========================= -->
+
+<div
+    id="baggage-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="baggage-modal-title">
+                    Add Baggage
+                </h3>
+
+                <p id="baggage-modal-subtitle">
+                    Enter baggage details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeBaggageModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="baggage-form"
+            onsubmit="saveBaggage(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Baggage ID</label>
+
+                    <input
+                        type="text"
+                        id="baggageID"
+                        required
+                        placeholder="Example: B006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Number of Pieces</label>
+
+                    <input
+                        type="number"
+                        id="baggagePieces"
+                        required
+                        min="1"
+                        step="1"
+                        placeholder="Example: 2">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Weight (kg)</label>
+
+                    <input
+                        type="number"
+                        id="baggageWeight"
+                        required
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 20.00">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeBaggageModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="baggage-save-btn">
+
+                    Save Baggage
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="payments" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Payments</h2>
+            <p>Manage ticket payment records</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openPaymentModal()">
+            + Add Payment
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="payment-search"
+                    placeholder="Search payments..."
+                    oninput="filterPayments()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadPayments()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="payment-table-container">
+
+            <div class="loading-state">
+                Loading payments...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PAYMENT MODAL
+========================= -->
+
+<div
+    id="payment-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="payment-modal-title">
+                    Add Payment
+                </h3>
+
+                <p id="payment-modal-subtitle">
+                    Enter payment details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closePaymentModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="payment-form"
+            onsubmit="savePayment(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Payment ID</label>
+
+                    <input
+                        type="text"
+                        id="paymentID"
+                        required
+                        placeholder="Example: PM06">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Reservation</label>
+
+                    <select
+                        id="paymentReservation"
+                        required
+                        onchange="updatePaymentTicketDropdown()">
+
+                        <option value="">
+                            Select reservation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Ticket</label>
+
+                    <select
+                        id="paymentTicket"
+                        required>
+
+                        <option value="">
+                            Select ticket
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Amount</label>
+
+                    <input
+                        type="number"
+                        id="paymentAmount"
+                        required
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 3500.00">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Payment Method</label>
+
+                    <select
+                        id="paymentMethod"
+                        required>
+
+                        <option value="">
+                            Select method
+                        </option>
+
+                        <option value="Card">
+                            Card
+                        </option>
+
+                        <option value="UPI">
+                            UPI
+                        </option>
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="Net Banking">
+                            Net Banking
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closePaymentModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="payment-save-btn">
+                    Save Payment
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="airports" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Airports</h2>
+            <p>Manage airport information and locations</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openAirportModal()">
+            + Add Airport
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="airport-search"
+                    placeholder="Search airports..."
+                    oninput="filterAirports()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadAirports()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="airport-table-container">
+
+            <div class="loading-state">
+                Loading airports...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     AIRPORT MODAL
+========================= -->
+
+<div
+    id="airport-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="airport-modal-title">
+                    Add Airport
+                </h3>
+
+                <p id="airport-modal-subtitle">
+                    Enter airport details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeAirportModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="airport-form"
+            onsubmit="saveAirport(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Airport ID</label>
+
+                    <input
+                        type="text"
+                        id="airportID"
+                        required
+                        placeholder="Example: A006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Airport Name</label>
+
+                    <input
+                        type="text"
+                        id="airportName"
+                        required
+                        placeholder="Example: International Airport">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input
+                        type="text"
+                        id="airportCity"
+                        required
+                        placeholder="Example: Mumbai">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Country</label>
+
+                    <input
+                        type="text"
+                        id="airportCountry"
+                        required
+                        placeholder="Example: India">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeAirportModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="airport-save-btn">
+                    Save Airport
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="airlines" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Airlines</h2>
+            <p>Manage airline information and codes</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openAirlineModal()">
+            + Add Airline
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="airline-search"
+                    placeholder="Search airlines..."
+                    oninput="filterAirlines()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadAirlines()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="airline-table-container">
+
+            <div class="loading-state">
+                Loading airlines...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     AIRLINE MODAL
+========================= -->
+
+<div
+    id="airline-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="airline-modal-title">
+                    Add Airline
+                </h3>
+
+                <p id="airline-modal-subtitle">
+                    Enter airline details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeAirlineModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="airline-form"
+            onsubmit="saveAirline(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Airline ID</label>
+
+                    <input
+                        type="text"
+                        id="airlineID"
+                        required
+                        placeholder="Example: AL06">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Airline Name</label>
+
+                    <input
+                        type="text"
+                        id="airlineName"
+                        required
+                        placeholder="Example: Air India">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>IATA Code</label>
+
+                    <input
+                        type="text"
+                        id="airlineIATA"
+                        required
+                        maxlength="10"
+                        placeholder="Example: AI">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeAirlineModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="airline-save-btn">
+                    Save Airline
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="employees" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Employees</h2>
+            <p>Manage airline staff and employee information</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openEmployeeModal()">
+            + Add Employee
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="employee-search"
+                    placeholder="Search employees..."
+                    oninput="filterEmployees()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadEmployees()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="employee-table-container">
+
+            <div class="loading-state">
+                Loading employees...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     EMPLOYEE MODAL
+========================= -->
+
+<div
+    id="employee-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="employee-modal-title">
+                    Add Employee
+                </h3>
+
+                <p id="employee-modal-subtitle">
+                    Enter employee details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeEmployeeModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="employee-form"
+            onsubmit="saveEmployee(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Employee ID</label>
+
+                    <input
+                        type="text"
+                        id="employeeID"
+                        required
+                        placeholder="Example: E006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Name</label>
+
+                    <input
+                        type="text"
+                        id="employeeName"
+                        required
+                        placeholder="Example: Rahul">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Designation</label>
+
+                    <input
+                        type="text"
+                        id="employeeDesignation"
+                        required
+                        placeholder="Example: Officer">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone</label>
+
+                    <input
+                        type="text"
+                        id="employeePhone"
+                        required
+                        maxlength="20"
+                        placeholder="Example: 90004">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeEmployeeModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="employee-save-btn">
+                    Save Employee
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     BAGGAGE TRACKING
+===================================================== -->
+
+<section id="tracking" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Baggage Tracking</h2>
+            <p>Track baggage movement and scan history</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openBaggageTrackingModal()">
+            + Add Scan
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="baggage-tracking-search"
+                    placeholder="Search tracking records..."
+                    oninput="filterBaggageTracking()">
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadBaggageTracking()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="baggage-tracking-table-container">
+
+            <div class="loading-state">
+                Loading baggage tracking...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div
+    id="baggage-tracking-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="baggage-tracking-modal-title">
+                    Add Tracking Scan
+                </h3>
+
+                <p id="baggage-tracking-modal-subtitle">
+                    Record a baggage scan
+                </p>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                onclick="closeBaggageTrackingModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="baggage-tracking-form"
+            onsubmit="saveBaggageTracking(event)">
+
+            <div class="form-grid">
+
+
+                <!-- Baggage ID -->
+
+                <div class="form-group">
+
+                    <label>Baggage ID</label>
+
+                    <select
+                        id="trackingBaggageID"
+                        required>
+
+                        <option value="">
+                            Select baggage
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Tracking ID -->
+
+                <div class="form-group">
+
+                    <label>Tracking ID</label>
+
+                    <input
+                        type="text"
+                        id="trackingID"
+                        required
+                        placeholder="Example: TR04">
+
+                </div>
+
+
+                <!-- Scan Location -->
+
+                <div class="form-group">
+
+                    <label>Scan Location</label>
+
+                    <input
+                        type="text"
+                        id="scanLocation"
+                        required
+                        placeholder="Example: Security">
+
+                </div>
+
+
+                <!-- Scan Time -->
+
+                <div class="form-group">
+
+                    <label>Scan Time</label>
+
+                    <input
+                        type="time"
+                        id="scanTime"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeBaggageTrackingModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="baggage-tracking-save-btn">
+
+                    Save Scan
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     TICKET-BAGGAGE
+===================================================== -->
+
+<section id="ticket-baggage" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Ticket-Baggage</h2>
+            <p>Manage baggage assigned to tickets</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openTicketBaggageModal()">
+            + Assign Baggage
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="ticket-baggage-search"
+                    placeholder="Search assignments..."
+                    oninput="filterTicketBaggage()">
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadTicketBaggage()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="ticket-baggage-table-container">
+
+            <div class="loading-state">
+                Loading ticket-baggage assignments...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TICKET-BAGGAGE MODAL
+===================================================== -->
+
+<div
+    id="ticket-baggage-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="ticket-baggage-modal-title">
+                    Assign Baggage
+                </h3>
+
+                <p id="ticket-baggage-modal-subtitle">
+                    Assign baggage to a ticket
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeTicketBaggageModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="ticket-baggage-form"
+            onsubmit="saveTicketBaggage(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Reservation</label>
+
+                    <select
+                        id="tbReservation"
+                        required
+                        onchange="updateTicketBaggageTicketDropdown()">
+
+                        <option value="">
+                            Select reservation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Ticket</label>
+
+                    <select
+                        id="tbTicket"
+                        required>
+
+                        <option value="">
+                            Select ticket
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Baggage</label>
+
+                    <select
+                        id="tbBaggage"
+                        required>
+
+                        <option value="">
+                            Select baggage
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Checked-In Date</label>
+
+                    <input
+                        type="date"
+                        id="tbCheckedInDate"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeTicketBaggageModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="ticket-baggage-save-btn">
+
+                    Assign Baggage
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     PASSENGER PHONES
+===================================================== -->
+
+<section id="passenger-phones" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Passenger Phones</h2>
+            <p>Manage passenger contact numbers</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openPassengerPhoneModal()">
+            + Add Phone
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="passenger-phone-search"
+                    placeholder="Search passenger phones..."
+                    oninput="filterPassengerPhones()">
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadPassengerPhones()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="passenger-phone-table-container">
+
+            <div class="loading-state">
+                Loading passenger phones...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PASSENGER PHONE MODAL
+===================================================== -->
+
+<div
+    id="passenger-phone-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="passenger-phone-modal-title">
+                    Add Phone
+                </h3>
+
+                <p id="passenger-phone-modal-subtitle">
+                    Add a phone number for a passenger
+                </p>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                onclick="closePassengerPhoneModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="passenger-phone-form"
+            onsubmit="savePassengerPhone(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Passenger</label>
+
+                    <select
+                        id="phonePassenger"
+                        required>
+
+                        <option value="">
+                            Select passenger
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        type="text"
+                        id="phoneNumber"
+                        required
+                        placeholder="Example: 9876500006">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closePassengerPhoneModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="passenger-phone-save-btn">
+                    Save Phone
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+            <section id="relationships" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>EER / Relationships</h2>
+                        <p>Explore the database structure</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    Interactive EER diagram coming next.
+                </div>
+            </section>
+
+
+            <section id="sql" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>SQL Console</h2>
+                        <p>Execute database queries</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    SQL console coming next.
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
