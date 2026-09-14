@@ -8990,7 +8990,14 @@ const interactiveEERRelationships = [
         cardinalityFrom: "1",
         cardinalityTo: "N"
     },
-
+    {
+    id: "airlines-airport",
+    from: "AIRLINES",
+    to: "AIRPORT",
+    label: "BASED AT",
+    cardinalityFrom: "M",
+    cardinalityTo: "N"
+    },
     {
         id: "reservation-airport",
         from: "RESERVATION",
@@ -9044,7 +9051,14 @@ const interactiveEERRelationships = [
         cardinalityFrom: "1",
         cardinalityTo: "N"
     },
-
+    {
+        id: "airlines-airport",
+        from: "AIRLINES",
+        to: "AIRPORT",
+        label: "BASED AT",
+        cardinalityFrom: "M",
+        cardinalityTo: "N"
+    },
     {
         id: "employee-airport",
         from: "EMPLOYEE",
@@ -9053,6 +9067,7 @@ const interactiveEERRelationships = [
         cardinalityFrom: "N",
         cardinalityTo: "1"
     }
+    
 
 ];
 
@@ -9105,317 +9120,130 @@ const interactiveEERUnion = {
 /* =========================================================
    EER ATTRIBUTES
 ========================================================= */
-
 const interactiveEERAttributes = {
-
     PASSENGER: [
-        {
-            id: "passenger-name",
-            label: "Name",
-            type: "attribute"
-        },
-        {
-            id: "passenger-email",
-            label: "Email",
-            type: "attribute"
-        },
-        {
-            id: "passenger-dob",
-            label: "DOB",
-            type: "attribute"
-        },
-        {
-            id: "passenger-address",
-            label: "Address",
-            type: "attribute"
-        },
-        {
-            id: "passenger-phone",
-            label: "Phone",
-            type: "multivalued"
-        }
-    ],
-
-    AIRPORT: [
-        {
-            id: "airport-name",
-            label: "AirportName",
-            type: "attribute"
-        },
-        {
-            id: "airport-city",
-            label: "City",
-            type: "attribute"
-        },
-        {
-            id: "airport-country",
-            label: "Country",
-            type: "attribute"
-        }
-    ],
-
-    AIRLINES: [
-        {
-            id: "airline-name",
-            label: "AirlineName",
-            type: "attribute"
-        },
-        {
-            id: "airline-iata",
-            label: "IATA_Code",
-            type: "attribute"
-        }
-    ],
-
-    FLIGHT: [
-        {
-            id: "flight-time",
-            label: "DepartureTime",
-            type: "attribute"
-        }
-    ],
-
-    EMPLOYEE: [
-        {
-            id: "employee-name",
-            label: "Name",
-            type: "attribute"
-        },
-        {
-            id: "employee-designation",
-            label: "Designation",
-            type: "attribute"
-        },
-        {
-            id: "employee-phone",
-            label: "Phone",
-            type: "attribute"
-        }
+        { id: "passenger-id", label: "PassengerID", type: "primary-key" },
+        { id: "passenger-name", label: "Name", type: "simple" },
+        { id: "passenger-email", label: "Email", type: "simple" },
+        { id: "passenger-dob", label: "DOB", type: "simple" },
+        { id: "passenger-address", label: "Address", type: "composite" },
+        { id: "passenger-phone", label: "Phone", type: "multivalued" }
     ],
 
     RESERVATION: [
-        {
-            id: "reservation-status",
-            label: "BookingStatus",
-            type: "attribute"
-        },
-        {
-            id: "reservation-class",
-            label: "Class",
-            type: "attribute"
-        }
+        { id: "reservation-id", label: "ReservationID", type: "primary-key" },
+        { id: "reservation-status", label: "BookingStatus", type: "simple" },
+        { id: "reservation-class", label: "Class", type: "simple" }
+    ],
+
+    AIRPORT: [
+        { id: "airport-id", label: "AirportID", type: "primary-key" },
+        { id: "airport-name", label: "AirportName", type: "simple" },
+        { id: "airport-city", label: "City", type: "simple" },
+        { id: "airport-country", label: "Country", type: "simple" }
+    ],
+
+    AIRLINES: [
+        { id: "airlines-id", label: "AirlineID", type: "primary-key" },
+        { id: "airline-name", label: "AirlineName", type: "simple" },
+        { id: "airline-iata", label: "IATA_Code", type: "simple" }
+    ],
+
+    FLIGHT: [
+        { id: "flight-id", label: "FlightID", type: "primary-key" },
+        { id: "flight-time", label: "DepartureTime", type: "simple" }
+    ],
+
+    EMPLOYEE: [
+        { id: "employee-id", label: "EmployeeID", type: "primary-key" },
+        { id: "employee-name", label: "Name", type: "simple" },
+        { id: "employee-designation", label: "Designation", type: "simple" },
+        { id: "employee-phone", label: "Phone", type: "simple" }
     ],
 
     TICKET: [
-        {
-            id: "ticket-seat",
-            label: "SeatNo",
-            type: "attribute"
-        },
-        {
-            id: "ticket-fare",
-            label: "Fare",
-            type: "attribute"
-        }
+        { id: "ticket-no", label: "TicketNo", type: "partial-key" },
+        { id: "ticket-seat", label: "SeatNo", type: "simple" },
+        { id: "ticket-fare", label: "Fare", type: "simple" }
     ],
 
     PAYMENT: [
-        {
-            id: "payment-amount",
-            label: "Amount",
-            type: "attribute"
-        },
-        {
-            id: "payment-method",
-            label: "PaymentMethod",
-            type: "attribute"
-        }
+        { id: "payment-id", label: "PaymentID", type: "primary-key" },
+        { id: "payment-amount", label: "Amount", type: "simple" },
+        { id: "payment-method", label: "PaymentMethod", type: "simple" }
     ],
 
     BAGGAGE: [
-        {
-            id: "baggage-pieces",
-            label: "NoOfPieces",
-            type: "attribute"
-        },
-        {
-            id: "baggage-weight",
-            label: "Weight",
-            type: "attribute"
-        }
+        { id: "baggage-id", label: "BaggageID", type: "primary-key" },
+        { id: "baggage-pieces", label: "NoOfPieces", type: "simple" },
+        { id: "baggage-weight", label: "Weight", type: "simple" }
     ],
 
     BAGGAGE_TRACKING: [
-        {
-            id: "tracking-location",
-            label: "ScanLocation",
-            type: "attribute"
-        },
-        {
-            id: "tracking-time",
-            label: "ScanTime",
-            type: "attribute"
-        }
+        { id: "tracking-id", label: "TrackingID", type: "partial-key" },
+        { id: "tracking-location", label: "ScanLocation", type: "simple" },
+        { id: "tracking-time", label: "ScanTime", type: "simple" }
     ]
-
 };
 /* =========================================================
    EER ATTRIBUTE POSITIONS
 ========================================================= */
-
 const interactiveEERAttributePositions = {
 
-    /* ---------- PASSENGER ---------- */
+    // PASSENGER
+    "passenger-id": { x: 90, y: 70 },
+    "passenger-name": { x: 170, y: 65 },
+    "passenger-email": { x: 250, y: 70 },
+    "passenger-dob": { x: 75, y: 225 },
+    "passenger-address": { x: 50, y: 100 },
+    "passenger-phone": { x: 245, y: 225 },
 
-    "passenger-name": {
-        x: 75,
-        y: 120
-    },
+    // RESERVATION
+    "reservation-id": { x: 360, y: 70 },
+    "reservation-status": { x: 445, y: 70 },
+    "reservation-class": { x: 525, y: 70 },
 
-    "passenger-email": {
-        x: 145,
-        y: 90
-    },
+    // AIRPORT
+    "airport-id": { x: 665, y: 65 },
+    "airport-name": { x: 750, y: 65 },
+    "airport-city": { x: 830, y: 65 },
+    "airport-country": { x: 900, y: 105 },
 
-    "passenger-dob": {
-        x: 215,
-        y: 120
-    },
+    // EMPLOYEE
+    "employee-id": { x: 1015, y: 65 },
+    "employee-name": { x: 1100, y: 65 },
+    "employee-designation": { x: 1190, y: 65 },
+    "employee-phone": { x: 1270, y: 110 },
 
-    "passenger-address": {
-        x: 65,
-        y: 240
-    },
+    // AIRLINES
+    "airlines-id": { x: 555, y: 460 },
+    "airline-name": { x: 650, y: 365 },
+    "airline-iata": { x: 750, y: 365 },
 
-    "passenger-phone": {
-        x: 225,
-        y: 240
-    },
+    // FLIGHT
+    "flight-id": { x: 855, y: 365 },
+    "flight-time": { x: 950, y: 355 },
 
+    // TICKET
+    "ticket-no": { x: 350, y: 575 },
+    "ticket-seat": { x: 430, y: 710 },
+    "ticket-fare": { x: 510, y: 575 },
 
-    /* ---------- RESERVATION ---------- */
+    // PAYMENT
+    "payment-id": { x: 600, y: 575 },
+    "payment-amount": { x: 685, y: 575 },
+    "payment-method": { x: 650, y: 710 },
 
-    "reservation-status": {
-        x: 365,
-        y: 110
-    },
+    // BAGGAGE
+    "baggage-id": { x: 850, y: 575 },
+    "baggage-pieces": { x: 940, y: 575 },
+    "baggage-weight": { x: 930, y: 710 },
 
-    "reservation-class": {
-        x: 505,
-        y: 110
-    },
-
-
-    /* ---------- AIRPORT ---------- */
-
-    "airport-name": {
-        x: 690,
-        y: 100
-    },
-
-    "airport-city": {
-        x: 755,
-        y: 80
-    },
-
-    "airport-country": {
-        x: 825,
-        y: 100
-    },
-
-
-    /* ---------- EMPLOYEE ---------- */
-
-    "employee-name": {
-        x: 1030,
-        y: 100
-    },
-
-    "employee-designation": {
-        x: 1110,
-        y: 80
-    },
-
-    "employee-phone": {
-        x: 1190,
-        y: 100
-    },
-
-
-    /* ---------- AIRLINES ---------- */
-
-    "airline-name": {
-        x: 640,
-        y: 365
-    },
-
-    "airline-iata": {
-        x: 755,
-        y: 365
-    },
-
-
-    /* ---------- FLIGHT ---------- */
-
-    "flight-time": {
-        x: 950,
-        y: 365
-    },
-
-
-    /* ---------- TICKET ---------- */
-
-    "ticket-seat": {
-        x: 400,
-        y: 585
-    },
-
-    "ticket-fare": {
-        x: 525,
-        y: 585
-    },
-
-
-    /* ---------- PAYMENT ---------- */
-
-    "payment-amount": {
-        x: 660,
-        y: 585
-    },
-
-    "payment-method": {
-        x: 785,
-        y: 585
-    },
-
-
-    /* ---------- BAGGAGE ---------- */
-
-    "baggage-pieces": {
-        x: 910,
-        y: 585
-    },
-
-    "baggage-weight": {
-        x: 1025,
-        y: 585
-    },
-
-
-    /* ---------- BAGGAGE TRACKING ---------- */
-
-    "tracking-location": {
-        x: 1160,
-        y: 585
-    },
-
-    "tracking-time": {
-        x: 1300,
-        y: 585
-    }
-
+    // BAGGAGE TRACKING
+    "tracking-id": { x: 1110, y: 575 },
+    "tracking-location": { x: 1200, y: 575 },
+    "tracking-time": { x: 1290, y: 575 }
 };
-
 /* =========================================================
    DIAGRAM POSITIONS
 ========================================================= */
@@ -9613,8 +9441,8 @@ const interactiveEERRelationshipPositions = {
     "baggage-tracking": {
         x: 1050,
         y: 650
-    }
-
+    },
+    "airlines-airport": { x: 730, y: 300 }
 };
 /* =========================================================
    INITIALIZE INTERACTIVE EER
@@ -10018,7 +9846,7 @@ function createISANodes(container) {
                 "RESERVATION"
             ) {
 
-                x = 435;
+                x = 415;
                 y = 285;
 
             }
@@ -10292,53 +10120,601 @@ function drawInteractiveEERConnections() {
     );
 
 
-    /*
+        /*
         ISA connections.
+
+        IMPORTANT:
+        Parent connects to ISA.
+        ISA connects to each subtype.
+
+        The parent must NOT connect directly
+        to the subtype entities.
     */
 
-    interactiveEERSpecializations.forEach(
-        specialization => {
+    drawEERSpecialConnection(
+        area,
+        svg,
+        "PASSENGER",
+        "ISA",
+        "PASSENGER"
+    );
 
-            specialization.children.forEach(
-                child => {
+    drawEERSpecialConnection(
+        area,
+        svg,
+        "ISA",
+        "DOMESTIC_PASSENGER",
+        "PASSENGER"
+    );
 
-                    drawEERLine(
-                        area,
-                        svg,
-                        specialization.parent,
-                        child
-                    );
+    drawEERSpecialConnection(
+        area,
+        svg,
+        "ISA",
+        "INTERNATIONAL_PASSENGER",
+        "PASSENGER"
+    );
 
-                }
-            );
 
-        }
+    drawEERSpecialConnection(
+        area,
+        svg,
+        "RESERVATION",
+        "ISA",
+        "RESERVATION"
+    );
+
+    drawEERSpecialConnection(
+        area,
+        svg,
+        "ISA",
+        "INDIVIDUAL_RESERVATION",
+        "RESERVATION"
+    );
+
+    drawEERSpecialConnection(
+        area,
+        svg,
+        "ISA",
+        "GROUP_RESERVATION",
+        "RESERVATION"
     );
 
 
     /*
-        Union connections.
+        UNION connections.
 
         IMPORTANT:
         There is NO enclosing box.
+
+        FULL_TIME_EMPLOYEE
+                 \
+                  U
+                 /
+        PART_TIME_EMPLOYEE
+
+                  |
+               EMPLOYEE
     */
 
-    drawEERLine(
+    drawEERUnionConnection(
+        area,
+        svg,
+        "EMPLOYEE",
+        "U"
+    );
+
+    drawEERUnionConnection(
         area,
         svg,
         "FULL_TIME_EMPLOYEE",
-        "EMPLOYEE"
+        "U"
     );
 
-    drawEERLine(
+    drawEERUnionConnection(
         area,
         svg,
         "PART_TIME_EMPLOYEE",
-        "EMPLOYEE"
+        "U"
     );
 
+    // Draw each attribute to its own entity
+    drawEERAttributeConnections(area, svg);
+
+
+}
+/* =========================================================
+   SPECIALIZATION CONNECTIONS
+   Entity ↔ ISA ↔ Subtypes
+========================================================= */
+
+function drawEERSpecialConnection(
+    area,
+    svg,
+    fromName,
+    toName,
+    specializationParent
+) {
+
+    const fromEntity =
+        document.querySelector(
+            `.eer-node[data-entity="${fromName}"]`
+        );
+
+    const toEntity =
+        document.querySelector(
+            `.eer-node[data-entity="${toName}"]`
+        );
+
+
+    /*
+     * If either side is the ISA triangle,
+     * find the correct triangle using its
+     * parent specialization.
+     */
+    let fromNode = fromEntity;
+    let toNode = toEntity;
+
+
+    if (fromName === "ISA") {
+
+        const isaNodes =
+            document.querySelectorAll(
+                ".eer-isa-node"
+            );
+
+        const index =
+            specializationParent === "PASSENGER"
+                ? 0
+                : 1;
+
+        fromNode =
+            isaNodes[index];
+    }
+
+
+    if (toName === "ISA") {
+
+        const isaNodes =
+            document.querySelectorAll(
+                ".eer-isa-node"
+            );
+
+        const index =
+            specializationParent === "PASSENGER"
+                ? 0
+                : 1;
+
+        toNode =
+            isaNodes[index];
+    }
+
+
+    if (!fromNode || !toNode) {
+        return;
+    }
+
+
+    const areaRect =
+        area.getBoundingClientRect();
+
+    const fromRect =
+        fromNode.getBoundingClientRect();
+
+    const toRect =
+        toNode.getBoundingClientRect();
+
+
+    const fromCenterX =
+        fromRect.left +
+        fromRect.width / 2 -
+        areaRect.left;
+
+    const fromCenterY =
+        fromRect.top +
+        fromRect.height / 2 -
+        areaRect.top;
+
+    const toCenterX =
+        toRect.left +
+        toRect.width / 2 -
+        areaRect.left;
+
+    const toCenterY =
+        toRect.top +
+        toRect.height / 2 -
+        areaRect.top;
+
+
+    let x1 = fromCenterX;
+    let y1 = fromCenterY;
+
+    let x2 = toCenterX;
+    let y2 = toCenterY;
+
+
+    /*
+     * Parent → ISA
+     * Connect from the bottom of the parent
+     * to the top of the ISA triangle.
+     */
+    if (toName === "ISA") {
+
+        x1 = fromCenterX;
+        y1 =
+            fromRect.bottom -
+            areaRect.top;
+
+        x2 = toCenterX;
+        y2 =
+            toRect.top -
+            areaRect.top;
+    }
+
+
+    /*
+     * ISA → subtype
+     * Connect from the bottom of the ISA
+     * to the top of the subtype.
+     */
+    else if (fromName === "ISA") {
+
+        x1 = fromCenterX;
+        y1 =
+            fromRect.bottom -
+            areaRect.top;
+
+        x2 = toCenterX;
+        y2 =
+            toRect.top -
+            areaRect.top;
+    }
+
+
+    const line =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+        );
+
+    line.classList.add(
+        "eer-connection",
+        "eer-specialization-connection"
+    );
+
+    line.setAttribute("x1", x1);
+    line.setAttribute("y1", y1);
+    line.setAttribute("x2", x2);
+    line.setAttribute("y2", y2);
+
+    svg.appendChild(line);
 }
 
+
+/* =========================================================
+   UNION CONNECTIONS
+   EMPLOYEE ↔ U ↔ FULL/PART TIME
+========================================================= */
+
+function drawEERUnionConnection(
+    area,
+    svg,
+    entityName,
+    unionName
+) {
+
+    const entity =
+        document.querySelector(
+            `.eer-node[data-entity="${entityName}"]`
+        );
+
+    const union =
+        document.querySelector(
+            ".eer-union-node"
+        );
+
+
+    if (!entity || !union) {
+        return;
+    }
+
+
+    const areaRect =
+        area.getBoundingClientRect();
+
+    const entityRect =
+        entity.getBoundingClientRect();
+
+    const unionRect =
+        union.getBoundingClientRect();
+
+
+    const entityCenterX =
+        entityRect.left +
+        entityRect.width / 2 -
+        areaRect.left;
+
+    const entityCenterY =
+        entityRect.top +
+        entityRect.height / 2 -
+        areaRect.top;
+
+    const unionCenterX =
+        unionRect.left +
+        unionRect.width / 2 -
+        areaRect.left;
+
+    const unionCenterY =
+        unionRect.top +
+        unionRect.height / 2 -
+        areaRect.top;
+
+
+    let x1;
+    let y1;
+    let x2;
+    let y2;
+
+
+    /*
+     * EMPLOYEE → U
+     *
+     * Straight vertical connection.
+     */
+    if (entityName === "EMPLOYEE") {
+
+        x1 = entityCenterX;
+
+        y1 =
+            entityRect.bottom -
+            areaRect.top;
+
+        x2 = unionCenterX;
+
+        y2 =
+            unionRect.top -
+            areaRect.top;
+    }
+
+
+    /*
+     * FULL/PART TIME → U
+     *
+     * Connect the top of each subtype
+     * to the bottom of U.
+     */
+    else {
+
+        x1 = entityCenterX;
+
+        y1 =
+            entityRect.top -
+            areaRect.top;
+
+        x2 = unionCenterX;
+
+        y2 =
+            unionRect.bottom -
+            areaRect.top;
+    }
+
+
+    const line =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+        );
+
+    line.classList.add(
+        "eer-connection",
+        "eer-union-connection"
+    );
+
+    line.setAttribute("x1", x1);
+    line.setAttribute("y1", y1);
+    line.setAttribute("x2", x2);
+    line.setAttribute("y2", y2);
+
+    svg.appendChild(line);
+}
+/* =========================================================
+   DRAW ATTRIBUTE → ENTITY CONNECTIONS
+========================================================= */
+
+function drawEERAttributeConnections(area, svg) {
+
+    Object.entries(interactiveEERAttributes).forEach(
+        ([entityName, attributes]) => {
+
+            const entity =
+                document.querySelector(
+                    `.eer-node[data-entity="${entityName}"]`
+                );
+
+            if (!entity) {
+                return;
+            }
+
+            attributes.forEach(attribute => {
+
+                const attributeNode =
+                    document.querySelector(
+                        `.eer-attribute-node[data-attribute="${attribute.id}"][data-entity="${entityName}"]`
+                    );
+
+                if (!attributeNode) {
+                    return;
+                }
+
+                const areaRect =
+                    area.getBoundingClientRect();
+
+                const entityRect =
+                    entity.getBoundingClientRect();
+
+                const attributeRect =
+                    attributeNode.getBoundingClientRect();
+
+
+                const entityCenterX =
+                    entityRect.left +
+                    entityRect.width / 2 -
+                    areaRect.left;
+
+                const entityCenterY =
+                    entityRect.top +
+                    entityRect.height / 2 -
+                    areaRect.top;
+
+                const attributeCenterX =
+                    attributeRect.left +
+                    attributeRect.width / 2 -
+                    areaRect.left;
+
+                const attributeCenterY =
+                    attributeRect.top +
+                    attributeRect.height / 2 -
+                    areaRect.top;
+
+
+                /*
+                 * Find the direction from the entity
+                 * towards the attribute.
+                 */
+                const dx =
+                    attributeCenterX -
+                    entityCenterX;
+
+                const dy =
+                    attributeCenterY -
+                    entityCenterY;
+
+
+                /*
+                 * Start/end points are moved to the
+                 * edges of the shapes instead of drawing
+                 * through their centres.
+                 */
+                const entityHalfWidth =
+                    entityRect.width / 2;
+
+                const entityHalfHeight =
+                    entityRect.height / 2;
+
+                const attributeHalfWidth =
+                    attributeRect.width / 2;
+
+                const attributeHalfHeight =
+                    attributeRect.height / 2;
+
+
+                let entityX =
+                    entityCenterX;
+
+                let entityY =
+                    entityCenterY;
+
+                let attributeX =
+                    attributeCenterX;
+
+                let attributeY =
+                    attributeCenterY;
+
+
+                /*
+                 * Entity edge
+                 */
+                if (Math.abs(dx) * entityHalfHeight >
+                    Math.abs(dy) * entityHalfWidth) {
+
+                    entityX +=
+                        Math.sign(dx) *
+                        entityHalfWidth;
+
+                    entityY +=
+                        dy / Math.abs(dx) *
+                        entityHalfWidth;
+
+                } else {
+
+                    entityY +=
+                        Math.sign(dy) *
+                        entityHalfHeight;
+
+                    entityX +=
+                        dx / Math.abs(dy) *
+                        entityHalfHeight;
+                }
+
+
+                /*
+                 * Attribute oval edge
+                 */
+                if (Math.abs(dx) * attributeHalfHeight >
+                    Math.abs(dy) * attributeHalfWidth) {
+
+                    attributeX -=
+                        Math.sign(dx) *
+                        attributeHalfWidth;
+
+                    attributeY -=
+                        dy / Math.abs(dx) *
+                        attributeHalfWidth;
+
+                } else {
+
+                    attributeY -=
+                        Math.sign(dy) *
+                        attributeHalfHeight;
+
+                    attributeX -=
+                        dx / Math.abs(dy) *
+                        attributeHalfHeight;
+                }
+
+
+                const line =
+                    document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "line"
+                    );
+
+                line.classList.add(
+                    "eer-connection",
+                    "eer-attribute-connection"
+                );
+
+                line.setAttribute(
+                    "x1",
+                    entityX
+                );
+
+                line.setAttribute(
+                    "y1",
+                    entityY
+                );
+
+                line.setAttribute(
+                    "x2",
+                    attributeX
+                );
+
+                line.setAttribute(
+                    "y2",
+                    attributeY
+                );
+
+                line.dataset.entity =
+                    entityName;
+
+                line.dataset.attribute =
+                    attribute.id;
+
+                svg.appendChild(line);
+            });
+        }
+    );
+}
 
 /* =========================================================
    DRAW ONE LINE

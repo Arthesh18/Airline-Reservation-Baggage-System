@@ -4363,3 +4363,86 @@ nav {
 
     pointer-events: none;
 }
+/* =========================================================
+   EER LEGEND - ADDITIONAL SYMBOLS
+========================================================= */
+
+.legend-key-text {
+    min-width: 31px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #334155;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+.legend-concept {
+    width: 31px;
+    height: 18px;
+
+    display: inline-block;
+
+    border: 2px dashed #64748b;
+
+    border-radius: 3px;
+
+    background: #f8fafc;
+}
+
+
+.legend-clickable {
+    width: 25px;
+    height: 25px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+/* EER attribute cleanup */
+.eer-attribute-node {
+    min-width: 78px !important;
+    max-width: 105px !important;
+    min-height: 28px !important;
+    padding: 6px 9px !important;
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+.eer-attribute-node.multivalued {
+    min-width: 82px !important;
+    max-width: 105px !important;
+}
+
+.eer-attribute-node.primary-key {
+    text-decoration: underline;
+}
+
+.eer-attribute-node.partial-key {
+    text-decoration: underline;
+}
+
+.eer-attribute-node.composite {
+    font-weight: 700;
+}
+/* EER specialization and union lines */
+.eer-specialization-connection,
+.eer-union-connection {
+    stroke-width: 1.5px !important;
+    opacity: 0.9;
+}
