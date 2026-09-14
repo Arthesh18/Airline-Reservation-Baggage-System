@@ -95,7 +95,12 @@
 
                 <button class="nav-item" onclick="showSection('relationships')">
                     <span>⌘</span>
-                    EER / Relationships
+                    Database Schema
+                </button>
+
+                <button class="nav-item" onclick="showSection('eer-diagram')">
+                    <span>◇</span>
+                    EER Diagram
                 </button>
 
                 <button class="nav-item" onclick="showSection('sql')">
@@ -2549,7 +2554,7 @@
     </div>
 
 </div>
-           <!-- =====================================================
+<!-- =====================================================
      EER / RELATIONSHIPS
 ===================================================== -->
 
@@ -2649,7 +2654,7 @@
         </div>
 
 
-        <div id="eer-diagram" class="eer-diagram">
+        <div id="database-schema-diagram" class="eer-diagram">
 
 
             <!-- AIRLINES -->
@@ -3181,7 +3186,217 @@
     </div>
 
 </section>
+<!-- =====================================================
+     INTERACTIVE EER DIAGRAM
+===================================================== -->
 
+<section id="eer-diagram" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>EER Diagram</h2>
+
+            <p>
+                Interactive conceptual model of the Airline Reservation
+                and Baggage Tracking System
+            </p>
+        </div>
+    </div>
+
+
+    <!-- EER TOOLBAR -->
+
+    <div class="eer-toolbar">
+
+        <div class="eer-toolbar-info">
+
+            <div class="eer-toolbar-icon">
+                ◇
+            </div>
+
+            <div>
+                <strong>Interactive EER Model</strong>
+
+                <span>
+                    Click an entity to explore its attributes,
+                    keys, relationships and database mapping.
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="eer-toolbar-actions">
+
+            <button
+                type="button"
+                class="eer-tool-btn"
+                onclick="resetInteractiveEER()">
+
+                ↻ Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- EER MAIN AREA -->
+
+    <div id="eer-workspace" class="eer-workspace">
+
+    <!-- =================================================
+         FULL PAGE INTERACTIVE EER CANVAS
+    ================================================== -->
+
+    <div
+        id="eer-diagram-area"
+        class="eer-diagram-area">
+
+        <!-- JavaScript creates the complete
+             interactive EER here -->
+
+    </div>
+
+
+    <!-- =================================================
+         CLICK-TO-OPEN DETAILS PANEL
+    ================================================== -->
+
+    <aside
+        id="eer-details"
+        class="eer-details-panel">
+
+    </aside>
+
+</div>
+
+
+    <!-- EER LEGEND -->
+
+    <div class="eer-legend">
+
+        <div class="eer-legend-title">
+
+            <h3>EER Notation</h3>
+
+            <p>
+                Symbols used in the conceptual database model
+            </p>
+
+        </div>
+
+
+        <div class="eer-legend-grid">
+
+            <div class="eer-legend-item">
+
+                <span class="legend-entity"></span>
+
+                <span>
+                    Strong Entity
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-weak-entity"></span>
+
+                <span>
+                    Weak Entity
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-attribute"></span>
+
+                <span>
+                    Attribute
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-multivalued"></span>
+
+                <span>
+                    Multivalued Attribute
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-relationship"></span>
+
+                <span>
+                    Relationship
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-isa">
+                    ISA
+                </span>
+
+                <span>
+                    Specialization
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-union">
+                    U
+                </span>
+
+                <span>
+                    Union Category
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-total"></span>
+
+                <span>
+                    Total Participation
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-partial"></span>
+
+                <span>
+                    Partial Participation
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
             <section id="sql" class="content-section">
                 <div class="section-header">

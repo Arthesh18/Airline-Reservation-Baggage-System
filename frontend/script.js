@@ -46,8 +46,9 @@ const sectionTitles = {
     airlines: "Airlines",
     employees: "Employees",
     tracking: "Baggage Tracking",
-    passengerPhones: "Passenger Phones",
-    relationships: "EER / Relationships",
+    "passenger-phones": "Passenger Phones",
+    relationships: "Database Schema",
+    "eer-diagram": "EER Diagram",
     sql: "SQL Console"
 };
 
@@ -138,6 +139,9 @@ function showSection(sectionId) {
     }
     if (sectionId === "passenger-phones") {
     loadPassengerPhones();
+    }
+    if (sectionId === "eer-diagram") {
+    initializeInteractiveEER();
     }
     window.scrollTo({
         top: 0,
@@ -1479,7 +1483,7 @@ async function openEditReservation(
     document.getElementById(
         "reservationClass"
     ).value =
-        reservation.class;
+        reservation.reservationClass;
 
 
     document.getElementById(
@@ -8643,6 +8647,2704 @@ function resetEERDiagram() {
         });
 
 }
+/* =========================================================
+   INTERACTIVE EER DIAGRAM
+========================================================= */
+
+const eerEntities = {
+
+    PASSENGER: {
+        title: "PASSENGER",
+        type: "entity",
+        description: "Stores passenger personal and contact information.",
+        table: "PASSENGER",
+        pk: ["PassengerID"],
+        fk: [],
+        attributes: [
+            "PassengerID",
+            "Name",
+            "Email",
+            "DOB",
+            "Street",
+            "City",
+            "PIN",
+            "Phone (multivalued)"
+        ],
+        relationships: [
+            "Makes RESERVATION",
+            "Has PASSENGER_PHONE"
+        ],
+        crudSection: "passengers"
+    },
+
+    RESERVATION: {
+        title: "RESERVATION",
+        type: "entity",
+        description: "Stores booking information for passengers.",
+        table: "RESERVATION",
+        pk: ["ReservationID"],
+        fk: [
+            "PassengerID",
+            "DepartureAirportID",
+            "ArrivalAirportID"
+        ],
+        attributes: [
+            "ReservationID",
+            "PassengerID",
+            "BookingStatus",
+            "Class",
+            "DepartureAirportID",
+            "ArrivalAirportID"
+        ],
+        relationships: [
+            "Belongs to PASSENGER",
+            "Uses AIRPORT",
+            "Has TICKET"
+        ],
+        crudSection: "reservations"
+    },
+
+    AIRPORT: {
+        title: "AIRPORT",
+        type: "entity",
+        description: "Stores airport information.",
+        table: "AIRPORT",
+        pk: ["AirportID"],
+        fk: [],
+        attributes: [
+            "AirportID",
+            "AirportName",
+            "City",
+            "Country"
+        ],
+        relationships: [
+            "Departure / Arrival point for RESERVATION",
+            "EMPLOYED AT for EMPLOYEE"
+        ],
+        crudSection: "airports"
+    },
+
+    AIRLINES: {
+        title: "AIRLINES",
+        type: "entity",
+        description: "Stores airline information.",
+        table: "AIRLINES",
+        pk: ["AirlineID"],
+        fk: [],
+        attributes: [
+            "AirlineID",
+            "AirlineName",
+            "IATA_Code"
+        ],
+        relationships: [
+            "Operates FLIGHT"
+        ],
+        crudSection: "airlines"
+    },
+
+    FLIGHT: {
+        title: "FLIGHT",
+        type: "entity",
+        description: "Stores flight schedule information.",
+        table: "FLIGHT",
+        pk: ["FlightID"],
+        fk: ["AirlineID"],
+        attributes: [
+            "FlightID",
+            "AirlineID",
+            "DepartureTime"
+        ],
+        relationships: [
+            "Operated by AIRLINES"
+        ],
+        crudSection: "flights"
+    },
+
+    EMPLOYEE: {
+        title: "EMPLOYEE",
+        type: "entity",
+        description: "Stores employee information.",
+        table: "EMPLOYEE",
+        pk: ["EmployeeID"],
+        fk: [],
+        attributes: [
+            "EmployeeID",
+            "Name",
+            "Designation",
+            "Phone"
+        ],
+        relationships: [
+            "EMPLOYED AT AIRPORT",
+            "Generalized from FULL_TIME_EMPLOYEE / PART_TIME_EMPLOYEE"
+        ],
+        crudSection: "employees"
+    },
+
+    TICKET: {
+        title: "TICKET",
+        type: "weak-entity",
+        description: "Weak entity representing a ticket belonging to a reservation.",
+        table: "TICKET",
+        pk: [
+            "ReservationID",
+            "TicketNo"
+        ],
+        fk: ["ReservationID"],
+        attributes: [
+            "ReservationID",
+            "TicketNo",
+            "SeatNo",
+            "Fare"
+        ],
+        relationships: [
+            "Belongs to RESERVATION",
+            "Has PAYMENT",
+            "Includes BAGGAGE"
+        ],
+        crudSection: "tickets"
+    },
+
+    PAYMENT: {
+        title: "PAYMENT",
+        type: "entity",
+        description: "Stores payment information for tickets.",
+        table: "PAYMENT",
+        pk: ["PaymentID"],
+        fk: [
+            "ReservationID",
+            "TicketNo"
+        ],
+        attributes: [
+            "PaymentID",
+            "ReservationID",
+            "TicketNo",
+            "Amount",
+            "PaymentMethod"
+        ],
+        relationships: [
+            "Pays for TICKET"
+        ],
+        crudSection: "payments"
+    },
+
+    BAGGAGE: {
+        title: "BAGGAGE",
+        type: "entity",
+        description: "Stores baggage quantity and weight information.",
+        table: "BAGGAGE",
+        pk: ["BaggageID"],
+        fk: [],
+        attributes: [
+            "BaggageID",
+            "NoOfPieces",
+            "Weight"
+        ],
+        relationships: [
+            "Tracked by BAGGAGE_TRACKING",
+            "Assigned to TICKET"
+        ],
+        crudSection: "baggage"
+    },
+
+    BAGGAGE_TRACKING: {
+        title: "BAGGAGE_TRACKING",
+        type: "weak-entity",
+        description: "Stores baggage scan and tracking information.",
+        table: "BAGGAGE_TRACKING",
+        pk: [
+            "BaggageID",
+            "TrackingID"
+        ],
+        fk: ["BaggageID"],
+        attributes: [
+            "BaggageID",
+            "TrackingID",
+            "ScanLocation",
+            "ScanTime"
+        ],
+        relationships: [
+            "Tracks BAGGAGE"
+        ],
+        crudSection: "tracking"
+    },
+
+    DOMESTIC_PASSENGER: {
+        title: "DOMESTIC_PASSENGER",
+        type: "subtype",
+        description: "Conceptual subtype of PASSENGER for domestic travel.",
+        table: null,
+        pk: [],
+        fk: [],
+        attributes: [],
+        relationships: [
+            "ISA → PASSENGER"
+        ],
+        crudSection: null
+    },
+
+    INTERNATIONAL_PASSENGER: {
+        title: "INTERNATIONAL_PASSENGER",
+        type: "subtype",
+        description: "Conceptual subtype of PASSENGER for international travel.",
+        table: null,
+        pk: [],
+        fk: [],
+        attributes: [],
+        relationships: [
+            "ISA → PASSENGER"
+        ],
+        crudSection: null
+    },
+
+    INDIVIDUAL_RESERVATION: {
+        title: "INDIVIDUAL_RESERVATION",
+        type: "subtype",
+        description: "Conceptual subtype representing an individual reservation.",
+        table: null,
+        pk: [],
+        fk: [],
+        attributes: [],
+        relationships: [
+            "ISA → RESERVATION"
+        ],
+        crudSection: null
+    },
+
+    GROUP_RESERVATION: {
+        title: "GROUP_RESERVATION",
+        type: "subtype",
+        description: "Conceptual subtype representing a group reservation.",
+        table: null,
+        pk: [],
+        fk: [],
+        attributes: [],
+        relationships: [
+            "ISA → RESERVATION"
+        ],
+        crudSection: null
+    },
+
+    FULL_TIME_EMPLOYEE: {
+        title: "FULL_TIME_EMPLOYEE",
+        type: "subtype",
+        description: "Conceptual employee category used in the EER union.",
+        table: null,
+        pk: [],
+        fk: [],
+        attributes: [],
+        relationships: [
+            "Participates in U category → EMPLOYEE"
+        ],
+        crudSection: null
+    },
+
+    PART_TIME_EMPLOYEE: {
+        title: "PART_TIME_EMPLOYEE",
+        type: "subtype",
+        description: "Conceptual employee category used in the EER union.",
+        table: null,
+        pk: [],
+        fk: [],
+        attributes: [],
+        relationships: [
+            "Participates in U category → EMPLOYEE"
+        ],
+        crudSection: null
+    }
+
+};
+
+/* =========================================================
+   INTERACTIVE EER DIAGRAM
+========================================================= */
+
+/*
+    IMPORTANT
+    ----------
+    The existing eerEntities object above this section is kept.
+
+    This renderer creates:
+    - Strong entities
+    - Weak entities
+    - Subtypes
+    - Relationships
+    - ISA triangles
+    - Union U
+    - Attribute ovals
+    - Cardinality labels
+    - Clickable elements
+*/
+
+
+/* =========================================================
+   EER RELATIONSHIPS
+========================================================= */
+
+const interactiveEERRelationships = [
+
+    {
+        id: "passenger-reservation",
+        from: "PASSENGER",
+        to: "RESERVATION",
+        label: "MAKES",
+        cardinalityFrom: "1",
+        cardinalityTo: "N"
+    },
+
+    {
+        id: "reservation-airport",
+        from: "RESERVATION",
+        to: "AIRPORT",
+        label: "DEPARTS / ARRIVES",
+        cardinalityFrom: "N",
+        cardinalityTo: "1"
+    },
+
+    {
+        id: "airlines-flight",
+        from: "AIRLINES",
+        to: "FLIGHT",
+        label: "OPERATES",
+        cardinalityFrom: "1",
+        cardinalityTo: "N"
+    },
+
+    {
+        id: "reservation-ticket",
+        from: "RESERVATION",
+        to: "TICKET",
+        label: "HAS",
+        cardinalityFrom: "1",
+        cardinalityTo: "N"
+    },
+
+    {
+        id: "ticket-payment",
+        from: "TICKET",
+        to: "PAYMENT",
+        label: "PAID BY",
+        cardinalityFrom: "1",
+        cardinalityTo: "N"
+    },
+
+    {
+        id: "ticket-baggage",
+        from: "TICKET",
+        to: "BAGGAGE",
+        label: "INCLUDES",
+        cardinalityFrom: "M",
+        cardinalityTo: "N"
+    },
+
+    {
+        id: "baggage-tracking",
+        from: "BAGGAGE",
+        to: "BAGGAGE_TRACKING",
+        label: "TRACKED BY",
+        cardinalityFrom: "1",
+        cardinalityTo: "N"
+    },
+
+    {
+        id: "employee-airport",
+        from: "EMPLOYEE",
+        to: "AIRPORT",
+        label: "EMPLOYED AT",
+        cardinalityFrom: "N",
+        cardinalityTo: "1"
+    }
+
+];
+
+
+/* =========================================================
+   EER SPECIALIZATION
+========================================================= */
+
+const interactiveEERSpecializations = [
+
+    {
+        parent: "PASSENGER",
+        children: [
+            "DOMESTIC_PASSENGER",
+            "INTERNATIONAL_PASSENGER"
+        ],
+        label: "ISA"
+    },
+
+    {
+        parent: "RESERVATION",
+        children: [
+            "INDIVIDUAL_RESERVATION",
+            "GROUP_RESERVATION"
+        ],
+        label: "ISA"
+    }
+
+];
+
+
+/* =========================================================
+   EER UNION
+========================================================= */
+
+const interactiveEERUnion = {
+
+    parent: "EMPLOYEE",
+
+    children: [
+        "FULL_TIME_EMPLOYEE",
+        "PART_TIME_EMPLOYEE"
+    ],
+
+    label: "U"
+
+};
+
+
+/* =========================================================
+   EER ATTRIBUTES
+========================================================= */
+
+const interactiveEERAttributes = {
+
+    PASSENGER: [
+        {
+            id: "passenger-name",
+            label: "Name",
+            type: "attribute"
+        },
+        {
+            id: "passenger-email",
+            label: "Email",
+            type: "attribute"
+        },
+        {
+            id: "passenger-dob",
+            label: "DOB",
+            type: "attribute"
+        },
+        {
+            id: "passenger-address",
+            label: "Address",
+            type: "attribute"
+        },
+        {
+            id: "passenger-phone",
+            label: "Phone",
+            type: "multivalued"
+        }
+    ],
+
+    AIRPORT: [
+        {
+            id: "airport-name",
+            label: "AirportName",
+            type: "attribute"
+        },
+        {
+            id: "airport-city",
+            label: "City",
+            type: "attribute"
+        },
+        {
+            id: "airport-country",
+            label: "Country",
+            type: "attribute"
+        }
+    ],
+
+    AIRLINES: [
+        {
+            id: "airline-name",
+            label: "AirlineName",
+            type: "attribute"
+        },
+        {
+            id: "airline-iata",
+            label: "IATA_Code",
+            type: "attribute"
+        }
+    ],
+
+    FLIGHT: [
+        {
+            id: "flight-time",
+            label: "DepartureTime",
+            type: "attribute"
+        }
+    ],
+
+    EMPLOYEE: [
+        {
+            id: "employee-name",
+            label: "Name",
+            type: "attribute"
+        },
+        {
+            id: "employee-designation",
+            label: "Designation",
+            type: "attribute"
+        },
+        {
+            id: "employee-phone",
+            label: "Phone",
+            type: "attribute"
+        }
+    ],
+
+    RESERVATION: [
+        {
+            id: "reservation-status",
+            label: "BookingStatus",
+            type: "attribute"
+        },
+        {
+            id: "reservation-class",
+            label: "Class",
+            type: "attribute"
+        }
+    ],
+
+    TICKET: [
+        {
+            id: "ticket-seat",
+            label: "SeatNo",
+            type: "attribute"
+        },
+        {
+            id: "ticket-fare",
+            label: "Fare",
+            type: "attribute"
+        }
+    ],
+
+    PAYMENT: [
+        {
+            id: "payment-amount",
+            label: "Amount",
+            type: "attribute"
+        },
+        {
+            id: "payment-method",
+            label: "PaymentMethod",
+            type: "attribute"
+        }
+    ],
+
+    BAGGAGE: [
+        {
+            id: "baggage-pieces",
+            label: "NoOfPieces",
+            type: "attribute"
+        },
+        {
+            id: "baggage-weight",
+            label: "Weight",
+            type: "attribute"
+        }
+    ],
+
+    BAGGAGE_TRACKING: [
+        {
+            id: "tracking-location",
+            label: "ScanLocation",
+            type: "attribute"
+        },
+        {
+            id: "tracking-time",
+            label: "ScanTime",
+            type: "attribute"
+        }
+    ]
+
+};
+/* =========================================================
+   EER ATTRIBUTE POSITIONS
+========================================================= */
+
+const interactiveEERAttributePositions = {
+
+    /* ---------- PASSENGER ---------- */
+
+    "passenger-name": {
+        x: 75,
+        y: 120
+    },
+
+    "passenger-email": {
+        x: 145,
+        y: 90
+    },
+
+    "passenger-dob": {
+        x: 215,
+        y: 120
+    },
+
+    "passenger-address": {
+        x: 65,
+        y: 240
+    },
+
+    "passenger-phone": {
+        x: 225,
+        y: 240
+    },
+
+
+    /* ---------- RESERVATION ---------- */
+
+    "reservation-status": {
+        x: 365,
+        y: 110
+    },
+
+    "reservation-class": {
+        x: 505,
+        y: 110
+    },
+
+
+    /* ---------- AIRPORT ---------- */
+
+    "airport-name": {
+        x: 690,
+        y: 100
+    },
+
+    "airport-city": {
+        x: 755,
+        y: 80
+    },
+
+    "airport-country": {
+        x: 825,
+        y: 100
+    },
+
+
+    /* ---------- EMPLOYEE ---------- */
+
+    "employee-name": {
+        x: 1030,
+        y: 100
+    },
+
+    "employee-designation": {
+        x: 1110,
+        y: 80
+    },
+
+    "employee-phone": {
+        x: 1190,
+        y: 100
+    },
+
+
+    /* ---------- AIRLINES ---------- */
+
+    "airline-name": {
+        x: 640,
+        y: 365
+    },
+
+    "airline-iata": {
+        x: 755,
+        y: 365
+    },
+
+
+    /* ---------- FLIGHT ---------- */
+
+    "flight-time": {
+        x: 950,
+        y: 365
+    },
+
+
+    /* ---------- TICKET ---------- */
+
+    "ticket-seat": {
+        x: 400,
+        y: 585
+    },
+
+    "ticket-fare": {
+        x: 525,
+        y: 585
+    },
+
+
+    /* ---------- PAYMENT ---------- */
+
+    "payment-amount": {
+        x: 660,
+        y: 585
+    },
+
+    "payment-method": {
+        x: 785,
+        y: 585
+    },
+
+
+    /* ---------- BAGGAGE ---------- */
+
+    "baggage-pieces": {
+        x: 910,
+        y: 585
+    },
+
+    "baggage-weight": {
+        x: 1025,
+        y: 585
+    },
+
+
+    /* ---------- BAGGAGE TRACKING ---------- */
+
+    "tracking-location": {
+        x: 1160,
+        y: 585
+    },
+
+    "tracking-time": {
+        x: 1300,
+        y: 585
+    }
+
+};
+
+/* =========================================================
+   DIAGRAM POSITIONS
+========================================================= */
+const interactiveEERPositions = {
+
+    /* =====================================================
+       MAIN ENTITIES
+    ===================================================== */
+
+    PASSENGER: {
+        x: 145,
+        y: 180
+    },
+
+    RESERVATION: {
+        x: 435,
+        y: 180
+    },
+
+    AIRPORT: {
+        x: 755,
+        y: 180
+    },
+
+    EMPLOYEE: {
+        x: 1110,
+        y: 180
+    },
+
+
+    /* =====================================================
+       PASSENGER SPECIALIZATION
+    ===================================================== */
+
+    DOMESTIC_PASSENGER: {
+        x: 75,
+        y: 390
+    },
+
+    INTERNATIONAL_PASSENGER: {
+        x: 220,
+        y: 390
+    },
+
+
+    /* =====================================================
+       RESERVATION SPECIALIZATION
+    ===================================================== */
+
+    INDIVIDUAL_RESERVATION: {
+        x: 365,
+        y: 390
+    },
+
+    GROUP_RESERVATION: {
+        x: 515,
+        y: 390
+    },
+
+
+    /* =====================================================
+       EMPLOYEE UNION MEMBERS
+    ===================================================== */
+
+    FULL_TIME_EMPLOYEE: {
+        x: 1020,
+        y: 390
+    },
+
+    PART_TIME_EMPLOYEE: {
+        x: 1200,
+        y: 390
+    },
+
+
+    /* =====================================================
+       AIRLINE / FLIGHT
+    ===================================================== */
+
+    AIRLINES: {
+        x: 700,
+        y: 450
+    },
+
+    FLIGHT: {
+        x: 950,
+        y: 450
+    },
+
+
+    /* =====================================================
+       LOWER SECTION
+    ===================================================== */
+
+    TICKET: {
+        x: 450,
+        y: 650
+    },
+
+    PAYMENT: {
+        x: 650,
+        y: 650
+    },
+
+    BAGGAGE: {
+        x: 900,
+        y: 650
+    },
+
+    BAGGAGE_TRACKING: {
+        x: 1200,
+        y: 650
+    }
+
+};
+/* =========================================================
+   EXPLICIT RELATIONSHIP POSITIONS
+========================================================= */
+const interactiveEERRelationshipPositions = {
+
+    /* =====================================================
+       PASSENGER → RESERVATION
+    ===================================================== */
+
+    "passenger-reservation": {
+        x: 290,
+        y: 180
+    },
+
+
+    /* =====================================================
+       RESERVATION → AIRPORT
+    ===================================================== */
+
+    "reservation-airport": {
+        x: 595,
+        y: 180
+    },
+
+
+    /* =====================================================
+       EMPLOYEE → AIRPORT
+    ===================================================== */
+
+    "employee-airport": {
+        x: 930,
+        y: 180
+    },
+
+
+    /* =====================================================
+       AIRLINES → FLIGHT
+    ===================================================== */
+
+    "airlines-flight": {
+        x: 825,
+        y: 450
+    },
+
+
+    /* =====================================================
+       RESERVATION → TICKET
+    ===================================================== */
+
+    "reservation-ticket": {
+        x: 440,
+        y: 520
+    },
+
+
+    /* =====================================================
+       TICKET → PAYMENT
+    ===================================================== */
+
+    "ticket-payment": {
+        x: 550,
+        y: 650
+    },
+
+
+    /* =====================================================
+       TICKET → BAGGAGE
+    ===================================================== */
+
+    "ticket-baggage": {
+        x: 775,
+        y: 650
+    },
+
+
+    /* =====================================================
+       BAGGAGE → TRACKING
+    ===================================================== */
+
+    "baggage-tracking": {
+        x: 1050,
+        y: 650
+    }
+
+};
+/* =========================================================
+   INITIALIZE INTERACTIVE EER
+========================================================= */
+
+function initializeInteractiveEER() {
+
+    const section =
+        document.getElementById("eer-diagram");
+
+    if (!section) {
+        console.warn("EER section not found.");
+        return;
+    }
+
+    const workspace =
+        section.querySelector(".eer-workspace");
+
+    if (!workspace) {
+        console.warn("Interactive EER workspace not found.");
+        return;
+    }
+
+    /*
+        Clear only the interactive EER workspace.
+
+        The existing Database Schema section is completely
+        separate and is not modified.
+    */
+    workspace.innerHTML = "";
+
+    const diagram =
+        document.createElement("div");
+
+    diagram.id = "eer-diagram-area";
+    diagram.className = "eer-diagram-area";
+
+    const details =
+        document.createElement("aside");
+
+    details.id = "eer-details";
+    details.className = "eer-details-panel";
+
+    workspace.appendChild(diagram);
+    workspace.appendChild(details);
+
+    createInteractiveEERDiagram(diagram);
+
+    createInteractiveEERDetails(details);
+}
+
+/* =========================================================
+   CREATE DIAGRAM
+========================================================= */
+function createInteractiveEERDiagram(container) {
+
+    container.innerHTML = "";
+
+
+    /* =====================================================
+       CREATE FIXED EER CANVAS
+    ===================================================== */
+
+    const canvas =
+        document.createElement(
+            "div"
+        );
+
+
+    canvas.className =
+        "eer-canvas";
+
+
+    canvas.id =
+        "eer-canvas";
+
+
+    container.appendChild(
+        canvas
+    );
+
+
+    /* =====================================================
+       SVG CONNECTION LAYER
+    ===================================================== */
+
+    const svg =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg"
+        );
+
+
+    svg.id =
+        "eer-connection-layer";
+
+
+    svg.classList.add(
+        "eer-connection-layer"
+    );
+
+
+    canvas.appendChild(
+        svg
+    );
+
+
+    /* =====================================================
+       HTML ELEMENT LAYER
+    ===================================================== */
+
+    const entityLayer =
+        document.createElement(
+            "div"
+        );
+
+
+    entityLayer.className =
+        "eer-entity-layer";
+
+
+    canvas.appendChild(
+        entityLayer
+    );
+
+
+    /* =====================================================
+       CREATE ENTITY RECTANGLES
+    ===================================================== */
+
+    Object.values(
+        eerEntities
+    ).forEach(
+        entity => {
+
+            const position =
+                interactiveEERPositions[
+                    entity.title
+                ];
+
+
+            if (!position) {
+                return;
+            }
+
+
+            const node =
+                document.createElement(
+                    "button"
+                );
+
+
+            node.type =
+                "button";
+
+
+            node.className =
+                "eer-node";
+
+
+            /* ---------- ENTITY TYPE ---------- */
+
+            if (
+                entity.type ===
+                "weak-entity"
+            ) {
+
+                node.classList.add(
+                    "eer-weak-entity"
+                );
+
+            }
+            else if (
+                entity.type ===
+                "subtype"
+            ) {
+
+                node.classList.add(
+                    "eer-concept"
+                );
+
+            }
+            else {
+
+                node.classList.add(
+                    "eer-entity"
+                );
+
+            }
+
+
+            node.dataset.entity =
+                entity.title;
+
+
+            /* ---------- POSITION ---------- */
+
+            node.style.left =
+                `${position.x}px`;
+
+
+            node.style.top =
+                `${position.y}px`;
+
+
+            /* ---------- TEXT ---------- */
+
+            node.innerHTML = `
+                <span class="eer-node-title">
+                    ${escapeHtml(
+                        entity.title
+                    )}
+                </span>
+            `;
+
+
+            /* ---------- CLICK ---------- */
+
+            node.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+
+                    selectEEREntity(
+                        entity.title
+                    );
+
+                }
+            );
+
+
+            entityLayer.appendChild(
+                node
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       RELATIONSHIP DIAMONDS
+    ===================================================== */
+
+    createRelationshipNodes(
+        entityLayer
+    );
+
+
+    /* =====================================================
+       ISA TRIANGLES
+    ===================================================== */
+
+    createISANodes(
+        entityLayer
+    );
+
+
+    /* =====================================================
+       UNION U
+    ===================================================== */
+
+    createUnionNode(
+        entityLayer
+    );
+
+
+    /* =====================================================
+       ATTRIBUTE OVALS
+    ===================================================== */
+
+    createAttributeNodes(
+        entityLayer
+    );
+
+
+    /* =====================================================
+       DRAW CONNECTIONS AFTER ELEMENTS EXIST
+    ===================================================== */
+
+    requestAnimationFrame(
+        () => {
+
+            drawInteractiveEERConnections();
+
+        }
+    );
+
+}
+
+/* =========================================================
+   RELATIONSHIP NODES
+========================================================= */
+function createRelationshipNodes(container) {
+
+    interactiveEERRelationships.forEach(
+        relationship => {
+
+            const position =
+                interactiveEERRelationshipPositions[
+                    relationship.id
+                ];
+
+            if (!position) {
+                return;
+            }
+
+
+            const node =
+                document.createElement(
+                    "button"
+                );
+
+            node.type = "button";
+
+            node.className =
+                "eer-relationship-node";
+
+
+            node.dataset.relationship =
+                relationship.id;
+
+
+            node.style.left =
+                `${position.x}px`;
+
+            node.style.top =
+                `${position.y}px`;
+
+
+            node.innerHTML = `
+                <span>
+                    ${escapeHtml(
+                        relationship.label
+                    )}
+                </span>
+            `;
+
+
+            node.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    showEERRelationshipDetails(
+                        relationship
+                    );
+
+                    openEERDetails();
+
+                }
+            );
+
+
+            container.appendChild(node);
+
+        }
+    );
+}
+/* =========================================================
+   ISA NODES
+========================================================= */
+function createISANodes(container) {
+
+    interactiveEERSpecializations.forEach(
+        specialization => {
+
+            /*
+             * Fixed position for the ISA triangle.
+             *
+             * PASSENGER ISA:
+             *        PASSENGER
+             *           |
+             *          ISA
+             *
+             * RESERVATION ISA:
+             *       RESERVATION
+             *           |
+             *          ISA
+             */
+
+            let x = 0;
+            let y = 0;
+
+
+            if (
+                specialization.parent ===
+                "PASSENGER"
+            ) {
+
+                x = 145;
+                y = 285;
+
+            }
+
+
+            if (
+                specialization.parent ===
+                "RESERVATION"
+            ) {
+
+                x = 435;
+                y = 285;
+
+            }
+
+
+            const node =
+                document.createElement(
+                    "button"
+                );
+
+
+            node.type =
+                "button";
+
+
+            node.className =
+                "eer-isa-node";
+
+
+            node.style.left =
+                `${x}px`;
+
+
+            node.style.top =
+                `${y}px`;
+
+
+            node.innerHTML = `
+    <span class="eer-isa-label">ISA</span>
+`;
+
+
+            node.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+
+                    showEERConceptDetails(
+                        specialization
+                    );
+
+
+                    openEERDetails();
+
+                }
+            );
+
+
+            container.appendChild(
+                node
+            );
+
+        }
+    );
+
+}
+/* =========================================================
+   UNION NODE
+========================================================= */
+function createUnionNode(container) {
+
+    const node =
+        document.createElement(
+            "button"
+        );
+
+
+    node.type =
+        "button";
+
+
+    node.className =
+        "eer-union-node";
+
+
+    /*
+     * U is placed between EMPLOYEE
+     * and the two employee categories.
+     */
+
+    node.style.left =
+        "1110px";
+
+
+    node.style.top =
+        "285px";
+
+
+    node.innerHTML =
+        "U";
+
+
+    node.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+
+
+            showEERUnionDetails();
+
+
+            openEERDetails();
+
+        }
+    );
+
+
+    container.appendChild(
+        node
+    );
+
+}
+/* =========================================================
+   ATTRIBUTE NODES
+========================================================= */
+function createAttributeNodes(container) {
+
+    Object.entries(
+        interactiveEERAttributes
+    ).forEach(
+        ([entityName, attributes]) => {
+
+            attributes.forEach(
+                attribute => {
+
+                    /*
+                     * Find the exact position
+                     * assigned to this attribute.
+                     */
+
+                    const position =
+                        interactiveEERAttributePositions[
+                            attribute.id
+                        ];
+
+
+                    if (!position) {
+                        return;
+                    }
+
+
+                    const node =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    node.type =
+                        "button";
+
+
+                    node.className =
+                        "eer-attribute-node";
+
+
+                    /*
+                     * Multivalued attribute.
+                     *
+                     * Example:
+                     * PASSENGER.Phone
+                     */
+
+                    if (
+                        attribute.type ===
+                        "multivalued"
+                    ) {
+
+                        node.classList.add(
+                            "multivalued"
+                        );
+
+                    }
+
+
+                    node.dataset.attribute =
+                        attribute.id;
+
+
+                    node.dataset.entity =
+                        entityName;
+
+
+                    node.style.left =
+                        `${position.x}px`;
+
+
+                    node.style.top =
+                        `${position.y}px`;
+
+
+                    node.innerHTML =
+                        escapeHtml(
+                            attribute.label
+                        );
+
+
+                    node.addEventListener(
+                        "click",
+                        event => {
+
+                            event.stopPropagation();
+
+
+                            showEERAttributeDetails(
+                                entityName,
+                                attribute
+                            );
+
+
+                            openEERDetails();
+
+                        }
+                    );
+
+
+                    container.appendChild(
+                        node
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+/* =========================================================
+   DRAW CONNECTIONS
+========================================================= */
+
+function drawInteractiveEERConnections() {
+
+    const area =
+    document.getElementById(
+        "eer-canvas"
+    );
+
+    const svg =
+        document.getElementById(
+            "eer-connection-layer"
+        );
+
+
+    if (!area || !svg) {
+        return;
+    }
+
+
+    svg.innerHTML = "";
+
+
+    /*
+        Relationship lines.
+    */
+
+    interactiveEERRelationships.forEach(
+        relationship => {
+
+            drawEERLine(
+                area,
+                svg,
+                relationship.from,
+                relationship.to,
+                relationship
+            );
+
+        }
+    );
+
+
+    /*
+        ISA connections.
+    */
+
+    interactiveEERSpecializations.forEach(
+        specialization => {
+
+            specialization.children.forEach(
+                child => {
+
+                    drawEERLine(
+                        area,
+                        svg,
+                        specialization.parent,
+                        child
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /*
+        Union connections.
+
+        IMPORTANT:
+        There is NO enclosing box.
+    */
+
+    drawEERLine(
+        area,
+        svg,
+        "FULL_TIME_EMPLOYEE",
+        "EMPLOYEE"
+    );
+
+    drawEERLine(
+        area,
+        svg,
+        "PART_TIME_EMPLOYEE",
+        "EMPLOYEE"
+    );
+
+}
+
+
+/* =========================================================
+   DRAW ONE LINE
+========================================================= */
+
+function drawEERLine(
+    area,
+    svg,
+    fromName,
+    toName,
+    relationship = null
+) {
+
+    const from =
+        document.querySelector(
+            `.eer-node[data-entity="${fromName}"]`
+        );
+
+    const to =
+        document.querySelector(
+            `.eer-node[data-entity="${toName}"]`
+        );
+
+
+    if (!from || !to) {
+        return;
+    }
+
+
+    const areaRect =
+        area.getBoundingClientRect();
+
+    const fromRect =
+        from.getBoundingClientRect();
+
+    const toRect =
+        to.getBoundingClientRect();
+
+
+    const x1 =
+        fromRect.left +
+        fromRect.width / 2 -
+        areaRect.left;
+
+    const y1 =
+        fromRect.top +
+        fromRect.height / 2 -
+        areaRect.top;
+
+
+    const x2 =
+        toRect.left +
+        toRect.width / 2 -
+        areaRect.left;
+
+    const y2 =
+        toRect.top +
+        toRect.height / 2 -
+        areaRect.top;
+
+
+    const line =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+        );
+
+
+    line.classList.add(
+        "eer-connection"
+    );
+
+
+    line.setAttribute(
+        "x1",
+        x1
+    );
+
+    line.setAttribute(
+        "y1",
+        y1
+    );
+
+    line.setAttribute(
+        "x2",
+        x2
+    );
+
+    line.setAttribute(
+        "y2",
+        y2
+    );
+
+
+    if (relationship) {
+
+        line.dataset.relationship =
+            relationship.id;
+
+    }
+
+
+    svg.appendChild(
+        line
+    );
+
+}
+
+
+/* =========================================================
+   SELECT ENTITY
+========================================================= */
+function selectEEREntity(entityName) {
+
+    /* =====================================================
+       OPEN DETAILS PANEL
+    ===================================================== */
+
+    openEERDetails();
+
+
+    /* =====================================================
+       CLEAR OLD SELECTION
+    ===================================================== */
+
+    document
+        .querySelectorAll(
+            ".eer-node"
+        )
+        .forEach(
+            node => {
+
+                node.classList.remove(
+                    "eer-selected"
+                );
+
+
+                node.classList.remove(
+                    "eer-related"
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       FIND SELECTED ENTITY
+    ===================================================== */
+
+    const selected =
+        document.querySelector(
+            `.eer-node[data-entity="${entityName}"]`
+        );
+
+
+    if (!selected) {
+        return;
+    }
+
+
+    /* =====================================================
+       HIGHLIGHT SELECTED ENTITY
+    ===================================================== */
+
+    selected.classList.add(
+        "eer-selected"
+    );
+
+
+    /* =====================================================
+       HIGHLIGHT RELATED ENTITIES
+    ===================================================== */
+
+    interactiveEERRelationships.forEach(
+        relationship => {
+
+            if (
+                relationship.from ===
+                entityName
+            ) {
+
+                markRelated(
+                    relationship.to
+                );
+
+            }
+
+
+            if (
+                relationship.to ===
+                entityName
+            ) {
+
+                markRelated(
+                    relationship.from
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       SHOW DETAILS
+    ===================================================== */
+
+    showEERDetails(
+        entityName
+    );
+
+}
+
+/* =========================================================
+   MARK RELATED
+========================================================= */
+
+function markRelated(entityName) {
+
+    const node =
+        document.querySelector(
+            `.eer-node[data-entity="${entityName}"]`
+        );
+
+
+    if (node) {
+
+        node.classList.add(
+            "eer-related"
+        );
+
+    }
+
+}
+/* =========================================================
+   EER DETAILS PANEL
+========================================================= */
+
+function openEERDetails() {
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    panel.classList.add(
+        "eer-details-visible"
+    );
+
+}
+
+
+function closeEERDetails() {
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    panel.classList.remove(
+        "eer-details-visible"
+    );
+
+}
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+function showEERDetails(entityName) {
+
+    const entity =
+        eerEntities[
+            entityName
+        ];
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!entity || !panel) {
+        return;
+    }
+
+
+    const attributes =
+        entity.attributes &&
+        entity.attributes.length
+            ? entity.attributes
+                .map(
+                    attribute =>
+                        `<li>${escapeHtml(attribute)}</li>`
+                )
+                .join("")
+            : "<li>No separate attributes</li>";
+
+
+    const primaryKeys =
+        entity.pk &&
+        entity.pk.length
+            ? entity.pk
+                .map(
+                    key =>
+                        `<li>${escapeHtml(key)}</li>`
+                )
+                .join("")
+            : "<li>None</li>";
+
+
+    const foreignKeys =
+        entity.fk &&
+        entity.fk.length
+            ? entity.fk
+                .map(
+                    key =>
+                        `<li>${escapeHtml(key)}</li>`
+                )
+                .join("")
+            : "<li>None</li>";
+
+
+    const relationships =
+        entity.relationships &&
+        entity.relationships.length
+            ? entity.relationships
+                .map(
+                    relationship =>
+                        `<li>${escapeHtml(relationship)}</li>`
+                )
+                .join("")
+            : "<li>None</li>";
+
+
+    const manageButton =
+        entity.crudSection
+            ? `
+                <button
+                    type="button"
+                    class="primary-btn"
+                    onclick="manageEERTable('${entity.crudSection}')">
+
+                    Manage Table
+
+                </button>
+            `
+            : `
+                <span class="eer-readonly">
+
+                    Conceptual EER element —
+                    no separate database table.
+
+                </span>
+            `;
+
+
+    panel.innerHTML = `
+
+    <button
+        type="button"
+        class="eer-details-close"
+        onclick="closeEERDetails()">
+        ×
+    </button>
+
+        <div class="eer-detail-header">
+
+            <span class="eer-detail-type">
+
+                ${escapeHtml(
+                    entity.type
+                )}
+
+            </span>
+
+            <h3>
+                ${escapeHtml(
+                    entity.title
+                )}
+            </h3>
+
+            <p>
+                ${escapeHtml(
+                    entity.description
+                )}
+            </p>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Attributes
+            </h4>
+
+            <ul>
+                ${attributes}
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Primary Key
+            </h4>
+
+            <ul>
+                ${primaryKeys}
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Foreign Keys
+            </h4>
+
+            <ul>
+                ${foreignKeys}
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Relationships
+            </h4>
+
+            <ul>
+                ${relationships}
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-actions">
+
+            ${manageButton}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RELATIONSHIP DETAILS
+========================================================= */
+
+function showEERRelationshipDetails(
+    relationship
+) {
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    panel.innerHTML = `
+
+    <button
+        type="button"
+        class="eer-details-close"
+        onclick="closeEERDetails()">
+        ×
+    </button>
+
+        <div class="eer-detail-header">
+
+            <span class="eer-detail-type">
+                RELATIONSHIP
+            </span>
+
+            <h3>
+                ${escapeHtml(
+                    relationship.label
+                )}
+            </h3>
+
+            <p>
+                Relationship between
+                ${escapeHtml(
+                    relationship.from
+                )}
+                and
+                ${escapeHtml(
+                    relationship.to
+                )}.
+            </p>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Cardinality
+            </h4>
+
+            <ul>
+
+                <li>
+                    ${escapeHtml(
+                        relationship.cardinalityFrom
+                    )}
+                    :
+                    ${escapeHtml(
+                        relationship.cardinalityTo
+                    )}
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                From
+            </h4>
+
+            <ul>
+                <li>
+                    ${escapeHtml(
+                        relationship.from
+                    )}
+                </li>
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                To
+            </h4>
+
+            <ul>
+                <li>
+                    ${escapeHtml(
+                        relationship.to
+                    )}
+                </li>
+            </ul>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ATTRIBUTE DETAILS
+========================================================= */
+
+function showEERAttributeDetails(
+    entityName,
+    attribute
+) {
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    let type =
+        "Simple Attribute";
+
+
+    if (
+        attribute.type ===
+        "multivalued"
+    ) {
+
+        type =
+            "Multivalued Attribute";
+
+    }
+
+
+    panel.innerHTML = `
+
+    <button
+        type="button"
+        class="eer-details-close"
+        onclick="closeEERDetails()">
+        ×
+    </button>
+
+        <div class="eer-detail-header">
+
+            <span class="eer-detail-type">
+                ${type}
+            </span>
+
+            <h3>
+                ${escapeHtml(
+                    attribute.label
+                )}
+            </h3>
+
+            <p>
+                Attribute belonging to
+                ${escapeHtml(
+                    entityName
+                )}.
+            </p>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Attribute Type
+            </h4>
+
+            <ul>
+
+                <li>
+                    ${type}
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Entity
+            </h4>
+
+            <ul>
+
+                <li>
+                    ${escapeHtml(
+                        entityName
+                    )}
+                </li>
+
+            </ul>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ISA DETAILS
+========================================================= */
+
+function showEERConceptDetails(
+    specialization
+) {
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    panel.innerHTML = `
+
+    <button
+        type="button"
+        class="eer-details-close"
+        onclick="closeEERDetails()">
+        ×
+    </button>
+
+        <div class="eer-detail-header">
+
+            <span class="eer-detail-type">
+                SPECIALIZATION
+            </span>
+
+            <h3>
+                ISA
+            </h3>
+
+            <p>
+                Specialization of
+                ${escapeHtml(
+                    specialization.parent
+                )}.
+            </p>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Supertype
+            </h4>
+
+            <ul>
+
+                <li>
+                    ${escapeHtml(
+                        specialization.parent
+                    )}
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Subtypes
+            </h4>
+
+            <ul>
+
+                ${specialization.children
+                    .map(
+                        child =>
+                            `<li>${escapeHtml(child)}</li>`
+                    )
+                    .join("")}
+
+            </ul>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   UNION DETAILS
+========================================================= */
+
+function showEERUnionDetails() {
+
+    const panel =
+        document.getElementById(
+            "eer-details"
+        );
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    panel.innerHTML = `
+
+    <button
+        type="button"
+        class="eer-details-close"
+        onclick="closeEERDetails()">
+        ×
+    </button>
+
+        <div class="eer-detail-header">
+
+            <span class="eer-detail-type">
+                UNION CATEGORY
+            </span>
+
+            <h3>
+                U
+            </h3>
+
+            <p>
+                Union category connecting the employee
+                subtypes to EMPLOYEE.
+            </p>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Member Categories
+            </h4>
+
+            <ul>
+
+                <li>
+                    FULL_TIME_EMPLOYEE
+                </li>
+
+                <li>
+                    PART_TIME_EMPLOYEE
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Union Result
+            </h4>
+
+            <ul>
+
+                <li>
+                    EMPLOYEE
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="eer-detail-section">
+
+            <h4>
+                Important
+            </h4>
+
+            <ul>
+
+                <li>
+                    The union is represented by U.
+                </li>
+
+                <li>
+                    No enclosing box is used.
+                </li>
+
+            </ul>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   CREATE EMPTY DETAILS
+========================================================= */
+
+function createInteractiveEERDetails(
+    panel
+) {
+
+    panel.innerHTML = `
+
+    <button
+        type="button"
+        class="eer-details-close"
+        onclick="closeEERDetails()">
+        ×
+    </button>
+
+        <div class="eer-details-empty">
+
+            <div class="eer-details-empty-icon">
+                ◇
+            </div>
+
+            <h3>
+                Select an entity
+            </h3>
+
+            <p>
+                Click an entity, relationship,
+                attribute, ISA triangle or U
+                to explore the EER model.
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   MANAGE DATABASE TABLE
+========================================================= */
+
+function manageEERTable(
+    sectionId
+) {
+
+    if (!sectionId) {
+        return;
+    }
+
+
+    showSection(
+        sectionId
+    );
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetInteractiveEER() {
+
+    initializeInteractiveEER();
+
+}
+
+
+/* =========================================================
+   FIT DIAGRAM
+========================================================= */
+
+function fitInteractiveEER() {
+
+    const diagram =
+        document.getElementById(
+            "eer-diagram-area"
+        );
+
+
+    if (!diagram) {
+        return;
+    }
+
+
+    diagram.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        const diagram =
+            document.getElementById(
+                "eer-diagram-area"
+            );
+
+
+        if (!diagram) {
+            return;
+        }
+
+
+        drawInteractiveEERConnections();
+
+    }
+);
+
+
 /* =========================
    INITIAL LOAD
 ========================= */
