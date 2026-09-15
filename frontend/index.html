@@ -134,9 +134,15 @@
                         ● API Online
                     </span>
 
-                    <div class="user-avatar">
-                        AR
-                    </div>
+                    <button
+    class="team-button"
+    type="button"
+    onclick="toggleTeamMembers()"
+    title="Team Members">
+
+    <span class="team-icon">👥</span>
+
+</button>
                 </div>
 
             </header>
@@ -151,14 +157,14 @@
                         <span class="eyebrow">AIRLINE OPERATIONS</span>
 
                         <h2>
-                            Welcome to your
-                            <span>operations dashboard</span>
-                        </h2>
+    Welcome to Your
+    <span>Operations Dashboard</span>
+</h2>
 
-                        <p>
-                            Monitor passengers, reservations, flights,
-                            tickets and baggage from one place.
-                        </p>
+<p>
+    Monitor Passengers, Reservations, Flights,
+    Tickets, and Baggage From One Place.
+</p>
                     </div>
 
                     <div class="plane-decoration">
@@ -3399,24 +3405,614 @@
 
 </section>
 
-            <section id="sql" class="content-section">
-                <div class="section-header">
-                    <div>
-                        <h2>SQL Console</h2>
-                        <p>Execute database queries</p>
-                    </div>
+           <section id="sql" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>SQL Console</h2>
+            <p>Write, build and execute SQL queries with guided tools</p>
+        </div>
+
+        <div class="sql-connection-status">
+            <span class="sql-status-dot"></span>
+            Database Connected
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         SQL TOOLBAR
+    ====================================================== -->
+
+    <div class="sql-toolbar">
+
+        <div class="sql-toolbar-left">
+
+            <button
+                type="button"
+                class="sql-tool-btn active"
+                id="sql-editor-tab">
+                <i class="fa-solid fa-code"></i>
+                SQL Editor
+            </button>
+
+            <button
+    type="button"
+    class="sql-tool-btn"
+    id="sql-builder-tab"
+    onclick="openSQLQueryBuilder()">
+
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    Query Builder
+
+</button>
+
+            <button
+    type="button"
+    class="sql-history-btn"
+    id="sql-history-btn"
+    onclick="toggleSQLHistory()">
+
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    History
+
+</button>
+
+        </div>
+
+        <div class="sql-toolbar-right">
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="sql-refresh-tables-btn">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                Refresh
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SQL MAIN WORKSPACE
+    ====================================================== -->
+
+    <div class="sql-workspace">
+
+
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
+        <aside class="sql-sidebar">
+
+            <div class="sql-sidebar-section">
+
+                <div class="sql-sidebar-heading">
+                    <span>
+                        <i class="fa-solid fa-database"></i>
+                        Tables
+                    </span>
+
+                    <span
+                        id="sql-table-count"
+                        class="sql-count">
+                        0
+                    </span>
                 </div>
 
-                <div class="panel">
-                    SQL console coming next.
+
+                <div
+                    id="sql-table-list"
+                    class="sql-table-list">
+
+                    <div class="sql-loading">
+                        Loading tables...
+                    </div>
+
                 </div>
-            </section>
+
+            </div>
+
+
+            <!-- SELECTED TABLE INFO -->
+
+            <div
+                id="sql-table-info"
+                class="sql-table-info">
+
+                <div class="sql-empty-info">
+
+                    <i class="fa-regular fa-hand-pointer"></i>
+
+                    <p>
+                        Select a table to view its columns
+                        and records.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN SQL AREA
+        ================================================== -->
+
+        <div class="sql-main">
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <div class="sql-quick-actions">
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('select')">
+
+        <i class="fa-solid fa-table-list"></i>
+        SELECT
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('insert')">
+
+        <i class="fa-solid fa-plus"></i>
+        INSERT
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('update')">
+
+        <i class="fa-solid fa-pen"></i>
+        UPDATE
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('delete')">
+
+        <i class="fa-solid fa-trash"></i>
+        DELETE
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('create')">
+
+        <i class="fa-solid fa-sitemap"></i>
+        DDL
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('join')">
+
+        <i class="fa-solid fa-link"></i>
+        JOIN
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('aggregate')">
+
+        <i class="fa-solid fa-chart-column"></i>
+        Aggregate
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('plsql')">
+
+        <i class="fa-solid fa-gears"></i>
+        Procedural SQL
+
+    </button>
+
+</div>
+
+            <!-- =================================================
+                 EDITOR CARD
+            ================================================== -->
+
+            <div class="sql-editor-card">
+
+                <div class="sql-editor-header">
+
+                    <div>
+
+                        <div class="sql-editor-title">
+                            <i class="fa-solid fa-terminal"></i>
+                            SQL Editor
+                        </div>
+
+                        <div class="sql-editor-subtitle">
+                            Write your SQL query or use a template
+                        </div>
+
+                    </div>
+
+
+                    <div class="sql-editor-actions">
+
+                        <button
+    type="button"
+    class="sql-small-btn"
+    id="sql-format-btn"
+    onclick="formatSQLQuery()">
+
+    <i class="fa-solid fa-align-left"></i>
+    Format
+
+</button>
+
+
+                       <button
+    type="button"
+    class="sql-small-btn"
+    id="sql-clear-btn"
+    onclick="clearSQLQuery()">
+
+    <i class="fa-solid fa-eraser"></i>
+    Clear
+
+</button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sql-editor-wrapper">
+
+                    <div
+                        id="sql-line-numbers"
+                        class="sql-line-numbers">
+                        1
+                    </div>
+
+
+                    <textarea
+                        id="sql-editor"
+                        class="sql-editor"
+                        spellcheck="false"
+                        placeholder="Write your SQL query here...
+
+Example:
+SELECT *
+FROM PASSENGER
+WHERE City = 'Chennai';
+
+Tip: Ctrl + Enter to execute the query."></textarea>
+
+                </div>
+
+
+                <div class="sql-editor-footer">
+
+                    <div class="sql-editor-hint">
+
+                        <i class="fa-regular fa-lightbulb"></i>
+
+                        <span>
+                            Ctrl + Enter to execute
+                        </span>
+
+                    </div>
+
+                    <button
+    type="button"
+    class="primary-btn sql-run-btn"
+    id="sql-run-btn"
+    onclick="executeSQLQuery()">
+
+    <i class="fa-solid fa-play"></i>
+    Run Query
+
+</button>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 QUERY STATUS
+            ================================================== -->
+
+            <div
+                id="sql-query-status"
+                class="sql-query-status"
+                hidden>
+
+            </div>
+
+
+            <!-- =================================================
+                 RESULT CARD
+            ================================================== -->
+
+            <div class="sql-result-card">
+
+                <div class="sql-result-header">
+
+                    <div>
+
+                        <div class="sql-result-title">
+
+                            <i class="fa-solid fa-table"></i>
+
+                            Query Result
+
+                        </div>
+
+                        <div
+                            id="sql-result-summary"
+                            class="sql-result-summary">
+
+                            Run a query to see results.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sql-result-actions">
+
+                        <button
+    type="button"
+    class="sql-small-btn"
+    id="sql-copy-result-btn"
+    onclick="copySQLResult()">
+
+    <i class="fa-regular fa-copy"></i>
+    Copy
+
+</button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="sql-result-container"
+                    class="sql-result-container">
+
+                    <div class="sql-empty-result">
+
+                        <div class="sql-empty-icon">
+                            <i class="fa-solid fa-terminal"></i>
+                        </div>
+
+                        <h3>No query executed</h3>
+
+                        <p>
+                            Write a query above and click
+                            <strong>Run Query</strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VIEW TABLE MODAL
+    ====================================================== -->
+
+    <div
+        id="sql-table-modal"
+        class="modal-overlay">
+
+        <div class="modal sql-table-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h3 id="sql-table-modal-title">
+                        Table
+                    </h3>
+
+                    <p id="sql-table-modal-subtitle">
+                        Complete table data
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeSQLTableModal()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="sql-table-modal-content"
+                class="sql-table-modal-content">
+
+                <div class="loading-state">
+                    Loading table...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         QUERY HISTORY PANEL
+    ====================================================== -->
+
+    <div
+        id="sql-history-panel"
+        class="sql-history-panel"
+        hidden>
+
+        <div class="sql-history-header">
+
+            <div>
+
+                <h3>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Query History
+                </h3>
+
+                <p>
+                    Previously executed queries
+                </p>
+
+            </div>
+
+
+            <button
+    type="button"
+    class="secondary-btn"
+    id="sql-clear-history-btn"
+    onclick="clearSQLHistory()">
+
+    <i class="fa-solid fa-trash"></i>
+    Clear History
+
+</button>
+
+        </div>
+
+
+        <div
+            id="sql-history-list"
+            class="sql-history-list">
+
+            <div class="sql-empty-history">
+
+                No queries executed yet.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
         </main>
 
     </div>
 
+    <!-- Team Members Popup -->
 
+<div
+    id="team-members-popup"
+    class="team-members-popup">
+
+    <div class="team-popup-header">
+
+        <div>
+            <h3>Team Members</h3>
+            <p>AirTrack Project Team</p>
+        </div>
+
+        <button
+            class="team-popup-close"
+            type="button"
+            onclick="toggleTeamMembers()">
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="team-member-list">
+
+        <div class="team-member">
+
+            <div class="team-member-icon">
+                👤
+            </div>
+
+            <div>
+                <strong>Arthesh</strong>
+                <span>Team Member</span>
+            </div>
+
+        </div>
+
+
+        <div class="team-member">
+
+            <div class="team-member-icon">
+                👤
+            </div>
+
+            <div>
+                <strong>Parth</strong>
+                <span>Team Member</span>
+            </div>
+
+        </div>
+
+
+        <div class="team-member">
+
+            <div class="team-member-icon">
+                👤
+            </div>
+
+            <div>
+                <strong>Tharshitha</strong>
+                <span>Team Member</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
     <script src="script.js"></script>
 
 </body>

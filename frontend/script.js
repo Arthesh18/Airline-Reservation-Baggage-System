@@ -143,6 +143,9 @@ function showSection(sectionId) {
     if (sectionId === "eer-diagram") {
     initializeInteractiveEER();
     }
+    if (sectionId === "sql") {
+    initializeSQLConsole();
+    }
     window.scrollTo({
         top: 0,
         behavior: "smooth"
@@ -11719,8 +11722,4891 @@ window.addEventListener(
 
     }
 );
+/* =========================================================
+   SQL CONSOLE
+========================================================= */
+
+let sqlTables = [];
+let sqlHistory = [];
+let sqlSelectedTable = null;
 
 
+/* =========================================================
+   SQL TABLE DEFINITIONS
+========================================================= */
+
+const sqlTableDefinitions = {
+    PASSENGER: {
+        endpoint: "/passengers",
+        columns: [
+            ["PassengerID", "VARCHAR(10)"],
+            ["Name", "VARCHAR(100)"],
+            ["Email", "VARCHAR(150)"],
+            ["DOB", "DATE"],
+            ["Street", "VARCHAR(150)"],
+            ["City", "VARCHAR(100)"],
+            ["PIN", "VARCHAR(10)"]
+        ]
+    },
+
+    RESERVATION: {
+        endpoint: "/reservations",
+        columns: [
+            ["ReservationID", "VARCHAR(10)"],
+            ["PassengerID", "VARCHAR(10)"],
+            ["BookingStatus", "VARCHAR(30)"],
+            ["Class", "VARCHAR(30)"],
+            ["DepartureAirportID", "VARCHAR(10)"],
+            ["ArrivalAirportID", "VARCHAR(10)"]
+        ]
+    },
+
+    AIRPORT: {
+        endpoint: "/airports",
+        columns: [
+            ["AirportID", "VARCHAR(10)"],
+            ["AirportName", "VARCHAR(100)"],
+            ["City", "VARCHAR(100)"],
+            ["Country", "VARCHAR(100)"]
+        ]
+    },
+
+    AIRLINES: {
+        endpoint: "/airlines",
+        columns: [
+            ["AirlineID", "VARCHAR(10)"],
+            ["AirlineName", "VARCHAR(100)"],
+            ["IATA_Code", "VARCHAR(10)"]
+        ]
+    },
+
+    EMPLOYEE: {
+        endpoint: "/employees",
+        columns: [
+            ["EmployeeID", "VARCHAR(10)"],
+            ["Name", "VARCHAR(100)"],
+            ["Designation", "VARCHAR(100)"],
+            ["Phone", "VARCHAR(20)"]
+        ]
+    },
+
+    BAGGAGE: {
+        endpoint: "/baggage",
+        columns: [
+            ["BaggageID", "VARCHAR(10)"],
+            ["NoOfPieces", "INT"],
+            ["Weight", "DECIMAL(8,2)"]
+        ]
+    },
+
+    FLIGHT: {
+        endpoint: "/flights",
+        columns: [
+            ["FlightID", "VARCHAR(10)"],
+            ["AirlineID", "VARCHAR(10)"],
+            ["DepartureTime", "TIME"]
+        ]
+    },
+
+    TICKET: {
+        endpoint: "/tickets",
+        columns: [
+            ["ReservationID", "VARCHAR(10)"],
+            ["TicketNo", "VARCHAR(10)"],
+            ["SeatNo", "VARCHAR(10)"],
+            ["Fare", "DECIMAL(10,2)"]
+        ]
+    },
+
+    PAYMENT: {
+        endpoint: "/payments",
+        columns: [
+            ["PaymentID", "VARCHAR(10)"],
+            ["ReservationID", "VARCHAR(10)"],
+            ["TicketNo", "VARCHAR(10)"],
+            ["Amount", "DECIMAL(10,2)"],
+            ["PaymentMethod", "VARCHAR(50)"]
+        ]
+    },
+
+    BAGGAGE_TRACKING: {
+        endpoint: "/baggage-tracking",
+        columns: [
+            ["BaggageID", "VARCHAR(10)"],
+            ["TrackingID", "VARCHAR(10)"],
+            ["ScanLocation", "VARCHAR(100)"],
+            ["ScanTime", "TIME"]
+        ]
+    },
+
+    TICKET_BAGGAGE: {
+        endpoint: "/ticket-baggage",
+        columns: [
+            ["ReservationID", "VARCHAR(10)"],
+            ["TicketNo", "VARCHAR(10)"],
+            ["BaggageID", "VARCHAR(10)"],
+            ["CheckedInDate", "DATE"]
+        ]
+    },
+
+    PASSENGER_PHONE: {
+        endpoint: "/passenger-phones",
+        columns: [
+            ["PassengerID", "VARCHAR(10)"],
+            ["Phone", "VARCHAR(20)"]
+        ]
+    }
+};
+/* =========================================================
+   QUERY BUILDER
+========================================================= */
+
+function openSQLQueryBuilder() {
+
+    const existing =
+        document.getElementById("sql-query-builder-modal");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const modal =
+        document.createElement("div");
+
+    modal.id = "sql-query-builder-modal";
+    modal.className = "sql-builder-overlay";
+
+    modal.innerHTML = `
+        <div class="sql-builder-modal">
+
+            <div class="sql-builder-header">
+
+                <div>
+                    <h3>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Query Builder
+                    </h3>
+
+                    <p>
+                        Build SQL queries visually without writing the complete query manually.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeSQLQueryBuilder()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <div class="sql-builder-body">
+
+                <!-- QUERY TYPE -->
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Query Type
+                    </label>
+
+                    <select
+                        id="builder-query-type"
+                        onchange="changeSQLBuilderType()">
+
+                        <option value="select">
+                            SELECT
+                        </option>
+
+                        <option value="insert">
+                            INSERT
+                        </option>
+
+                        <option value="update">
+                            UPDATE
+                        </option>
+
+                        <option value="delete">
+                            DELETE
+                        </option>
+
+                        <option value="join">
+                            JOIN
+                        </option>
+
+                        <option value="aggregate">
+                            Aggregate
+                        </option>
+
+                        <option value="ddl">
+                            DDL
+                        </option>
+                        
+                        <option value="procedural">
+                            Procedural SQL
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- DYNAMIC BUILDER CONTENT -->
+
+                <div id="sql-builder-dynamic-content"></div>
+
+
+                <!-- PREVIEW -->
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Query Preview
+                    </label>
+
+                    <div
+                        id="builder-preview"
+                        class="sql-builder-preview">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="sql-builder-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeSQLQueryBuilder()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    onclick="generateSQLBuilderQuery()">
+
+                    <i class="fa-solid fa-code"></i>
+
+                    Generate Query
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    const queryType =
+        document.getElementById("builder-query-type");
+
+    if (queryType) {
+
+        queryType.value = "select";
+
+    }
+
+
+    renderSQLBuilderType("select");
+
+
+    modal.addEventListener(
+        "click",
+        function (event) {
+
+            if (event.target === modal) {
+
+                closeSQLQueryBuilder();
+
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   CHANGE QUERY TYPE
+========================================================= */
+
+function changeSQLBuilderType() {
+
+    const type =
+        document.getElementById(
+            "builder-query-type"
+        )?.value || "select";
+
+
+    renderSQLBuilderType(type);
+}
+
+
+/* =========================================================
+   RENDER QUERY TYPE
+========================================================= */
+
+function renderSQLBuilderType(type) {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    switch (type) {
+
+        case "select":
+
+            renderSQLBuilderSelect();
+
+            break;
+
+
+        case "insert":
+
+            renderSQLBuilderInsert();
+
+            break;
+
+
+        case "update":
+
+            renderSQLBuilderUpdate();
+
+            break;
+
+
+        case "delete":
+
+            renderSQLBuilderDelete();
+
+            break;
+
+
+        case "join":
+
+            renderSQLBuilderJoin();
+
+            break;
+
+
+        case "aggregate":
+
+            renderSQLBuilderAggregate();
+
+            break;
+
+
+        case "ddl":
+
+            renderSQLBuilderDDL();
+
+            break;
+
+        case "procedural":
+
+            renderSQLBuilderProcedural();
+
+            break;
+        default:
+
+            renderSQLBuilderSelect();
+
+    }
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   BUILDER TABLE OPTIONS
+========================================================= */
+
+function getSQLBuilderTables() {
+
+    return Object.keys(
+        sqlTableDefinitions || {}
+    );
+
+}
+
+
+/* =========================================================
+   BUILDER TABLE DROPDOWN
+========================================================= */
+
+function createSQLBuilderTableOptions(
+    selectedTable = null
+) {
+
+    return getSQLBuilderTables()
+        .map(table => {
+
+            const selected =
+                table === selectedTable
+                    ? "selected"
+                    : "";
+
+            return `
+                <option
+                    value="${table}"
+                    ${selected}>
+
+                    ${table}
+
+                </option>
+            `;
+
+        })
+        .join("");
+}
+
+
+/* =========================================================
+   BUILDER COLUMN DATA
+========================================================= */
+
+function getSQLBuilderColumns(table) {
+
+    const definition =
+        sqlTableDefinitions[table];
+
+    if (!definition) {
+        return [];
+    }
+
+    return definition.columns.map(
+        column => column[0]
+    );
+
+}
+
+
+/* =========================================================
+   SELECT BUILDER
+========================================================= */
+
+function renderSQLBuilderSelect() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const table =
+        sqlSelectedTable &&
+        sqlTableDefinitions[sqlSelectedTable]
+            ? sqlSelectedTable
+            : "PASSENGER";
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Table
+            </label>
+
+            <select
+                id="builder-table"
+                onchange="updateSQLBuilderColumns()">
+
+                ${createSQLBuilderTableOptions(table)}
+
+            </select>
+
+        </div>
+
+
+        <div class="sql-builder-group">
+
+            <label>
+                Columns
+            </label>
+
+            <div
+                id="builder-columns"
+                class="sql-builder-columns">
+            </div>
+
+        </div>
+
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    WHERE Column
+                </label>
+
+                <select
+                    id="builder-where-column"
+                    onchange="updateSQLBuilderPreview()">
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    WHERE Value
+                </label>
+
+                <input
+                    type="text"
+                    id="builder-where-value"
+                    placeholder="Optional value"
+                    oninput="updateSQLBuilderPreview()">
+
+            </div>
+
+        </div>
+
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    ORDER BY
+                </label>
+
+                <select
+                    id="builder-order-column"
+                    onchange="updateSQLBuilderPreview()">
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Direction
+                </label>
+
+                <select
+                    id="builder-order-direction"
+                    onchange="updateSQLBuilderPreview()">
+
+                    <option value="ASC">
+                        Ascending
+                    </option>
+
+                    <option value="DESC">
+                        Descending
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="sql-builder-group">
+
+            <label>
+                Limit
+            </label>
+
+            <input
+                type="number"
+                id="builder-limit"
+                min="1"
+                placeholder="Optional"
+                oninput="updateSQLBuilderPreview()">
+
+        </div>
+
+    `;
+
+
+    updateSQLBuilderColumns();
+}
+
+
+/* =========================================================
+   SELECT BUILDER COLUMNS
+========================================================= */
+
+function updateSQLBuilderColumns() {
+
+    const tableSelect =
+        document.getElementById(
+            "builder-table"
+        );
+
+    const columnsContainer =
+        document.getElementById(
+            "builder-columns"
+        );
+
+    const whereColumn =
+        document.getElementById(
+            "builder-where-column"
+        );
+
+    const orderColumn =
+        document.getElementById(
+            "builder-order-column"
+        );
+
+
+    if (
+        !tableSelect ||
+        !columnsContainer ||
+        !whereColumn ||
+        !orderColumn
+    ) {
+        return;
+    }
+
+
+    const table =
+        tableSelect.value;
+
+
+    const columns =
+        getSQLBuilderColumns(table);
+
+
+    columnsContainer.innerHTML = `
+
+        <label class="sql-builder-column-option">
+
+            <input
+                type="checkbox"
+                id="builder-select-all"
+                checked
+                onchange="toggleAllSQLBuilderColumns(this)">
+
+            <span>
+                All columns
+            </span>
+
+        </label>
+
+    `;
+
+
+    columns.forEach(column => {
+
+        const label =
+            document.createElement("label");
+
+        label.className =
+            "sql-builder-column-option";
+
+
+        label.innerHTML = `
+
+            <input
+                type="checkbox"
+                class="builder-column-checkbox"
+                value="${column}"
+                checked
+                onchange="updateSQLBuilderPreview()">
+
+            <span>
+                ${column}
+            </span>
+
+        `;
+
+
+        columnsContainer.appendChild(label);
+
+    });
+
+
+    whereColumn.innerHTML =
+        `<option value="">
+            No WHERE condition
+        </option>`;
+
+
+    orderColumn.innerHTML =
+        `<option value="">
+            No ORDER BY
+        </option>`;
+
+
+    columns.forEach(column => {
+
+        whereColumn.innerHTML += `
+            <option value="${column}">
+                ${column}
+            </option>
+        `;
+
+
+        orderColumn.innerHTML += `
+            <option value="${column}">
+                ${column}
+            </option>
+        `;
+
+    });
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   SELECT ALL COLUMNS
+========================================================= */
+
+function toggleAllSQLBuilderColumns(
+    checkbox
+) {
+
+    document
+        .querySelectorAll(
+            ".builder-column-checkbox"
+        )
+        .forEach(item => {
+
+            item.checked =
+                checkbox.checked;
+
+        });
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   INSERT BUILDER
+========================================================= */
+
+function renderSQLBuilderInsert() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const table =
+        sqlSelectedTable &&
+        sqlTableDefinitions[sqlSelectedTable]
+            ? sqlSelectedTable
+            : "PASSENGER";
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Table
+            </label>
+
+            <select
+                id="builder-insert-table"
+                onchange="renderSQLBuilderInsertFields()">
+
+                ${createSQLBuilderTableOptions(table)}
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="builder-insert-fields">
+        </div>
+
+    `;
+
+
+    renderSQLBuilderInsertFields();
+}
+
+
+/* =========================================================
+   INSERT FIELDS
+========================================================= */
+
+function renderSQLBuilderInsertFields() {
+
+    const table =
+        document.getElementById(
+            "builder-insert-table"
+        )?.value;
+
+
+    const container =
+        document.getElementById(
+            "builder-insert-fields"
+        );
+
+
+    if (!table || !container) {
+        return;
+    }
+
+
+    const columns =
+        getSQLBuilderColumns(table);
+
+
+    let html = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Column Values
+            </label>
+
+            <div class="sql-builder-columns">
+
+    `;
+
+
+    columns.forEach((column, index) => {
+
+        html += `
+
+            <div
+                class="sql-builder-grid"
+                style="margin-bottom:10px;">
+
+                <div>
+
+                    <label
+                        class="sql-builder-column-option">
+
+                        <input
+                            type="checkbox"
+                            class="builder-insert-column"
+                            value="${column}"
+                            checked
+                            onchange="updateSQLBuilderPreview()">
+
+                        <span>
+                            ${column}
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div>
+
+                    <input
+                        type="text"
+                        class="builder-insert-value"
+                        data-column="${column}"
+                        placeholder="Value"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    html += `
+
+            </div>
+
+        </div>
+
+        <div class="sql-builder-group">
+
+            <small>
+                Enter SQL NULL without quotes when a NULL value is required.
+            </small>
+
+        </div>
+
+    `;
+
+
+    container.innerHTML = html;
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   UPDATE BUILDER
+========================================================= */
+
+function renderSQLBuilderUpdate() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const table =
+        sqlSelectedTable &&
+        sqlTableDefinitions[sqlSelectedTable]
+            ? sqlSelectedTable
+            : "PASSENGER";
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Table
+            </label>
+
+            <select
+                id="builder-update-table"
+                onchange="updateSQLBuilderUpdateColumns()">
+
+                ${createSQLBuilderTableOptions(table)}
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="builder-update-fields">
+        </div>
+
+    `;
+
+
+    updateSQLBuilderUpdateColumns();
+}
+
+
+/* =========================================================
+   UPDATE FIELDS
+========================================================= */
+
+function updateSQLBuilderUpdateColumns() {
+
+    const table =
+        document.getElementById(
+            "builder-update-table"
+        )?.value;
+
+
+    const container =
+        document.getElementById(
+            "builder-update-fields"
+        );
+
+
+    if (!table || !container) {
+        return;
+    }
+
+
+    const columns =
+        getSQLBuilderColumns(table);
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    SET Column
+                </label>
+
+                <select
+                    id="builder-update-column"
+                    onchange="updateSQLBuilderPreview()">
+
+                    ${columns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    SET Value
+                </label>
+
+                <input
+                    type="text"
+                    id="builder-update-value"
+                    placeholder="New value"
+                    oninput="updateSQLBuilderPreview()">
+
+            </div>
+
+        </div>
+
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    WHERE Column
+                </label>
+
+                <select
+                    id="builder-update-where-column"
+                    onchange="updateSQLBuilderPreview()">
+
+                    <option value="">
+                        Select condition column
+                    </option>
+
+                    ${columns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    WHERE Value
+                </label>
+
+                <input
+                    type="text"
+                    id="builder-update-where-value"
+                    placeholder="Required"
+                    oninput="updateSQLBuilderPreview()">
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   DELETE BUILDER
+========================================================= */
+
+function renderSQLBuilderDelete() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const table =
+        sqlSelectedTable &&
+        sqlTableDefinitions[sqlSelectedTable]
+            ? sqlSelectedTable
+            : "PASSENGER";
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Table
+            </label>
+
+            <select
+                id="builder-delete-table"
+                onchange="updateSQLBuilderDeleteColumns()">
+
+                ${createSQLBuilderTableOptions(table)}
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="builder-delete-fields">
+        </div>
+
+    `;
+
+
+    updateSQLBuilderDeleteColumns();
+}
+
+
+/* =========================================================
+   DELETE FIELDS
+========================================================= */
+
+function updateSQLBuilderDeleteColumns() {
+
+    const table =
+        document.getElementById(
+            "builder-delete-table"
+        )?.value;
+
+
+    const container =
+        document.getElementById(
+            "builder-delete-fields"
+        );
+
+
+    if (!table || !container) {
+        return;
+    }
+
+
+    const columns =
+        getSQLBuilderColumns(table);
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    WHERE Column
+                </label>
+
+                <select
+                    id="builder-delete-where-column"
+                    onchange="updateSQLBuilderPreview()">
+
+                    <option value="">
+                        Select condition column
+                    </option>
+
+                    ${columns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    WHERE Value
+                </label>
+
+                <input
+                    type="text"
+                    id="builder-delete-where-value"
+                    placeholder="Required"
+                    oninput="updateSQLBuilderPreview()">
+
+            </div>
+
+        </div>
+
+        <div class="sql-builder-group">
+
+            <small>
+                A WHERE condition is required for DELETE queries.
+            </small>
+
+        </div>
+
+    `;
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   JOIN BUILDER
+========================================================= */
+
+function renderSQLBuilderJoin() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const tables =
+        getSQLBuilderTables();
+
+
+    const firstTable =
+        sqlSelectedTable &&
+        sqlTableDefinitions[sqlSelectedTable]
+            ? sqlSelectedTable
+            : tables[0];
+
+
+    const secondTable =
+        tables.find(
+            table => table !== firstTable
+        ) || tables[1] || firstTable;
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    First Table
+                </label>
+
+                <select
+                    id="builder-join-left-table"
+                    onchange="updateSQLBuilderJoinColumns()">
+
+                    ${createSQLBuilderTableOptions(firstTable)}
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Second Table
+                </label>
+
+                <select
+                    id="builder-join-right-table"
+                    onchange="updateSQLBuilderJoinColumns()">
+
+                    ${createSQLBuilderTableOptions(secondTable)}
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="sql-builder-group">
+
+            <label>
+                Join Type
+            </label>
+
+            <select
+                id="builder-join-type"
+                onchange="updateSQLBuilderPreview()">
+
+                <option value="INNER JOIN">
+                    INNER JOIN
+                </option>
+
+                <option value="LEFT JOIN">
+                    LEFT JOIN
+                </option>
+
+                <option value="RIGHT JOIN">
+                    RIGHT JOIN
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="builder-join-columns">
+        </div>
+
+    `;
+
+
+    updateSQLBuilderJoinColumns();
+}
+
+
+/* =========================================================
+   JOIN COLUMNS
+========================================================= */
+
+function updateSQLBuilderJoinColumns() {
+
+    const leftTable =
+        document.getElementById(
+            "builder-join-left-table"
+        )?.value;
+
+
+    const rightTable =
+        document.getElementById(
+            "builder-join-right-table"
+        )?.value;
+
+
+    const container =
+        document.getElementById(
+            "builder-join-columns"
+        );
+
+
+    if (!leftTable || !rightTable || !container) {
+        return;
+    }
+
+
+    const leftColumns =
+        getSQLBuilderColumns(leftTable);
+
+
+    const rightColumns =
+        getSQLBuilderColumns(rightTable);
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    First Table Column
+                </label>
+
+                <select
+                    id="builder-join-left-column"
+                    onchange="updateSQLBuilderPreview()">
+
+                    ${leftColumns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Second Table Column
+                </label>
+
+                <select
+                    id="builder-join-right-column"
+                    onchange="updateSQLBuilderPreview()">
+
+                    ${rightColumns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   AGGREGATE BUILDER
+========================================================= */
+
+function renderSQLBuilderAggregate() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    const table =
+        sqlSelectedTable &&
+        sqlTableDefinitions[sqlSelectedTable]
+            ? sqlSelectedTable
+            : "PASSENGER";
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Table
+            </label>
+
+            <select
+                id="builder-aggregate-table"
+                onchange="updateSQLBuilderAggregateColumns()">
+
+                ${createSQLBuilderTableOptions(table)}
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="builder-aggregate-fields">
+        </div>
+
+    `;
+
+
+    updateSQLBuilderAggregateColumns();
+}
+
+
+/* =========================================================
+   AGGREGATE FIELDS
+========================================================= */
+
+function updateSQLBuilderAggregateColumns() {
+
+    const table =
+        document.getElementById(
+            "builder-aggregate-table"
+        )?.value;
+
+
+    const container =
+        document.getElementById(
+            "builder-aggregate-fields"
+        );
+
+
+    if (!table || !container) {
+        return;
+    }
+
+
+    const columns =
+        getSQLBuilderColumns(table);
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Function
+                </label>
+
+                <select
+                    id="builder-aggregate-function"
+                    onchange="updateSQLBuilderAggregateColumnState()">
+
+                    <option value="COUNT">
+                        COUNT
+                    </option>
+
+                    <option value="SUM">
+                        SUM
+                    </option>
+
+                    <option value="AVG">
+                        AVG
+                    </option>
+
+                    <option value="MIN">
+                        MIN
+                    </option>
+
+                    <option value="MAX">
+                        MAX
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Column
+                </label>
+
+                <select
+                    id="builder-aggregate-column"
+                    onchange="updateSQLBuilderPreview()">
+
+                    <option value="*">
+                        *
+                    </option>
+
+                    ${columns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="sql-builder-grid">
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Alias
+                </label>
+
+                <input
+                    type="text"
+                    id="builder-aggregate-alias"
+                    value="Total"
+                    oninput="updateSQLBuilderPreview()">
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    GROUP BY
+                </label>
+
+                <select
+                    id="builder-aggregate-group"
+                    onchange="updateSQLBuilderPreview()">
+
+                    <option value="">
+                        No GROUP BY
+                    </option>
+
+                    ${columns.map(column => `
+                        <option value="${column}">
+                            ${column}
+                        </option>
+                    `).join("")}
+
+                </select>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    updateSQLBuilderAggregateColumnState();
+}
+
+
+/* =========================================================
+   AGGREGATE COLUMN STATE
+========================================================= */
+
+function updateSQLBuilderAggregateColumnState() {
+
+    const functionSelect =
+        document.getElementById(
+            "builder-aggregate-function"
+        );
+
+
+    const columnSelect =
+        document.getElementById(
+            "builder-aggregate-column"
+        );
+
+
+    if (!functionSelect || !columnSelect) {
+        return;
+    }
+
+
+    if (functionSelect.value === "COUNT") {
+
+        columnSelect.disabled = false;
+
+    } else {
+
+        if (columnSelect.value === "*") {
+
+            const firstRealColumn =
+                Array.from(
+                    columnSelect.options
+                ).find(
+                    option =>
+                        option.value !== "*"
+                );
+
+            if (firstRealColumn) {
+
+                columnSelect.value =
+                    firstRealColumn.value;
+
+            }
+
+        }
+
+        columnSelect.disabled = false;
+
+    }
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   DDL BUILDER
+========================================================= */
+
+function renderSQLBuilderDDL() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                DDL Operation
+            </label>
+
+            <select
+                id="builder-ddl-operation"
+                onchange="renderSQLBuilderDDLFields()">
+
+                <option value="create">
+                    CREATE TABLE
+                </option>
+
+                <option value="alter">
+                    ALTER TABLE
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="builder-ddl-fields">
+        </div>
+
+    `;
+
+
+    renderSQLBuilderDDLFields();
+}
+function renderSQLBuilderProcedural() {
+
+    const container =
+        document.getElementById("sql-builder-dynamic-content");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="sql-builder-section">
+
+            <div class="sql-builder-field">
+                <label>Procedural Construct</label>
+
+                <select
+                    id="builder-procedural-construct"
+                    onchange="changeSQLBuilderProceduralConstruct(this.value)">
+
+                    <option value="variable">
+                        Variable Declaration
+                    </option>
+
+                    <option value="if">
+                        IF / ELSE
+                    </option>
+
+                    <option value="case">
+                        CASE
+                    </option>
+
+                    <option value="while">
+                        WHILE Loop
+                    </option>
+
+                    <option value="repeat">
+                        REPEAT Loop
+                    </option>
+
+                    <option value="loop">
+                        LOOP / LEAVE
+                    </option>
+
+                    <option value="procedure">
+                        Stored Procedure
+                    </option>
+
+                </select>
+            </div>
+
+            <div
+                id="builder-procedural-fields">
+            </div>
+
+            <div class="sql-builder-info">
+
+                <strong>
+                    MySQL Procedural SQL
+                </strong>
+
+                <p>
+                    Build MySQL procedural constructs
+                    such as variables, conditions,
+                    loops and stored procedures.
+                </p>
+
+            </div>
+
+            <div class="sql-builder-preview-box">
+
+                <label>
+                    Query Preview
+                </label>
+
+                <pre id="builder-preview"></pre>
+
+            </div>
+
+        </div>
+    `;
+
+    changeSQLBuilderProceduralConstruct("variable");
+}
+/* =========================================================
+   PROCEDURAL SQL BUILDER
+========================================================= */
+
+function renderSQLBuilderProcedural() {
+
+    const container =
+        document.getElementById(
+            "sql-builder-dynamic-content"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+
+        <div class="sql-builder-group">
+
+            <label>
+                Procedural Construct
+            </label>
+
+            <select
+                id="builder-procedural-construct"
+                onchange="changeSQLBuilderProceduralConstruct(this.value)">
+
+                <option value="variable">
+                    Variable Declaration
+                </option>
+
+                <option value="if">
+                    IF / ELSE
+                </option>
+
+                <option value="case">
+                    CASE
+                </option>
+
+                <option value="while">
+                    WHILE Loop
+                </option>
+
+                <option value="repeat">
+                    REPEAT Loop
+                </option>
+
+                <option value="loop">
+                    LOOP / LEAVE
+                </option>
+
+                <option value="procedure">
+                    Stored Procedure
+                </option>
+
+            </select>
+
+        </div>
+
+        <div
+            id="builder-procedural-fields">
+        </div>
+
+        <div class="sql-builder-info">
+
+            <strong>
+                MySQL Procedural SQL
+            </strong>
+
+            <p>
+                Build MySQL procedural constructs
+                such as variables, conditions,
+                loops and stored procedures.
+            </p>
+
+        </div>
+
+    `;
+
+    changeSQLBuilderProceduralConstruct("variable");
+}
+
+
+/* =========================================================
+   PROCEDURAL CONSTRUCT FIELDS
+========================================================= */
+
+function changeSQLBuilderProceduralConstruct(
+    construct
+) {
+
+    const container =
+        document.getElementById(
+            "builder-procedural-fields"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    let html = "";
+
+
+    switch (construct) {
+
+        /* =========================
+           VARIABLE
+        ========================= */
+
+        case "variable":
+
+            html = `
+
+                <div class="sql-builder-grid">
+
+                    <div class="sql-builder-group">
+
+                        <label>
+                            Variable Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="builder-variable-name"
+                            value="v_count"
+                            placeholder="Example: v_count"
+                            oninput="updateSQLBuilderPreview()">
+
+                    </div>
+
+
+                    <div class="sql-builder-group">
+
+                        <label>
+                            Data Type
+                        </label>
+
+                        <select
+                            id="builder-variable-type"
+                            onchange="updateSQLBuilderPreview()">
+
+                            <option value="INT">
+                                INT
+                            </option>
+
+                            <option value="VARCHAR(100)">
+                                VARCHAR(100)
+                            </option>
+
+                            <option value="DECIMAL(10,2)">
+                                DECIMAL(10,2)
+                            </option>
+
+                            <option value="DATE">
+                                DATE
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Default Value
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-variable-default"
+                        value="0"
+                        placeholder="Optional"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            `;
+
+            break;
+
+
+        /* =========================
+           IF / ELSE
+        ========================= */
+
+        case "if":
+
+            html = `
+
+                <div class="sql-builder-grid">
+
+                    <div class="sql-builder-group">
+
+                        <label>
+                            Variable
+                        </label>
+
+                        <input
+                            type="text"
+                            id="builder-if-variable"
+                            value="v_count"
+                            oninput="updateSQLBuilderPreview()">
+
+                    </div>
+
+
+                    <div class="sql-builder-group">
+
+                        <label>
+                            Operator
+                        </label>
+
+                        <select
+                            id="builder-if-operator"
+                            onchange="updateSQLBuilderPreview()">
+
+                            <option value=">">
+                                Greater than (>)
+                            </option>
+
+                            <option value="<">
+                                Less than (<)
+                            </option>
+
+                            <option value="=">
+                                Equal (=)
+                            </option>
+
+                            <option value=">=">
+                                Greater than or equal (>=)
+                            </option>
+
+                            <option value="<=">
+                                Less than or equal (<=)
+                            </option>
+
+                            <option value="<>">
+                                Not equal (<>)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Compare With
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-if-value"
+                        value="5"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        THEN Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-if-then"
+                        value="SELECT 'Condition is TRUE' AS Message;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        ELSE Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-if-else"
+                        value="SELECT 'Condition is FALSE' AS Message;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            `;
+
+            break;
+
+
+        /* =========================
+           CASE
+        ========================= */
+
+        case "case":
+
+            html = `
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Variable
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-case-variable"
+                        value="v_count"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        WHEN Condition
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-case-condition"
+                        value="v_count > 5"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        THEN Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-case-then"
+                        value="SELECT 'High' AS Status;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        ELSE Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-case-else"
+                        value="SELECT 'Low' AS Status;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            `;
+
+            break;
+
+
+        /* =========================
+           WHILE LOOP
+        ========================= */
+
+        case "while":
+
+            html = `
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Variable
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-while-variable"
+                        value="v_count"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Loop Condition
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-while-condition"
+                        value="v_count < 5"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Loop Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-while-statement"
+                        value="SET v_count = v_count + 1;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            `;
+
+            break;
+
+
+        /* =========================
+           REPEAT LOOP
+        ========================= */
+
+        case "repeat":
+
+            html = `
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Variable
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-repeat-variable"
+                        value="v_count"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Loop Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-repeat-statement"
+                        value="SET v_count = v_count + 1;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        UNTIL Condition
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-repeat-condition"
+                        value="v_count >= 5"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            `;
+
+            break;
+
+
+        /* =========================
+           LOOP / LEAVE
+        ========================= */
+
+        case "loop":
+
+            html = `
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Loop Label
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-loop-label"
+                        value="main_loop"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Variable
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-loop-variable"
+                        value="v_count"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Loop Statement
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-loop-statement"
+                        value="SET v_count = v_count + 1;"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        LEAVE Condition
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-loop-condition"
+                        value="v_count >= 5"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+            `;
+
+            break;
+
+
+        /* =========================
+           STORED PROCEDURE
+        ========================= */
+
+        case "procedure":
+
+            html = `
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Procedure Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-procedure-name"
+                        value="GetPassengerCount"
+                        placeholder="Example: GetPassengerCount"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Table
+                    </label>
+
+                    <select
+                        id="builder-procedure-table"
+                        onchange="updateSQLBuilderPreview()">
+
+                        ${createSQLBuilderTableOptions(
+                            "PASSENGER"
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div class="sql-builder-info">
+
+                    <strong>
+                        Procedure Action
+                    </strong>
+
+                    <p>
+                        The procedure will count records
+                        from the selected table.
+                    </p>
+
+                </div>
+
+            `;
+
+            break;
+    }
+
+
+    container.innerHTML = html;
+
+    updateSQLBuilderPreview();
+}
+/* =========================================================
+   DDL FIELDS
+========================================================= */
+
+function renderSQLBuilderDDLFields() {
+
+    const operation =
+        document.getElementById(
+            "builder-ddl-operation"
+        )?.value;
+
+
+    const container =
+        document.getElementById(
+            "builder-ddl-fields"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (operation === "create") {
+
+        container.innerHTML = `
+
+            <div class="sql-builder-group">
+
+                <label>
+                    New Table Name
+                </label>
+
+                <input
+                    type="text"
+                    id="builder-create-table"
+                    value="NEW_TABLE"
+                    oninput="updateSQLBuilderPreview()">
+
+            </div>
+
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Columns Definition
+                </label>
+
+                <textarea
+                    id="builder-create-columns"
+                    rows="6"
+                    oninput="updateSQLBuilderPreview()">ID VARCHAR(10) PRIMARY KEY,
+Name VARCHAR(100) NOT NULL</textarea>
+
+            </div>
+
+        `;
+
+    } else {
+
+        const table =
+            sqlSelectedTable &&
+            sqlTableDefinitions[sqlSelectedTable]
+                ? sqlSelectedTable
+                : "PASSENGER";
+
+
+        container.innerHTML = `
+
+            <div class="sql-builder-group">
+
+                <label>
+                    Table
+                </label>
+
+                <select
+                    id="builder-alter-table"
+                    onchange="updateSQLBuilderPreview()">
+
+                    ${createSQLBuilderTableOptions(table)}
+
+                </select>
+
+            </div>
+
+
+            <div class="sql-builder-grid">
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        New Column Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="builder-alter-column"
+                        value="NewColumn"
+                        oninput="updateSQLBuilderPreview()">
+
+                </div>
+
+
+                <div class="sql-builder-group">
+
+                    <label>
+                        Data Type
+                    </label>
+
+                    <select
+                        id="builder-alter-type"
+                        onchange="updateSQLBuilderPreview()">
+
+                        <option value="VARCHAR(100)">
+                            VARCHAR(100)
+                        </option>
+
+                        <option value="INT">
+                            INT
+                        </option>
+
+                        <option value="DECIMAL(10,2)">
+                            DECIMAL(10,2)
+                        </option>
+
+                        <option value="DATE">
+                            DATE
+                        </option>
+
+                        <option value="TIME">
+                            TIME
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    updateSQLBuilderPreview();
+}
+
+
+/* =========================================================
+   VALUE ESCAPING
+========================================================= */
+
+function formatSQLBuilderValue(value) {
+
+    const trimmed =
+        String(value ?? "").trim();
+
+
+    if (
+        trimmed.toUpperCase() === "NULL"
+    ) {
+
+        return "NULL";
+
+    }
+
+
+    if (
+        /^-?\d+(\.\d+)?$/.test(trimmed)
+    ) {
+
+        return trimmed;
+
+    }
+
+
+    return `'${trimmed.replace(
+        /'/g,
+        "''"
+    )}'`;
+
+}
+
+
+/* =========================================================
+   SELECT QUERY
+========================================================= */
+
+function buildSQLBuilderSelectQuery() {
+
+    const table =
+        document.getElementById(
+            "builder-table"
+        )?.value;
+
+
+    if (!table) {
+        return "";
+    }
+
+
+    const selectedColumns =
+        Array.from(
+            document.querySelectorAll(
+                ".builder-column-checkbox:checked"
+            )
+        ).map(
+            checkbox => checkbox.value
+        );
+
+
+    const columns =
+        selectedColumns.length > 0
+            ? selectedColumns.join(", ")
+            : "*";
+
+
+    let query =
+`SELECT ${columns}
+FROM ${table}`;
+
+
+    const whereColumn =
+        document.getElementById(
+            "builder-where-column"
+        )?.value;
+
+
+    const whereValue =
+        document.getElementById(
+            "builder-where-value"
+        )?.value.trim();
+
+
+    if (
+        whereColumn &&
+        whereValue
+    ) {
+
+        query +=
+`\nWHERE ${whereColumn} = ${formatSQLBuilderValue(whereValue)}`;
+
+    }
+
+
+    const orderColumn =
+        document.getElementById(
+            "builder-order-column"
+        )?.value;
+
+
+    const orderDirection =
+        document.getElementById(
+            "builder-order-direction"
+        )?.value || "ASC";
+
+
+    if (orderColumn) {
+
+        query +=
+`\nORDER BY ${orderColumn} ${orderDirection}`;
+
+    }
+
+
+    const limit =
+        document.getElementById(
+            "builder-limit"
+        )?.value;
+
+
+    if (limit) {
+
+        const numericLimit =
+            Number(limit);
+
+
+        if (
+            Number.isInteger(numericLimit) &&
+            numericLimit > 0
+        ) {
+
+            query +=
+`\nLIMIT ${numericLimit}`;
+
+        }
+
+    }
+
+
+    return query + ";";
+}
+
+
+/* =========================================================
+   INSERT QUERY
+========================================================= */
+
+function buildSQLBuilderInsertQuery() {
+
+    const table =
+        document.getElementById(
+            "builder-insert-table"
+        )?.value;
+
+
+    if (!table) {
+        return "";
+    }
+
+
+    const selectedColumns =
+        Array.from(
+            document.querySelectorAll(
+                ".builder-insert-column:checked"
+            )
+        );
+
+
+    if (selectedColumns.length === 0) {
+        return "";
+    }
+
+
+    const columns =
+        selectedColumns.map(
+            checkbox => checkbox.value
+        );
+
+
+    const values =
+        columns.map(column => {
+
+            const input =
+                document.querySelector(
+                    `.builder-insert-value[data-column="${CSS.escape(column)}"]`
+                );
+
+
+            return formatSQLBuilderValue(
+                input?.value || ""
+            );
+
+        });
+
+
+    return `INSERT INTO ${table}
+(${columns.join(", ")})
+VALUES (${values.join(", ")});`;
+}
+
+
+/* =========================================================
+   UPDATE QUERY
+========================================================= */
+
+function buildSQLBuilderUpdateQuery() {
+
+    const table =
+        document.getElementById(
+            "builder-update-table"
+        )?.value;
+
+
+    const setColumn =
+        document.getElementById(
+            "builder-update-column"
+        )?.value;
+
+
+    const setValue =
+        document.getElementById(
+            "builder-update-value"
+        )?.value.trim();
+
+
+    const whereColumn =
+        document.getElementById(
+            "builder-update-where-column"
+        )?.value;
+
+
+    const whereValue =
+        document.getElementById(
+            "builder-update-where-value"
+        )?.value.trim();
+
+
+    if (
+        !table ||
+        !setColumn ||
+        !setValue ||
+        !whereColumn ||
+        !whereValue
+    ) {
+
+        return "";
+
+    }
+
+
+    return `UPDATE ${table}
+SET ${setColumn} = ${formatSQLBuilderValue(setValue)}
+WHERE ${whereColumn} = ${formatSQLBuilderValue(whereValue)};`;
+}
+
+
+/* =========================================================
+   DELETE QUERY
+========================================================= */
+
+function buildSQLBuilderDeleteQuery() {
+
+    const table =
+        document.getElementById(
+            "builder-delete-table"
+        )?.value;
+
+
+    const whereColumn =
+        document.getElementById(
+            "builder-delete-where-column"
+        )?.value;
+
+
+    const whereValue =
+        document.getElementById(
+            "builder-delete-where-value"
+        )?.value.trim();
+
+
+    if (
+        !table ||
+        !whereColumn ||
+        !whereValue
+    ) {
+
+        return "";
+
+    }
+
+
+    return `DELETE FROM ${table}
+WHERE ${whereColumn} = ${formatSQLBuilderValue(whereValue)};`;
+}
+
+
+/* =========================================================
+   JOIN QUERY
+========================================================= */
+
+function buildSQLBuilderJoinQuery() {
+
+    const leftTable =
+        document.getElementById(
+            "builder-join-left-table"
+        )?.value;
+
+
+    const rightTable =
+        document.getElementById(
+            "builder-join-right-table"
+        )?.value;
+
+
+    const joinType =
+        document.getElementById(
+            "builder-join-type"
+        )?.value || "INNER JOIN";
+
+
+    const leftColumn =
+        document.getElementById(
+            "builder-join-left-column"
+        )?.value;
+
+
+    const rightColumn =
+        document.getElementById(
+            "builder-join-right-column"
+        )?.value;
+
+
+    if (
+        !leftTable ||
+        !rightTable ||
+        !leftColumn ||
+        !rightColumn
+    ) {
+
+        return "";
+
+    }
+
+
+    return `SELECT *
+FROM ${leftTable} l
+${joinType} ${rightTable} r
+    ON l.${leftColumn} = r.${rightColumn};`;
+}
+
+
+/* =========================================================
+   AGGREGATE QUERY
+========================================================= */
+
+function buildSQLBuilderAggregateQuery() {
+
+    const table =
+        document.getElementById(
+            "builder-aggregate-table"
+        )?.value;
+
+
+    const aggregateFunction =
+        document.getElementById(
+            "builder-aggregate-function"
+        )?.value;
+
+
+    const column =
+        document.getElementById(
+            "builder-aggregate-column"
+        )?.value;
+
+
+    const alias =
+        document.getElementById(
+            "builder-aggregate-alias"
+        )?.value.trim();
+
+
+    const groupColumn =
+        document.getElementById(
+            "builder-aggregate-group"
+        )?.value;
+
+
+    if (
+        !table ||
+        !aggregateFunction ||
+        !column
+    ) {
+
+        return "";
+
+    }
+
+
+    let query =
+`SELECT ${aggregateFunction}(${column})`;
+
+
+    if (alias) {
+
+        query +=
+` AS ${alias}`;
+
+    }
+
+
+    query +=
+`\nFROM ${table}`;
+
+
+    if (groupColumn) {
+
+        query +=
+`\nGROUP BY ${groupColumn}`;
+
+    }
+
+
+    return query + ";";
+}
+function buildSQLBuilderProceduralQuery() {
+
+    const construct =
+        document.getElementById(
+            "builder-procedural-construct"
+        )?.value;
+
+    if (!construct) {
+        return "";
+    }
+        /* =========================
+       IF / ELSE
+    ========================= */
+    /* =========================
+       IF / ELSE
+    ========================= */
+
+    if (construct === "if") {
+
+        const variable =
+            document.getElementById(
+                "builder-if-variable"
+            )?.value.trim();
+
+        const operator =
+            document.getElementById(
+                "builder-if-operator"
+            )?.value;
+
+        const compareValue =
+            document.getElementById(
+                "builder-if-value"
+            )?.value.trim();
+
+        const thenStatement =
+            document.getElementById(
+                "builder-if-then"
+            )?.value.trim();
+
+        const elseStatement =
+            document.getElementById(
+                "builder-if-else"
+            )?.value.trim();
+
+
+        if (
+            !variable ||
+            !operator ||
+            !compareValue ||
+            !thenStatement ||
+            !elseStatement
+        ) {
+            return "";
+        }
+
+
+        if (
+            !/^[A-Za-z_][A-Za-z0-9_]*$/.test(
+                variable
+            )
+        ) {
+            return "";
+        }
+
+
+        /*
+         * Remove any semicolon already entered
+         * in the THEN / ELSE statement.
+         */
+        const cleanThenStatement =
+            thenStatement.replace(/;+$/, "");
+
+        const cleanElseStatement =
+            elseStatement.replace(/;+$/, "");
+
+
+        /*
+         * Each procedural builder construct is
+         * executable on its own, so declare the
+         * variable inside this generated procedure.
+         */
+        return `CREATE PROCEDURE TestIfElse()
+BEGIN
+    DECLARE ${variable} INT DEFAULT 0;
+
+    IF ${variable} ${operator} ${formatSQLBuilderValue(compareValue)} THEN
+        ${cleanThenStatement};
+    ELSE
+        ${cleanElseStatement};
+    END IF;
+END`;
+    }
+        /* =========================
+       CASE
+    ========================= */
+
+    if (construct === "case") {
+
+        const variable =
+            document.getElementById(
+                "builder-case-variable"
+            )?.value.trim();
+
+        const condition =
+            document.getElementById(
+                "builder-case-condition"
+            )?.value.trim();
+
+        const thenStatement =
+            document.getElementById(
+                "builder-case-then"
+            )?.value.trim();
+
+        const elseStatement =
+            document.getElementById(
+                "builder-case-else"
+            )?.value.trim();
+
+
+        if (
+            !variable ||
+            !condition ||
+            !thenStatement ||
+            !elseStatement
+        ) {
+            return "";
+        }
+
+
+        if (
+            !/^[A-Za-z_][A-Za-z0-9_]*$/.test(
+                variable
+            )
+        ) {
+            return "";
+        }
+
+
+        const cleanThenStatement =
+            thenStatement.replace(/;+$/, "");
+
+        const cleanElseStatement =
+            elseStatement.replace(/;+$/, "");
+
+
+        return `CREATE PROCEDURE TestCase()
+BEGIN
+    DECLARE ${variable} INT DEFAULT 0;
+
+    CASE
+        WHEN ${condition} THEN
+            ${cleanThenStatement};
+        ELSE
+            ${cleanElseStatement};
+    END CASE;
+END`;
+    }
+        /* =========================
+       WHILE LOOP
+    ========================= */
+
+    if (construct === "while") {
+
+        const variable =
+            document.getElementById(
+                "builder-while-variable"
+            )?.value.trim();
+
+        const condition =
+            document.getElementById(
+                "builder-while-condition"
+            )?.value.trim();
+
+        const loopStatement =
+            document.getElementById(
+                "builder-while-statement"
+            )?.value.trim();
+
+
+        if (
+            !variable ||
+            !condition ||
+            !loopStatement
+        ) {
+            return "";
+        }
+
+
+        if (
+            !/^[A-Za-z_][A-Za-z0-9_]*$/.test(
+                variable
+            )
+        ) {
+            return "";
+        }
+
+
+        const cleanLoopStatement =
+            loopStatement.replace(/;+$/, "");
+
+
+        return `CREATE PROCEDURE TestWhile()
+BEGIN
+    DECLARE ${variable} INT DEFAULT 0;
+
+    WHILE ${condition} DO
+        ${cleanLoopStatement};
+    END WHILE;
+
+    SELECT ${variable} AS FinalValue;
+END`;
+    }
+    /* =========================
+       VARIABLE DECLARATION
+    ========================= */
+
+    if (construct === "variable") {
+
+        const variableName =
+            document.getElementById(
+                "builder-variable-name"
+            )?.value.trim();
+
+        const variableType =
+            document.getElementById(
+                "builder-variable-type"
+            )?.value;
+
+        const defaultValue =
+            document.getElementById(
+                "builder-variable-default"
+            )?.value.trim();
+
+
+        if (!variableName || !variableType) {
+            return "";
+        }
+
+
+        if (
+            !/^[A-Za-z_][A-Za-z0-9_]*$/.test(
+                variableName
+            )
+        ) {
+            return "";
+        }
+
+
+        let declaration =
+            `DECLARE ${variableName} ${variableType}`;
+
+
+        if (defaultValue) {
+
+            declaration +=
+                ` DEFAULT ${formatSQLBuilderValue(
+                    defaultValue
+                )}`;
+
+        }
+
+
+        declaration += ";";
+
+
+        return `CREATE PROCEDURE TestVariable()
+BEGIN
+    ${declaration}
+    SELECT ${variableName} AS VariableValue;
+END`;
+    }
+
+
+    return "";
+}
+/* =========================================================
+   DDL QUERY
+========================================================= */
+
+function buildSQLBuilderDDLQuery() {
+
+    const operation =
+        document.getElementById(
+            "builder-ddl-operation"
+        )?.value;
+
+
+    if (operation === "create") {
+
+        const table =
+            document.getElementById(
+                "builder-create-table"
+            )?.value.trim();
+
+
+        const columns =
+            document.getElementById(
+                "builder-create-columns"
+            )?.value.trim();
+
+
+        if (!table || !columns) {
+            return "";
+        }
+
+
+        if (
+            !/^[A-Za-z_][A-Za-z0-9_]*$/.test(
+                table
+            )
+        ) {
+
+            return "";
+
+        }
+
+
+        return `CREATE TABLE ${table} (
+${columns}
+);`;
+
+    }
+
+
+    if (operation === "alter") {
+
+        const table =
+            document.getElementById(
+                "builder-alter-table"
+            )?.value;
+
+
+        const column =
+            document.getElementById(
+                "builder-alter-column"
+            )?.value.trim();
+
+
+        const dataType =
+            document.getElementById(
+                "builder-alter-type"
+            )?.value;
+
+
+        if (
+            !table ||
+            !column ||
+            !dataType
+        ) {
+
+            return "";
+
+        }
+
+
+        if (
+            !/^[A-Za-z_][A-Za-z0-9_]*$/.test(
+                column
+            )
+        ) {
+
+            return "";
+
+        }
+
+
+        return `ALTER TABLE ${table}
+ADD COLUMN ${column} ${dataType};`;
+
+    }
+
+
+    return "";
+}
+
+
+/* =========================================================
+   MAIN BUILDER QUERY
+========================================================= */
+
+function buildSQLBuilderQuery() {
+
+    const type =
+        document.getElementById(
+            "builder-query-type"
+        )?.value || "select";
+
+
+    switch (type) {
+
+        case "select":
+
+            return buildSQLBuilderSelectQuery();
+
+
+        case "insert":
+
+            return buildSQLBuilderInsertQuery();
+
+
+        case "update":
+
+            return buildSQLBuilderUpdateQuery();
+
+
+        case "delete":
+
+            return buildSQLBuilderDeleteQuery();
+
+
+        case "join":
+
+            return buildSQLBuilderJoinQuery();
+
+
+        case "aggregate":
+
+            return buildSQLBuilderAggregateQuery();
+
+
+        case "ddl":
+
+            return buildSQLBuilderDDLQuery();
+
+        case "procedural":
+
+            return buildSQLBuilderProceduralQuery();
+
+        default:
+
+            return "";
+
+    }
+
+}
+
+
+/* =========================================================
+   BUILDER PREVIEW
+========================================================= */
+
+function updateSQLBuilderPreview() {
+
+    const preview =
+        document.getElementById(
+            "builder-preview"
+        );
+
+
+    if (!preview) {
+        return;
+    }
+
+
+    const query =
+        buildSQLBuilderQuery();
+
+
+    preview.textContent =
+        query ||
+        "Complete the required fields to generate the query.";
+}
+
+
+/* =========================================================
+   GENERATE QUERY
+========================================================= */
+
+function generateSQLBuilderQuery() {
+
+    const query =
+        buildSQLBuilderQuery();
+
+
+    if (!query) {
+
+        showSQLStatus(
+            "error",
+            "Please complete all required Query Builder fields."
+        );
+
+        return;
+
+    }
+
+
+    const editor =
+        document.getElementById(
+            "sql-editor"
+        );
+
+
+    if (!editor) {
+        return;
+    }
+
+
+    editor.value =
+        query;
+
+
+    updateSQLLineNumbers();
+
+
+    closeSQLQueryBuilder();
+
+
+    editor.focus();
+
+
+    showSQLStatus(
+        "success",
+        "Query generated successfully."
+    );
+}
+
+
+/* =========================================================
+   CLOSE BUILDER
+========================================================= */
+
+function closeSQLQueryBuilder() {
+
+    const modal =
+        document.getElementById(
+            "sql-query-builder-modal"
+        );
+
+
+    if (modal) {
+
+        modal.remove();
+
+    }
+
+}
+/* =========================================================
+   SQL HISTORY TOGGLE
+========================================================= */
+
+function toggleSQLHistory() {
+
+    const panel =
+        document.getElementById("sql-history-panel");
+
+    if (!panel) {
+        return;
+    }
+
+    panel.hidden = !panel.hidden;
+
+    if (!panel.hidden) {
+        renderSQLHistory();
+
+        panel.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+/* =========================================================
+   CLOSE SQL HISTORY
+========================================================= */
+
+function closeSQLHistory() {
+
+    const panel =
+        document.getElementById("sql-history-panel");
+
+    if (panel) {
+        panel.hidden = true;
+    }
+}
+/* =========================================================
+   SQL CONSOLE INITIALIZATION
+========================================================= */
+
+function initializeSQLConsole() {
+
+    const editor = document.getElementById("sql-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    populateSQLTables();
+    updateSQLLineNumbers();
+
+    editor.addEventListener("input", updateSQLLineNumbers);
+
+    editor.addEventListener("scroll", function () {
+        const lineNumbers = document.getElementById("sql-line-numbers");
+
+        if (lineNumbers) {
+            lineNumbers.scrollTop = editor.scrollTop;
+        }
+    });
+
+    editor.addEventListener("keydown", function (event) {
+
+        /* Ctrl + Enter = Execute */
+        if (event.ctrlKey && event.key === "Enter") {
+            event.preventDefault();
+            executeSQLQuery();
+            return;
+        }
+
+        /* Tab inserts spaces instead of leaving editor */
+        if (event.key === "Tab") {
+            event.preventDefault();
+
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+
+            editor.value =
+                editor.value.substring(0, start) +
+                "    " +
+                editor.value.substring(end);
+
+            editor.selectionStart = editor.selectionEnd = start + 4;
+
+            updateSQLLineNumbers();
+        }
+    });
+
+    loadSQLHistory();
+}
+
+
+/* =========================================================
+   TABLE LIST
+========================================================= */
+
+function populateSQLTables() {
+
+    const container = document.getElementById("sql-table-list");
+
+    if (!container) {
+        return;
+    }
+
+    sqlTables = Object.keys(sqlTableDefinitions);
+
+    container.innerHTML = "";
+
+    sqlTables.forEach(tableName => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "sql-table-item";
+
+        button.innerHTML = `
+            <span>
+                <i class="fa-solid fa-table"></i>
+                ${tableName}
+            </span>
+            <i class="fa-solid fa-chevron-right"></i>
+        `;
+
+        button.onclick = function () {
+            selectSQLTable(tableName, button);
+        };
+
+        container.appendChild(button);
+    });
+
+    const count = document.getElementById("sql-table-count");
+
+    if (count) {
+        count.textContent = sqlTables.length;
+    }
+}
+
+
+/* =========================================================
+   SELECT TABLE
+========================================================= */
+
+function selectSQLTable(tableName, clickedButton = null) {
+
+    sqlSelectedTable = tableName;
+
+    document.querySelectorAll(".sql-table-item").forEach(button => {
+        button.classList.remove("active");
+    });
+
+    if (clickedButton) {
+        clickedButton.classList.add("active");
+    } else {
+
+        document.querySelectorAll(".sql-table-item").forEach(button => {
+
+            if (button.textContent.includes(tableName)) {
+                button.classList.add("active");
+            }
+
+        });
+    }
+
+    showSQLTableInfo(tableName);
+
+    const editor = document.getElementById("sql-editor");
+
+    if (editor) {
+
+        editor.value =
+`SELECT *
+FROM ${tableName};`;
+
+        updateSQLLineNumbers();
+
+        editor.focus();
+    }
+}
+
+
+/* =========================================================
+   TABLE INFORMATION
+========================================================= */
+
+function showSQLTableInfo(tableName) {
+
+    const container = document.getElementById("sql-table-info");
+
+    if (!container) {
+        return;
+    }
+
+    const definition = sqlTableDefinitions[tableName];
+
+    if (!definition) {
+        return;
+    }
+
+    let columnsHTML = "";
+
+    definition.columns.forEach(column => {
+
+        columnsHTML += `
+            <div class="sql-column-item">
+                <span class="sql-column-name">
+                    ${column[0]}
+                </span>
+
+                <span class="sql-column-type">
+                    ${column[1]}
+                </span>
+            </div>
+        `;
+
+    });
+
+    container.innerHTML = `
+        <div class="sql-table-info-title">
+            ${tableName}
+        </div>
+
+        <div class="sql-column-list">
+            ${columnsHTML}
+        </div>
+
+        <button
+            type="button"
+            class="sql-table-view-btn"
+            onclick="viewSQLCompleteTable('${tableName}')">
+
+            <i class="fa-solid fa-table"></i>
+            View Complete Table
+
+        </button>
+    `;
+}
+
+
+/* =========================================================
+   QUERY TEMPLATES
+========================================================= */
+
+function insertSQLTemplate(type) {
+
+    const editor = document.getElementById("sql-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    const table = sqlSelectedTable || "PASSENGER";
+
+    let query = "";
+
+    switch (type) {
+
+        case "select":
+
+            query =
+`SELECT *
+FROM ${table};`;
+
+            break;
+
+
+        case "select-where":
+
+            query =
+`SELECT *
+FROM ${table}
+WHERE <column> = '<value>';`;
+
+            break;
+
+
+        case "insert":
+
+            query =
+`INSERT INTO ${table}
+VALUES (...);`;
+
+            break;
+
+
+        case "update":
+
+            query =
+`UPDATE ${table}
+SET <column> = '<value>'
+WHERE <primary_key> = '<value>';`;
+
+            break;
+
+
+        case "delete":
+
+            query =
+`DELETE FROM ${table}
+WHERE <primary_key> = '<value>';`;
+
+            break;
+
+
+        case "create":
+
+            query =
+`CREATE TABLE table_name (
+    id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100)
+);`;
+
+            break;
+
+
+        case "alter":
+
+            query =
+`ALTER TABLE ${table}
+ADD COLUMN new_column VARCHAR(100);`;
+
+            break;
+
+
+        case "drop":
+
+            query =
+`DROP TABLE table_name;`;
+
+            break;
+
+
+        case "aggregate":
+
+            query =
+`SELECT COUNT(*) AS TotalRecords
+FROM ${table};`;
+
+            break;
+
+
+        case "join":
+
+            query =
+`SELECT *
+FROM PASSENGER p
+JOIN RESERVATION r
+    ON p.PassengerID = r.PassengerID;`;
+
+            break;
+
+
+        case "group":
+
+            query =
+`SELECT <column>, COUNT(*) AS Total
+FROM ${table}
+GROUP BY <column>;`;
+
+            break;
+
+
+        case "order":
+
+            query =
+`SELECT *
+FROM ${table}
+ORDER BY <column> ASC;`;
+
+            break;
+
+
+        case "plsql":
+
+            query =
+`-- PL/SQL example
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM ${table};
+
+    DBMS_OUTPUT.PUT_LINE(v_count);
+END;`;
+
+            break;
+
+
+        case "procedure":
+
+            query =
+`CREATE OR REPLACE PROCEDURE procedure_name
+AS
+BEGIN
+    -- procedure statements
+    NULL;
+END;`;
+
+            break;
+
+
+        case "trigger":
+
+            query =
+`CREATE OR REPLACE TRIGGER trigger_name
+BEFORE INSERT ON ${table}
+FOR EACH ROW
+BEGIN
+    NULL;
+END;`;
+
+            break;
+
+
+        default:
+
+            query = `SELECT * FROM ${table};`;
+    }
+
+    editor.value = query;
+
+    updateSQLLineNumbers();
+
+    editor.focus();
+}
+
+
+/* =========================================================
+   EXECUTE QUERY
+========================================================= */
+
+async function executeSQLQuery() {
+
+    const editor = document.getElementById("sql-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    const sql = editor.value.trim();
+
+    if (!sql) {
+
+        showSQLStatus(
+            "error",
+            "Please enter a SQL query first."
+        );
+
+        editor.focus();
+
+        return;
+    }
+
+    const runButton = document.getElementById("sql-run-btn");
+
+    if (runButton) {
+
+        runButton.disabled = true;
+
+        runButton.innerHTML =
+            `<i class="fa-solid fa-spinner fa-spin"></i> Running...`;
+    }
+
+    showSQLStatus(
+        "loading",
+        "Executing query..."
+    );
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE}/sql/execute`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    sql: sql
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Query execution failed."
+            );
+        }
+
+        displaySQLResult(data);
+
+        addSQLHistory(sql);
+
+        showSQLStatus(
+            "success",
+            getSQLSuccessMessage(data)
+        );
+
+    } catch (error) {
+
+        showSQLStatus(
+            "error",
+            error.message || "Something went wrong."
+        );
+
+        displaySQLError(
+            error.message || "Something went wrong."
+        );
+
+    } finally {
+
+        if (runButton) {
+
+            runButton.disabled = false;
+
+            runButton.innerHTML =
+                `<i class="fa-solid fa-play"></i> Run Query`;
+        }
+    }
+}
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+function getSQLSuccessMessage(data) {
+
+    if (data.rowsAffected !== undefined) {
+
+        return `Query executed successfully. ${data.rowsAffected} row(s) affected.`;
+    }
+
+    if (data.affectedRows !== undefined) {
+
+        return `Query executed successfully. ${data.affectedRows} row(s) affected.`;
+    }
+
+    if (Array.isArray(data)) {
+
+        return `Query executed successfully. ${data.length} row(s) returned.`;
+    }
+
+    if (data.rows && Array.isArray(data.rows)) {
+
+        return `Query executed successfully. ${data.rows.length} row(s) returned.`;
+    }
+
+    if (data.data && Array.isArray(data.data)) {
+
+        return `Query executed successfully. ${data.data.length} row(s) returned.`;
+    }
+
+    return "Query executed successfully.";
+}
+
+
+/* =========================================================
+   DISPLAY RESULT
+========================================================= */
+
+function displaySQLResult(data) {
+
+    const container =
+        document.getElementById("sql-result-container");
+
+    const summary =
+        document.getElementById("sql-result-summary");
+
+    if (!container) {
+        return;
+    }
+
+    let rows = [];
+
+    if (Array.isArray(data)) {
+        rows = data;
+    } else if (Array.isArray(data.rows)) {
+        rows = data.rows;
+    } else if (Array.isArray(data.data)) {
+        rows = data.data;
+    } else if (Array.isArray(data.result)) {
+        rows = data.result;
+    }
+
+    if (rows.length === 0) {
+
+        container.innerHTML = `
+            <div class="sql-empty-result">
+                <div class="sql-empty-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <h3>Query executed successfully</h3>
+
+                <p>No rows were returned.</p>
+            </div>
+        `;
+
+        if (summary) {
+            summary.textContent =
+                data.rowsAffected !== undefined
+                    ? `${data.rowsAffected} row(s) affected`
+                    : "No rows returned";
+        }
+
+        return;
+    }
+
+    const columns = Object.keys(rows[0]);
+
+    let headerHTML = "";
+
+    columns.forEach(column => {
+
+        headerHTML += `
+            <th>${escapeSQLHTML(column)}</th>
+        `;
+
+    });
+
+    let bodyHTML = "";
+
+    rows.forEach(row => {
+
+        bodyHTML += "<tr>";
+
+        columns.forEach(column => {
+
+            let value = row[column];
+
+            if (value === null || value === undefined) {
+                value = "NULL";
+            }
+
+            bodyHTML += `
+                <td>${escapeSQLHTML(String(value))}</td>
+            `;
+
+        });
+
+        bodyHTML += "</tr>";
+    });
+
+    container.innerHTML = `
+        <table class="sql-result-table">
+
+            <thead>
+                <tr>
+                    ${headerHTML}
+                </tr>
+            </thead>
+
+            <tbody>
+                ${bodyHTML}
+            </tbody>
+
+        </table>
+    `;
+
+    if (summary) {
+        summary.textContent =
+            `${rows.length} row(s) returned`;
+    }
+}
+
+
+/* =========================================================
+   ERROR RESULT
+========================================================= */
+
+function displaySQLError(message) {
+
+    const container =
+        document.getElementById("sql-result-container");
+
+    const summary =
+        document.getElementById("sql-result-summary");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="sql-empty-result">
+
+            <div class="sql-empty-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+
+            <h3>Query failed</h3>
+
+            <p>${escapeSQLHTML(message)}</p>
+
+        </div>
+    `;
+
+    if (summary) {
+        summary.textContent = "Execution failed";
+    }
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showSQLStatus(type, message) {
+
+    const container =
+        document.getElementById("sql-query-status");
+
+    if (!container) {
+        return;
+    }
+
+    if (!message) {
+        container.style.display = "none";
+        return;
+    }
+
+    container.style.display = "flex";
+
+    container.className = "sql-query-status";
+
+    if (type === "success") {
+        container.classList.add("success");
+    }
+
+    if (type === "error") {
+        container.classList.add("error");
+    }
+
+    if (type === "loading") {
+        container.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            ${escapeSQLHTML(message)}
+        `;
+
+        return;
+    }
+
+    if (type === "success") {
+        container.innerHTML = `
+            <i class="fa-solid fa-circle-check"></i>
+            ${escapeSQLHTML(message)}
+        `;
+
+        return;
+    }
+
+    container.innerHTML = `
+        <i class="fa-solid fa-circle-exclamation"></i>
+        ${escapeSQLHTML(message)}
+    `;
+}
+
+
+/* =========================================================
+   COMPLETE TABLE VIEWER
+========================================================= */
+
+async function viewSQLCompleteTable(tableName) {
+
+    const definition =
+        sqlTableDefinitions[tableName];
+
+    if (!definition) {
+        return;
+    }
+
+    const modal =
+        document.getElementById("sql-table-modal");
+
+    const title =
+        document.getElementById("sql-table-modal-title");
+
+    const content =
+        document.getElementById("sql-table-modal-content");
+
+    if (!modal || !content) {
+        return;
+    }
+
+    if (title) {
+        title.textContent = tableName;
+    }
+
+    content.innerHTML = `
+        <div class="sql-loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading table...
+        </div>
+    `;
+
+    modal.classList.add("show");
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE}${definition.endpoint}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to load table.");
+        }
+
+        const rows = await response.json();
+
+        renderSQLModalTable(rows);
+
+    } catch (error) {
+
+        content.innerHTML = `
+            <div class="sql-empty-result">
+                <div class="sql-empty-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <h3>Unable to load table</h3>
+
+                <p>${escapeSQLHTML(error.message)}</p>
+            </div>
+        `;
+    }
+}
+
+
+function renderSQLModalTable(rows) {
+
+    const content =
+        document.getElementById("sql-table-modal-content");
+
+    if (!content) {
+        return;
+    }
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+
+        content.innerHTML = `
+            <div class="sql-empty-result">
+                <div class="sql-empty-icon">
+                    <i class="fa-solid fa-table"></i>
+                </div>
+
+                <h3>No records</h3>
+
+                <p>This table currently contains no records.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    const columns = Object.keys(rows[0]);
+
+    let headerHTML = "";
+
+    columns.forEach(column => {
+
+        headerHTML += `
+            <th>${escapeSQLHTML(column)}</th>
+        `;
+
+    });
+
+    let bodyHTML = "";
+
+    rows.forEach(row => {
+
+        bodyHTML += "<tr>";
+
+        columns.forEach(column => {
+
+            let value = row[column];
+
+            if (value === null || value === undefined) {
+                value = "NULL";
+            }
+
+            bodyHTML += `
+                <td>${escapeSQLHTML(String(value))}</td>
+            `;
+        });
+
+        bodyHTML += "</tr>";
+    });
+
+    content.innerHTML = `
+        <table class="sql-modal-table">
+
+            <thead>
+                <tr>
+                    ${headerHTML}
+                </tr>
+            </thead>
+
+            <tbody>
+                ${bodyHTML}
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+/* =========================================================
+   CLOSE TABLE MODAL
+========================================================= */
+
+function closeSQLTableModal() {
+
+    const modal =
+        document.getElementById("sql-table-modal");
+
+    if (modal) {
+        modal.classList.remove("show");
+    }
+}
+
+
+/* =========================================================
+   LINE NUMBERS
+========================================================= */
+
+function updateSQLLineNumbers() {
+
+    const editor =
+        document.getElementById("sql-editor");
+
+    const lineNumbers =
+        document.getElementById("sql-line-numbers");
+
+    if (!editor || !lineNumbers) {
+        return;
+    }
+
+    const lineCount =
+        editor.value.split("\n").length;
+
+    let numbers = "";
+
+    for (let i = 1; i <= lineCount; i++) {
+        numbers += i + "\n";
+    }
+
+    lineNumbers.textContent = numbers;
+}
+
+
+/* =========================================================
+   CLEAR EDITOR
+========================================================= */
+
+function clearSQLQuery() {
+
+    const editor =
+        document.getElementById("sql-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    editor.value = "";
+
+    updateSQLLineNumbers();
+
+    editor.focus();
+}
+
+
+/* =========================================================
+   COPY QUERY
+========================================================= */
+
+async function copySQLQuery() {
+
+    const editor =
+        document.getElementById("sql-editor");
+
+    if (!editor || !editor.value.trim()) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(
+            editor.value
+        );
+
+        showSQLStatus(
+            "success",
+            "Query copied to clipboard."
+        );
+
+    } catch (error) {
+
+        showSQLStatus(
+            "error",
+            "Unable to copy query."
+        );
+    }
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function addSQLHistory(query) {
+
+    sqlHistory.unshift({
+        query: query,
+        time: new Date().toLocaleTimeString()
+    });
+
+    sqlHistory =
+        sqlHistory.slice(0, 10);
+
+    localStorage.setItem(
+        "airlineSQLHistory",
+        JSON.stringify(sqlHistory)
+    );
+
+    renderSQLHistory();
+}
+
+
+function loadSQLHistory() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "airlineSQLHistory"
+            );
+
+        if (saved) {
+            sqlHistory = JSON.parse(saved);
+        }
+
+    } catch (error) {
+        sqlHistory = [];
+    }
+
+    renderSQLHistory();
+}
+
+
+function renderSQLHistory() {
+
+    const container =
+        document.getElementById("sql-history-list");
+
+    if (!container) {
+        return;
+    }
+
+    if (sqlHistory.length === 0) {
+
+        container.innerHTML = `
+            <div class="sql-empty-history">
+                No queries executed yet.
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    sqlHistory.forEach((item, index) => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "sql-history-item";
+
+        row.innerHTML = `
+            <div class="sql-history-query"
+                 title="${escapeSQLHTML(item.query)}">
+                ${escapeSQLHTML(item.query)}
+            </div>
+
+            <div class="sql-history-meta">
+                ${item.time}
+            </div>
+
+            <button
+                type="button"
+                class="sql-small-btn"
+                onclick="loadSQLHistoryQuery(${index})">
+
+                <i class="fa-solid fa-arrow-up"></i>
+
+            </button>
+        `;
+
+        container.appendChild(row);
+    });
+}
+
+
+function loadSQLHistoryQuery(index) {
+
+    if (!sqlHistory[index]) {
+        return;
+    }
+
+    const editor =
+        document.getElementById("sql-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    editor.value =
+        sqlHistory[index].query;
+
+    updateSQLLineNumbers();
+
+    editor.focus();
+}
+
+
+/* =========================================================
+   CLEAR HISTORY
+========================================================= */
+
+function clearSQLHistory() {
+
+    sqlHistory = [];
+
+    localStorage.removeItem(
+        "airlineSQLHistory"
+    );
+
+    renderSQLHistory();
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeSQLHTML(value) {
+
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   SQL SECTION INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        initializeSQLConsole();
+
+    }
+);
+/* =========================================================
+   FORMAT SQL
+========================================================= */
+
+function formatSQLQuery() {
+
+    const editor =
+        document.getElementById("sql-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    let sql = editor.value.trim();
+
+    if (!sql) {
+        return;
+    }
+
+    sql = sql
+        .replace(/\s+/g, " ")
+        .replace(/\s*,\s*/g, ", ")
+        .replace(/\s*=\s*/g, " = ")
+        .replace(/\s*;\s*$/, ";");
+
+    sql = sql
+        .replace(/\bSELECT\b/gi, "SELECT")
+        .replace(/\bFROM\b/gi, "\nFROM")
+        .replace(/\bWHERE\b/gi, "\nWHERE")
+        .replace(/\bGROUP BY\b/gi, "\nGROUP BY")
+        .replace(/\bORDER BY\b/gi, "\nORDER BY")
+        .replace(/\bHAVING\b/gi, "\nHAVING")
+        .replace(/\bJOIN\b/gi, "\nJOIN")
+        .replace(/\bLEFT JOIN\b/gi, "\nLEFT JOIN")
+        .replace(/\bRIGHT JOIN\b/gi, "\nRIGHT JOIN")
+        .replace(/\bINNER JOIN\b/gi, "\nINNER JOIN")
+        .replace(/\bON\b/gi, "\n    ON")
+        .replace(/\bSET\b/gi, "\nSET")
+        .replace(/\bVALUES\b/gi, "\nVALUES");
+
+    editor.value = sql.trim();
+
+    updateSQLLineNumbers();
+
+    editor.focus();
+}
+
+
+/* =========================================================
+   COPY QUERY RESULT
+========================================================= */
+
+async function copySQLResult() {
+
+    const container =
+        document.getElementById("sql-result-container");
+
+    if (!container) {
+        return;
+    }
+
+    const table =
+        container.querySelector("table");
+
+    if (!table) {
+
+        showSQLStatus(
+            "error",
+            "There is no query result to copy."
+        );
+
+        return;
+    }
+
+    try {
+
+        const rows =
+            Array.from(
+                table.querySelectorAll("tr")
+            );
+
+        const text =
+            rows.map(row => {
+
+                const cells =
+                    Array.from(
+                        row.querySelectorAll("th, td")
+                    );
+
+                return cells
+                    .map(cell => cell.innerText.trim())
+                    .join("\t");
+
+            }).join("\n");
+
+        await navigator.clipboard.writeText(text);
+
+        showSQLStatus(
+            "success",
+            "Query result copied to clipboard."
+        );
+
+    } catch (error) {
+
+        showSQLStatus(
+            "error",
+            "Unable to copy query result."
+        );
+    }
+}
+/* =====================================================
+   TEAM MEMBERS
+===================================================== */
+
+function toggleTeamMembers() {
+
+    const popup =
+        document.getElementById(
+            "team-members-popup"
+        );
+
+    if (!popup) {
+        return;
+    }
+
+    popup.classList.toggle("show");
+}
 /* =========================
    INITIAL LOAD
 ========================= */
