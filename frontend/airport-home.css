@@ -1,0 +1,2338 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+
+    --navy: #061426;
+    --navy-2: #0b2038;
+
+    --blue: #1677ff;
+    --blue-light: #eaf4ff;
+
+    --text: #101b2d;
+    --muted: #718198;
+
+    --line: #dce6f0;
+
+    --surface: #ffffff;
+    --background: #f3f7fb;
+
+    --green: #24c987;
+    --yellow: #f4b83f;
+
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+}
+
+
+button,
+input {
+
+    font: inherit;
+
+}
+
+
+button {
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.airport-home {
+
+    min-height: 100vh;
+
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.airport-topbar {
+
+    height: 70px;
+
+    padding:
+        0 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background:
+        rgba(255,255,255,0.96);
+
+    border-bottom:
+        1px solid var(--line);
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.brand-mark {
+
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 11px;
+
+    background:
+        var(--navy);
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+}
+
+
+.brand strong,
+.brand span {
+
+    display: block;
+
+}
+
+
+.brand strong {
+
+    font-size: 14px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.brand span {
+
+    margin-top: 3px;
+
+    color:
+        var(--muted);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+.topbar-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+
+.live-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color:
+        #1ba96d;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+.live-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 0 5px rgba(36,201,135,0.10);
+
+}
+
+
+.team-button {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        9px 12px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 10px;
+
+    background: white;
+
+    color:
+        var(--navy);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+.team-button:hover {
+
+    background:
+        #f3f7fb;
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    position: relative;
+
+    min-height: 390px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        70px 7%;
+
+    background:
+        linear-gradient(
+            120deg,
+            #061426,
+            #0a2039
+        );
+
+    color: white;
+
+}
+
+
+.hero-background {
+
+    position: absolute;
+
+    inset: 0;
+
+}
+
+
+.hero-grid {
+
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0.15;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.08) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        48px 48px;
+
+}
+
+
+.hero-glow {
+
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 50%;
+
+    filter:
+        blur(10px);
+
+}
+
+
+.glow-one {
+
+    right: 3%;
+
+    top: -250px;
+
+    background:
+        rgba(22,119,255,0.20);
+
+}
+
+
+.glow-two {
+
+    left: 25%;
+
+    bottom: -350px;
+
+    background:
+        rgba(49,200,232,0.12);
+
+}
+
+
+.hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    width:
+        min(950px, 100%);
+
+}
+
+
+.hero-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding:
+        8px 12px;
+
+    border:
+        1px solid rgba(255,255,255,0.14);
+
+    border-radius:
+        999px;
+
+    color:
+        #82bfff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1.4px;
+
+}
+
+
+.hero h1 {
+
+    margin:
+        20px 0 8px;
+
+    font-size:
+        clamp(42px, 6vw, 70px);
+
+    line-height:
+        1;
+
+    letter-spacing:
+        -3px;
+
+}
+
+
+.hero h1 span {
+
+    color:
+        #58b5ff;
+
+}
+
+
+.hero p {
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,0.60);
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.main-search {
+
+    width:
+        min(820px, 100%);
+
+    height: 62px;
+
+    margin-top: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding:
+        0 17px;
+
+    border:
+        1px solid rgba(255,255,255,0.17);
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,0.09);
+
+    backdrop-filter:
+        blur(18px);
+
+}
+
+
+.search-symbol {
+
+    font-size: 28px;
+
+    color:
+        rgba(255,255,255,0.60);
+
+}
+
+
+.main-search input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 100%;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 13px;
+
+}
+
+
+.main-search input::placeholder {
+
+    color:
+        rgba(255,255,255,0.48);
+
+}
+
+
+.main-search kbd {
+
+    padding:
+        6px 9px;
+
+    border-radius: 6px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color:
+        rgba(255,255,255,0.48);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+.search-results {
+
+    position: absolute;
+
+    z-index: 20;
+
+    width:
+        min(820px, 100%);
+
+    display: none;
+
+    overflow: hidden;
+
+    margin-top: 8px;
+
+    border-radius: 14px;
+
+    background: white;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.25);
+
+}
+
+
+.search-results.show {
+
+    display: block;
+
+}
+
+
+.search-result {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        13px 16px;
+
+    border-bottom:
+        1px solid #edf1f5;
+
+    background: white;
+
+    text-align: left;
+
+}
+
+
+.search-result:hover {
+
+    background:
+        #f4f8fc;
+
+}
+
+
+.search-result-icon {
+
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    background:
+        var(--blue-light);
+
+}
+
+
+.search-result-text {
+
+    flex: 1;
+
+}
+
+
+.search-result-text strong,
+.search-result-text small {
+
+    display: block;
+
+}
+
+
+.search-result-text strong {
+
+    color:
+        var(--text);
+
+    font-size: 11px;
+
+}
+
+
+.search-result-text small {
+
+    margin-top: 3px;
+
+    color:
+        var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.search-result-type {
+
+    color:
+        #98a5b4;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+}
+
+
+/* =========================================================
+   AIRPORT SCENE
+========================================================= */
+
+.airport-scene {
+
+    padding:
+        55px 5% 65px;
+
+    background:
+        #f3f7fb;
+
+}
+
+
+.scene-header {
+
+    max-width:
+        1450px;
+
+    margin:
+        0 auto 22px;
+
+    display: flex;
+
+    align-items: end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.scene-header > div > span,
+.summary-heading > div > span {
+
+    color:
+        var(--blue);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.scene-header h2,
+.summary-heading h2 {
+
+    margin:
+        5px 0 0;
+
+    font-size: 25px;
+
+    letter-spacing:
+        -0.8px;
+
+}
+
+
+.dashboard-button {
+
+    padding:
+        12px 18px;
+
+    border-radius: 10px;
+
+    background:
+        var(--navy);
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+.dashboard-button:hover {
+
+    background:
+        #0d2c4c;
+
+}
+
+
+.dashboard-button span {
+
+    margin-left: 10px;
+
+    color:
+        #5db6ff;
+
+}
+
+
+/* =========================================================
+   TERMINAL GRID
+========================================================= */
+
+.terminal {
+
+    position: relative;
+
+    max-width:
+        1450px;
+
+    margin:
+        auto;
+
+    padding:
+        24px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 25px;
+
+    background:
+        white;
+
+    box-shadow:
+        0 25px 70px rgba(8,25,45,0.10);
+
+}
+
+
+.terminal-top {
+
+    display: grid;
+
+    grid-template-columns:
+        1.7fr 1fr 1fr;
+
+    gap: 14px;
+
+}
+
+
+.terminal-middle {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1.2fr 1fr;
+
+    gap: 14px;
+
+    align-items: center;
+
+    margin-top: 14px;
+
+}
+
+
+.terminal-bottom {
+
+    display: grid;
+
+    grid-template-columns:
+        1.8fr 1fr 1fr 1fr;
+
+    gap: 14px;
+
+    margin-top: 14px;
+
+}
+
+
+/* =========================================================
+   TERMINAL CARDS
+========================================================= */
+
+.terminal-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 20px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 17px;
+
+    background:
+        white;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+
+}
+
+
+.terminal-card:hover,
+.station:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        #abd3f8;
+
+    box-shadow:
+        0 18px 40px rgba(7,25,45,0.10);
+
+}
+
+
+.card-heading {
+
+    display: flex;
+
+    align-items: start;
+
+    justify-content: space-between;
+
+}
+
+
+.card-heading span,
+.card-label {
+
+    color:
+        #74869a;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+}
+
+
+.card-heading h3 {
+
+    margin:
+        5px 0 0;
+
+    font-size: 17px;
+
+}
+
+
+.card-heading b {
+
+    font-size: 25px;
+
+}
+
+
+.departure-board {
+
+    min-height:
+        245px;
+
+    color: white;
+
+    background:
+        var(--navy);
+
+    border-color:
+        var(--navy);
+
+}
+
+
+.departure-board .card-heading span {
+
+    color:
+        #62b8ff;
+
+}
+
+
+.departure-board .card-heading h3 {
+
+    color: white;
+
+}
+
+
+.flight-header,
+.flight-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 8px;
+
+}
+
+
+.flight-header {
+
+    margin-top: 18px;
+
+    padding:
+        9px 12px;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color:
+        #71869d;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+}
+
+
+.flight-row {
+
+    padding:
+        10px 12px;
+
+    border-top:
+        1px solid rgba(255,255,255,0.07);
+
+    font-size: 9px;
+
+}
+
+
+.flight-row strong {
+
+    color: white;
+
+}
+
+
+.flight-row span {
+
+    color:
+        #89a1b8;
+
+}
+
+
+.flight-loading {
+
+    padding:
+        20px;
+
+    text-align: center;
+
+    color:
+        #70869d;
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   CHECK-IN / RESERVATION
+========================================================= */
+
+.checkin,
+.reservation {
+
+    min-height:
+        245px;
+
+}
+
+
+.card-number {
+
+    position: absolute;
+
+    top: 12px;
+
+    right: 15px;
+
+    color:
+        #e1e8ef;
+
+    font-size: 29px;
+
+    font-weight: 800;
+
+}
+
+
+.big-icon {
+
+    width: 47px;
+    height: 47px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 13px;
+
+    background:
+        var(--blue-light);
+
+    font-size: 21px;
+
+}
+
+
+.checkin h3,
+.reservation h3 {
+
+    margin:
+        6px 0;
+
+    font-size: 17px;
+
+}
+
+
+.checkin p,
+.reservation p {
+
+    margin: 0;
+
+    color:
+        var(--muted);
+
+    font-size: 10px;
+
+    line-height: 1.55;
+
+}
+
+
+.open-arrow {
+
+    position: absolute;
+
+    left: 20px;
+
+    bottom: 18px;
+
+    color:
+        #6f8296;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   STATIONS
+========================================================= */
+
+.station {
+
+    overflow: hidden;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 17px;
+
+    background: white;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+
+}
+
+
+.station-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding:
+        10px 14px;
+
+    background:
+        var(--navy);
+
+    color: white;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+.station-top i {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 10px rgba(36,201,135,0.6);
+
+}
+
+
+.station-content {
+
+    min-height:
+        145px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding:
+        22px;
+
+}
+
+
+.station-icon {
+
+    width: 50px;
+    height: 50px;
+
+    display: grid;
+
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        #edf5ff;
+
+    color:
+        var(--blue);
+
+    font-size: 22px;
+
+}
+
+
+.station-content span {
+
+    color:
+        #74869a;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+.station-content h3 {
+
+    margin:
+        5px 0;
+
+    font-size: 16px;
+
+}
+
+
+.station-content p {
+
+    margin: 0;
+
+    color:
+        var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   AIRCRAFT
+========================================================= */
+
+.aircraft {
+
+    position: relative;
+
+    min-height:
+        175px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+}
+
+
+.runway {
+
+    position: absolute;
+
+    width: 82px;
+
+    height: 175px;
+
+    border-radius:
+        45px;
+
+    background:
+        #e0e6ec;
+
+    border:
+        1px solid #cdd8e2;
+
+}
+
+
+.runway div {
+
+    position: absolute;
+
+    left: 50%;
+
+    width: 4px;
+    height: 20px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 4px;
+
+    background:
+        white;
+
+}
+
+
+.runway div:nth-child(1) {
+    top: 20px;
+}
+
+
+.runway div:nth-child(2) {
+    top: 60px;
+}
+
+
+.runway div:nth-child(3) {
+    top: 100px;
+}
+
+
+.runway div:nth-child(4) {
+    top: 140px;
+}
+
+
+.plane {
+
+    position: relative;
+
+    z-index: 2;
+
+    color:
+        var(--blue);
+
+    font-size: 68px;
+
+    filter:
+        drop-shadow(
+            0 10px 12px
+            rgba(22,119,255,0.20)
+        );
+
+}
+
+
+.aircraft > span {
+
+    position: absolute;
+
+    bottom: 7px;
+
+    color:
+        #74869a;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================================================
+   BAGGAGE
+========================================================= */
+
+.baggage {
+
+    min-height:
+        190px;
+
+}
+
+
+.conveyor {
+
+    position: relative;
+
+    height: 78px;
+
+    margin-top: 14px;
+
+}
+
+
+.belt {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: 5px;
+
+    height: 39px;
+
+    border:
+        5px solid #14283e;
+
+    border-radius:
+        22px;
+
+    background:
+        #263a50;
+
+}
+
+
+.bags {
+
+    position: absolute;
+
+    z-index: 2;
+
+    left: 8%;
+    right: 8%;
+
+    bottom: 30px;
+
+    display: flex;
+
+    justify-content:
+        space-around;
+
+    font-size: 25px;
+
+}
+
+
+.bags span:nth-child(2) {
+
+    transform:
+        translateY(-7px);
+
+}
+
+
+.bags span:nth-child(4) {
+
+    transform:
+        translateY(-4px);
+
+}
+
+
+.baggage-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.baggage-footer span {
+
+    color:
+        var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.baggage-footer button {
+
+    padding:
+        7px 10px;
+
+    border-radius: 7px;
+
+    background:
+        var(--blue-light);
+
+    color:
+        var(--blue);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   OTHER CARDS
+========================================================= */
+
+.airport-info,
+.airline-info,
+.staff-info {
+
+    min-height:
+        190px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.airport-info > div:last-child,
+.airline-info > div:last-child,
+.staff-info > div:last-child {
+
+    flex: 1;
+
+}
+
+
+.building,
+.airline-symbol,
+.staff-symbol {
+
+    width: 52px;
+    height: 52px;
+
+    display: grid;
+
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        var(--blue-light);
+
+    color:
+        var(--blue);
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+}
+
+
+.airline-symbol {
+
+    background:
+        var(--navy);
+
+    color: white;
+
+}
+
+
+.staff-symbol {
+
+    background:
+        #f0ebff;
+
+    color:
+        #7259dd;
+
+}
+
+
+.airport-info > div:last-child > span,
+.airline-info > div:last-child > span,
+.staff-info > div:last-child > span {
+
+    color:
+        #74869a;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+.airport-info h3,
+.airline-info h3,
+.staff-info h3 {
+
+    margin:
+        5px 0;
+
+    font-size: 15px;
+
+}
+
+
+.airport-info p,
+.airline-info p,
+.staff-info p {
+
+    margin: 0;
+
+    color:
+        var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   DATABASE HUB
+========================================================= */
+
+.database-hub {
+
+    position: relative;
+
+    min-height:
+        130px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.hub-line {
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 1px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #cbd9e6 0,
+            #cbd9e6 5px,
+            transparent 5px,
+            transparent 10px
+        );
+
+}
+
+
+.hub-circle {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 78px;
+    height: 78px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        var(--navy);
+
+    color: white;
+
+    box-shadow:
+        0 15px 35px rgba(7,20,38,0.22);
+
+}
+
+
+.hub-circle strong {
+
+    font-size: 22px;
+
+}
+
+
+.hub-circle small {
+
+    margin-top: 3px;
+
+    color:
+        #63b8ff;
+
+    font-size: 6px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+.hub-label {
+
+    position: absolute;
+
+    bottom: 4px;
+
+    color:
+        #73859a;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+/* =========================================================
+   RELATIONSHIP STRIP
+========================================================= */
+
+.relationship-strip {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    padding-top:
+        8px;
+
+}
+
+
+.relationship-strip button {
+
+    padding:
+        10px 13px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 9px;
+
+    background:
+        #f9fbfd;
+
+    color:
+        #596b7f;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+.relationship-strip button:hover {
+
+    border-color:
+        #a9cff0;
+
+    color:
+        var(--blue);
+
+}
+
+
+/* =========================================================
+   DATABASE SUMMARY
+========================================================= */
+
+.database-summary {
+
+    padding:
+        50px 5% 70px;
+
+    background:
+        white;
+
+}
+
+
+.summary-heading {
+
+    max-width:
+        1450px;
+
+    margin:
+        0 auto 22px;
+
+    display: flex;
+
+    align-items: end;
+
+    justify-content: space-between;
+
+}
+
+
+.summary-heading p {
+
+    margin: 0;
+
+    color:
+        var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.summary-grid {
+
+    max-width:
+        1450px;
+
+    margin:
+        auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, 1fr);
+
+    gap: 12px;
+
+}
+
+
+.summary-card {
+
+    padding:
+        18px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 14px;
+
+    background:
+        #f9fbfd;
+
+}
+
+
+.summary-card > span {
+
+    font-size: 19px;
+
+}
+
+
+.summary-card strong {
+
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 25px;
+
+}
+
+
+.summary-card small {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color:
+        #8190a2;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================================================
+   TEAM POPUP
+========================================================= */
+
+.team-popup {
+
+    position: fixed;
+
+    z-index: 100;
+
+    top: 78px;
+
+    right: 35px;
+
+    width: 250px;
+
+    padding: 22px;
+
+    display: none;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 16px;
+
+    background:
+        white;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.18);
+
+}
+
+
+.team-popup.show {
+
+    display: block;
+
+}
+
+
+.team-popup > span {
+
+    color:
+        var(--blue);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+.team-popup h3 {
+
+    margin:
+        5px 0 17px;
+
+}
+
+
+.popup-close {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 10px;
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 7px;
+
+    background:
+        #f1f4f7;
+
+    font-size: 18px;
+
+}
+
+
+.team-member {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+        9px 0;
+
+    border-top:
+        1px solid #edf1f5;
+
+    color:
+        #425269;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.team-member b {
+
+    width: 31px;
+    height: 31px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    background:
+        var(--blue-light);
+
+    color:
+        var(--blue);
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .terminal-top {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .departure-board {
+
+        grid-column:
+            1 / -1;
+
+    }
+
+    .terminal-middle {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .aircraft {
+
+        grid-column:
+            1 / -1;
+
+        order:
+            -1;
+
+    }
+
+    .terminal-bottom {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .baggage {
+
+        grid-column:
+            1 / -1;
+
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .airport-topbar {
+
+        height: auto;
+
+        padding:
+            16px 20px;
+
+    }
+
+    .live-status {
+
+        display: none;
+
+    }
+
+    .hero {
+
+        padding:
+            55px 20px;
+
+    }
+
+    .hero h1 {
+
+        font-size:
+            42px;
+
+    }
+
+    .main-search {
+
+        height:
+            55px;
+
+    }
+
+    .main-search kbd {
+
+        display: none;
+
+    }
+
+    .airport-scene {
+
+        padding:
+            30px 12px;
+
+    }
+
+    .scene-header {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+    .terminal {
+
+        padding:
+            12px;
+
+    }
+
+    .terminal-top,
+    .terminal-middle,
+    .terminal-bottom {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .departure-board,
+    .baggage,
+    .aircraft {
+
+        grid-column:
+            auto;
+
+    }
+
+    .aircraft {
+
+        order:
+            0;
+
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .summary-heading {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap: 10px;
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .brand span {
+
+        display: none;
+
+    }
+
+    .team-button span {
+
+        display: none;
+
+    }
+
+}
+/* ============================================================
+   TOP BAR — ENTER DASHBOARD BUTTON
+============================================================ */
+
+.airport-topbar .home-dashboard-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    height: 44px;
+
+    min-width: 155px;
+
+    padding: 0 19px;
+
+    border: 1px solid rgba(67, 169, 255, 0.65);
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #1685ff,
+        #0864cf
+    );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(20, 126, 235, 0.28);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+
+}
+
+
+.airport-topbar .home-dashboard-button span {
+
+    color: #ffffff;
+
+}
+
+
+.airport-topbar .home-dashboard-button span:last-child {
+
+    font-size: 15px;
+
+    line-height: 1;
+
+    transition:
+        transform 0.2s ease;
+
+}
+
+
+.airport-topbar .home-dashboard-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    background: linear-gradient(
+        135deg,
+        #2993ff,
+        #0870df
+    );
+
+    box-shadow:
+        0 12px 32px rgba(20, 126, 235, 0.42);
+
+}
+
+
+.airport-topbar .home-dashboard-button:hover span:last-child {
+
+    transform:
+        translateX(4px);
+
+}
+
+
+.airport-topbar .home-dashboard-button:active {
+
+    transform:
+        translateY(0);
+
+}

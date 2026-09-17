@@ -16607,6 +16607,23 @@ function toggleTeamMembers() {
 
     popup.classList.toggle("show");
 }
+function goToAirportHome() {
+    window.location.href = "index.html";
+}
+function toggleDashboardNavigation() {
+
+    const navigation =
+        document.querySelector(
+            ".dashboard-navigation"
+        );
+
+    if (!navigation) {
+        return;
+    }
+
+    navigation.classList.toggle("open");
+
+}
 /* =========================
    INITIAL LOAD
 ========================= */

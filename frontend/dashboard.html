@@ -1,0 +1,4157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Airline Reservation & Baggage Tracking</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard-premium.css">
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">✈</div>
+                <div>
+                    <h2>AirTrack</h2>
+                    <span>Airline Operations</span>
+                </div>
+            </div>
+
+            <nav>
+                <button class="nav-item active" onclick="showSection('dashboard')">
+                    <span>▦</span>
+                    Dashboard
+                </button>
+
+                <button class="nav-item" onclick="showSection('passengers')">
+                    <span>👤</span>
+                    Passengers
+                </button>
+
+                <button class="nav-item" onclick="showSection('reservations')">
+                    <span>▣</span>
+                    Reservations
+                </button>
+
+                <button class="nav-item" onclick="showSection('flights')">
+                    <span>✈</span>
+                    Flights
+                </button>
+
+                <button class="nav-item" onclick="showSection('tickets')">
+                    <span>🎫</span>
+                    Tickets
+                </button>
+
+                <button class="nav-item" onclick="showSection('baggage')">
+                    <span>🧳</span>
+                    Baggage
+                </button>
+
+                <button class="nav-item" onclick="showSection('payments')">
+                    <span>₹</span>
+                    Payments
+                </button>
+
+                <div class="nav-divider"></div>
+
+                <button class="nav-item" onclick="showSection('airports')">
+                    <span>⌖</span>
+                    Airports
+                </button>
+
+                <button class="nav-item" onclick="showSection('airlines')">
+                    <span>◈</span>
+                    Airlines
+                </button>
+
+                <button class="nav-item" onclick="showSection('employees')">
+                    <span>♙</span>
+                    Employees
+                </button>
+
+                <button class="nav-item" onclick="showSection('tracking')">
+                    <span>◉</span>
+                    Baggage Tracking
+                </button>
+
+                <button class="nav-item" onclick="showSection('ticket-baggage')">
+                <span>🔗</span>
+                    Ticket-Baggage
+                </button>
+                
+                <button class="nav-item" onclick="showSection('passenger-phones')">
+                    <span>☎</span>
+                    Passenger Phones
+
+                </button>
+
+                <button class="nav-item" onclick="showSection('relationships')">
+                    <span>⌘</span>
+                    Database Schema
+                </button>
+
+                <button class="nav-item" onclick="showSection('eer-diagram')">
+                    <span>◇</span>
+                    EER Diagram
+                </button>
+
+                <button class="nav-item" onclick="showSection('sql')">
+                    <span>▤</span>
+                    SQL Console
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="status-dot"></span>
+                Database Connected
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle">
+                        Airline Reservation & Baggage Tracking System
+                    </p>
+                </div>
+
+                <div class="topbar-right">
+                    
+
+                    
+<div class="dashboard-navigation">
+
+    <button
+        type="button"
+        class="dashboard-nav-button"
+        onclick="toggleDashboardNavigation()">
+
+        <span class="nav-menu-icon">☰</span>
+
+        <span>Tables</span>
+
+        <span class="nav-chevron"></span>
+
+    </button>
+
+
+    <div
+        id="dashboard-navigation-menu"
+        class="dashboard-nav-menu">
+
+        <div class="nav-menu-title">
+            <span>✈</span>
+            AIRTRACK NAVIGATION
+        </div>
+
+
+        <button onclick="showSection('dashboard')">
+            <span>▦</span>
+            Dashboard
+        </button>
+
+        <button onclick="showSection('passengers')">
+            <span>👥</span>
+            Passengers
+        </button>
+
+        <button onclick="showSection('reservations')">
+            <span>▣</span>
+            Reservations
+        </button>
+
+        <button onclick="showSection('flights')">
+            <span>✈</span>
+            Flights
+        </button>
+
+        <button onclick="showSection('tickets')">
+            <span>🎫</span>
+            Tickets
+        </button>
+
+        <button onclick="showSection('baggage')">
+            <span>🧳</span>
+            Baggage
+        </button>
+
+        <button onclick="showSection('payments')">
+            <span>₹</span>
+            Payments
+        </button>
+
+        <button onclick="showSection('airports')">
+            <span>⌖</span>
+            Airports
+        </button>
+
+        <button onclick="showSection('airlines')">
+            <span>A</span>
+            Airlines
+        </button>
+
+        <button onclick="showSection('employees')">
+            <span>◉</span>
+            Employees
+        </button>
+
+        <button onclick="showSection('tracking')">
+            <span>◉</span>
+            Baggage Tracking
+        </button>
+
+        <button onclick="showSection('ticket-baggage')">
+            <span>↔</span>
+            Ticket-Baggage
+        </button>
+
+        <button onclick="showSection('passenger-phones')">
+            <span>☎</span>
+            Passenger Phones
+        </button>
+
+
+        
+    </div>
+
+</div>
+<button
+    class="home-button"
+    type="button"
+    onclick="goToAirportHome()"
+    title="Back to Airport Home">
+
+    <span>✈</span>
+    <span>Airport Home</span>
+
+</button>
+<button
+    type="button"
+    class="topbar-db-link"
+    onclick="showSection('relationships')">
+
+    <span>⌘</span>
+    <span>Database Schema</span>
+
+</button>
+
+
+<button
+    type="button"
+    class="topbar-db-link"
+    onclick="showSection('eer-diagram')">
+
+    <span>◇</span>
+    <span>EER Diagram</span>
+
+</button>
+
+
+<button
+    type="button"
+    class="topbar-db-link"
+    onclick="showSection('sql')">
+
+    <span>▤</span>
+    <span>SQL Console</span>
+
+</button>
+<button
+    class="team-button"
+    type="button"
+    onclick="toggleTeamMembers()"
+    title="Team Members">
+
+    <span class="team-icon">👥</span>
+
+</button>
+                </div>
+
+            </header>
+
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="content-section active">
+                
+                <div class="welcome-card">
+
+                    <div>
+                        <span class="eyebrow">AIRLINE OPERATIONS</span>
+
+                        <h2>
+    Welcome to Your
+    <span>Operations Dashboard</span>
+</h2>
+
+<p>
+    Monitor Passengers, Reservations, Flights,
+    Tickets, and Baggage From One Place.
+</p>
+                    </div>
+
+                    <div class="plane-decoration">
+                        ✈
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon">👤</div>
+                        <div>
+                            <p>Passengers</p>
+                            <h3 id="passenger-count">—</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">▣</div>
+                        <div>
+                            <p>Reservations</p>
+                            <h3 id="reservation-count">—</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🎫</div>
+                        <div>
+                            <p>Tickets</p>
+                            <h3 id="ticket-count">—</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🧳</div>
+                        <div>
+                            <p>Baggage</p>
+                            <h3 id="baggage-count">—</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h3>System Overview</h3>
+                                <p>Live database information</p>
+                            </div>
+                        </div>
+
+                        <div class="overview-list">
+
+                            <div>
+                                <span>Airlines</span>
+                                <strong id="airline-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Airports</span>
+                                <strong id="airport-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Flights</span>
+                                <strong id="flight-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Employees</span>
+                                <strong id="employee-count">—</strong>
+                            </div>
+
+                            <div>
+                                <span>Payments</span>
+                                <strong id="payment-count">—</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h3>Quick Actions</h3>
+                                <p>Manage the system</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+
+                            <button onclick="showSection('passengers')">
+                                <span>+</span>
+                                Add Passenger
+                            </button>
+
+                            <button onclick="showSection('reservations')">
+                                <span>+</span>
+                                New Reservation
+                            </button>
+
+                            <button onclick="showSection('flights')">
+                                <span>✈</span>
+                                View Flights
+                            </button>
+
+                            <button onclick="showSection('tracking')">
+                                <span>◉</span>
+                                Track Baggage
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Placeholder sections -->
+            <section id="passengers" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Passengers</h2>
+            <p>Manage passenger records</p>
+        </div>
+
+        <button class="primary-btn" onclick="openPassengerModal()">
+            + Add Passenger
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="passenger-search"
+                    placeholder="Search passengers..."
+                    oninput="filterPassengers()"
+                >
+
+            </div>
+
+            <button class="refresh-btn" onclick="loadPassengers()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="passenger-table-container">
+
+            <div class="loading-state">
+                Loading passengers...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Passenger Modal -->
+
+<div id="passenger-modal" class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+                <h3 id="passenger-modal-title">Add Passenger</h3>
+                <p id="passenger-modal-subtitle">
+                    Enter passenger details
+                </p>
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closePassengerModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="passenger-form" onsubmit="savePassenger(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Passenger ID</label>
+
+                    <input
+                        type="text"
+                        id="passengerID"
+                        required
+                        placeholder="Example: P006"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Name</label>
+
+                    <input
+                        type="text"
+                        id="passengerName"
+                        required
+                        placeholder="Passenger name"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        id="passengerEmail"
+                        required
+                        placeholder="example@mail.com"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Date of Birth</label>
+
+                    <input
+                        type="date"
+                        id="passengerDOB"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Street</label>
+
+                    <input
+                        type="text"
+                        id="passengerStreet"
+                        placeholder="Street"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input
+                        type="text"
+                        id="passengerCity"
+                        placeholder="City"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>PIN</label>
+
+                    <input
+                        type="text"
+                        id="passengerPIN"
+                        placeholder="PIN"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closePassengerModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="passenger-save-btn">
+                    Save Passenger
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Toast -->
+
+<div id="toast" class="toast"></div>
+
+
+            <section id="reservations" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Reservations</h2>
+            <p>Manage flight reservations</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openReservationModal()">
+            + Add Reservation
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="reservation-search"
+                    placeholder="Search reservations..."
+                    oninput="filterReservations()"
+                >
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadReservations()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="reservation-table-container">
+
+            <div class="loading-state">
+                Loading reservations...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     RESERVATION MODAL
+========================= -->
+
+<div
+    id="reservation-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="reservation-modal-title">
+                    Add Reservation
+                </h3>
+
+                <p id="reservation-modal-subtitle">
+                    Enter reservation details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeReservationModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="reservation-form"
+            onsubmit="saveReservation(event)">
+
+            <div class="form-grid">
+
+
+                <!-- Reservation ID -->
+
+                <div class="form-group">
+
+                    <label>Reservation ID</label>
+
+                    <input
+                        type="text"
+                        id="reservationID"
+                        required
+                        placeholder="Example: R006"
+                    >
+
+                </div>
+
+
+                <!-- Passenger -->
+
+                <div class="form-group">
+
+                    <label>Passenger</label>
+
+                    <select
+                        id="reservationPassenger"
+                        required>
+
+                        <option value="">
+                            Select passenger
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Booking Status -->
+
+                <div class="form-group">
+
+                    <label>Booking Status</label>
+
+                    <select
+                        id="reservationStatus"
+                        required>
+
+                        <option value="">
+                            Select status
+                        </option>
+
+                        <option value="Confirmed">
+                            Confirmed
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="Cancelled">
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Class -->
+
+                <div class="form-group">
+
+                    <label>Class</label>
+
+                    <select
+                        id="reservationClass"
+                        required>
+
+                        <option value="">
+                            Select class
+                        </option>
+
+                        <option value="Economy">
+                            Economy
+                        </option>
+
+                        <option value="Business">
+                            Business
+                        </option>
+
+                        <option value="First">
+                            First
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Departure Airport -->
+
+                <div class="form-group">
+
+                    <label>Departure Airport</label>
+
+                    <select
+                        id="departureAirport"
+                        required>
+
+                        <option value="">
+                            Select departure airport
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Arrival Airport -->
+
+                <div class="form-group">
+
+                    <label>Arrival Airport</label>
+
+                    <select
+                        id="arrivalAirport"
+                        required>
+
+                        <option value="">
+                            Select arrival airport
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeReservationModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="reservation-save-btn">
+
+                    Save Reservation
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<section id="flights" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Flights</h2>
+            <p>Manage scheduled flights</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openFlightModal()">
+            + Add Flight
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="flight-search"
+                    placeholder="Search flights..."
+                    oninput="filterFlights()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadFlights()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="flight-table-container">
+
+            <div class="loading-state">
+                Loading flights...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FLIGHT MODAL
+========================= -->
+
+<div
+    id="flight-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="flight-modal-title">
+                    Add Flight
+                </h3>
+
+                <p id="flight-modal-subtitle">
+                    Enter flight details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeFlightModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="flight-form"
+            onsubmit="saveFlight(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Flight ID</label>
+
+                    <input
+                        type="text"
+                        id="flightID"
+                        required
+                        placeholder="Example: F006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Airline</label>
+
+                    <select
+                        id="flightAirline"
+                        required>
+
+                        <option value="">
+                            Select airline
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Departure Time</label>
+
+                    <input
+                        type="time"
+                        id="flightDepartureTime"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeFlightModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="flight-save-btn">
+
+                    Save Flight
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div><section id="tickets" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Tickets</h2>
+            <p>Manage passenger tickets</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openTicketModal()">
+            + Add Ticket
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="ticket-search"
+                    placeholder="Search tickets..."
+                    oninput="filterTickets()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadTickets()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="ticket-table-container">
+
+            <div class="loading-state">
+                Loading tickets...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     TICKET MODAL
+========================= -->
+
+<div
+    id="ticket-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="ticket-modal-title">
+                    Add Ticket
+                </h3>
+
+                <p id="ticket-modal-subtitle">
+                    Enter ticket details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeTicketModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="ticket-form"
+            onsubmit="saveTicket(event)">
+
+            <div class="form-grid">
+
+
+                <!-- Reservation -->
+
+                <div class="form-group">
+
+                    <label>Reservation</label>
+
+                    <select
+                        id="ticketReservation"
+                        required>
+
+                        <option value="">
+                            Select reservation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Ticket Number -->
+
+                <div class="form-group">
+
+                    <label>Ticket Number</label>
+
+                    <input
+                        type="text"
+                        id="ticketNo"
+                        required
+                        placeholder="Example: T006">
+
+                </div>
+
+
+                <!-- Seat -->
+
+                <div class="form-group">
+
+                    <label>Seat Number</label>
+
+                    <input
+                        type="text"
+                        id="ticketSeatNo"
+                        placeholder="Example: 15A">
+
+                </div>
+
+
+                <!-- Fare -->
+
+                <div class="form-group">
+
+                    <label>Fare</label>
+
+                    <input
+                        type="number"
+                        id="ticketFare"
+                        required
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 3500.00">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeTicketModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="ticket-save-btn">
+
+                    Save Ticket
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="baggage" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Baggage</h2>
+            <p>Manage passenger baggage records</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openBaggageModal()">
+            + Add Baggage
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="baggage-search"
+                    placeholder="Search baggage..."
+                    oninput="filterBaggage()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadBaggage()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="baggage-table-container">
+
+            <div class="loading-state">
+                Loading baggage...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     BAGGAGE MODAL
+========================= -->
+
+<div
+    id="baggage-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="baggage-modal-title">
+                    Add Baggage
+                </h3>
+
+                <p id="baggage-modal-subtitle">
+                    Enter baggage details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeBaggageModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="baggage-form"
+            onsubmit="saveBaggage(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Baggage ID</label>
+
+                    <input
+                        type="text"
+                        id="baggageID"
+                        required
+                        placeholder="Example: B006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Number of Pieces</label>
+
+                    <input
+                        type="number"
+                        id="baggagePieces"
+                        required
+                        min="1"
+                        step="1"
+                        placeholder="Example: 2">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Weight (kg)</label>
+
+                    <input
+                        type="number"
+                        id="baggageWeight"
+                        required
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 20.00">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeBaggageModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="baggage-save-btn">
+
+                    Save Baggage
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="payments" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Payments</h2>
+            <p>Manage ticket payment records</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openPaymentModal()">
+            + Add Payment
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="payment-search"
+                    placeholder="Search payments..."
+                    oninput="filterPayments()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadPayments()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="payment-table-container">
+
+            <div class="loading-state">
+                Loading payments...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PAYMENT MODAL
+========================= -->
+
+<div
+    id="payment-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="payment-modal-title">
+                    Add Payment
+                </h3>
+
+                <p id="payment-modal-subtitle">
+                    Enter payment details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closePaymentModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="payment-form"
+            onsubmit="savePayment(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Payment ID</label>
+
+                    <input
+                        type="text"
+                        id="paymentID"
+                        required
+                        placeholder="Example: PM06">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Reservation</label>
+
+                    <select
+                        id="paymentReservation"
+                        required
+                        onchange="updatePaymentTicketDropdown()">
+
+                        <option value="">
+                            Select reservation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Ticket</label>
+
+                    <select
+                        id="paymentTicket"
+                        required>
+
+                        <option value="">
+                            Select ticket
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Amount</label>
+
+                    <input
+                        type="number"
+                        id="paymentAmount"
+                        required
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 3500.00">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Payment Method</label>
+
+                    <select
+                        id="paymentMethod"
+                        required>
+
+                        <option value="">
+                            Select method
+                        </option>
+
+                        <option value="Card">
+                            Card
+                        </option>
+
+                        <option value="UPI">
+                            UPI
+                        </option>
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="Net Banking">
+                            Net Banking
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closePaymentModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="payment-save-btn">
+                    Save Payment
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="airports" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Airports</h2>
+            <p>Manage airport information and locations</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openAirportModal()">
+            + Add Airport
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="airport-search"
+                    placeholder="Search airports..."
+                    oninput="filterAirports()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadAirports()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="airport-table-container">
+
+            <div class="loading-state">
+                Loading airports...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     AIRPORT MODAL
+========================= -->
+
+<div
+    id="airport-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="airport-modal-title">
+                    Add Airport
+                </h3>
+
+                <p id="airport-modal-subtitle">
+                    Enter airport details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeAirportModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="airport-form"
+            onsubmit="saveAirport(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Airport ID</label>
+
+                    <input
+                        type="text"
+                        id="airportID"
+                        required
+                        placeholder="Example: A006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Airport Name</label>
+
+                    <input
+                        type="text"
+                        id="airportName"
+                        required
+                        placeholder="Example: International Airport">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input
+                        type="text"
+                        id="airportCity"
+                        required
+                        placeholder="Example: Mumbai">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Country</label>
+
+                    <input
+                        type="text"
+                        id="airportCountry"
+                        required
+                        placeholder="Example: India">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeAirportModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="airport-save-btn">
+                    Save Airport
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="airlines" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Airlines</h2>
+            <p>Manage airline information and codes</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openAirlineModal()">
+            + Add Airline
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="airline-search"
+                    placeholder="Search airlines..."
+                    oninput="filterAirlines()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadAirlines()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="airline-table-container">
+
+            <div class="loading-state">
+                Loading airlines...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     AIRLINE MODAL
+========================= -->
+
+<div
+    id="airline-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="airline-modal-title">
+                    Add Airline
+                </h3>
+
+                <p id="airline-modal-subtitle">
+                    Enter airline details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeAirlineModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="airline-form"
+            onsubmit="saveAirline(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Airline ID</label>
+
+                    <input
+                        type="text"
+                        id="airlineID"
+                        required
+                        placeholder="Example: AL06">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Airline Name</label>
+
+                    <input
+                        type="text"
+                        id="airlineName"
+                        required
+                        placeholder="Example: Air India">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>IATA Code</label>
+
+                    <input
+                        type="text"
+                        id="airlineIATA"
+                        required
+                        maxlength="10"
+                        placeholder="Example: AI">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeAirlineModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="airline-save-btn">
+                    Save Airline
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<section id="employees" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Employees</h2>
+            <p>Manage airline staff and employee information</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openEmployeeModal()">
+            + Add Employee
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="employee-search"
+                    placeholder="Search employees..."
+                    oninput="filterEmployees()">
+
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="loadEmployees()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="employee-table-container">
+
+            <div class="loading-state">
+                Loading employees...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     EMPLOYEE MODAL
+========================= -->
+
+<div
+    id="employee-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="employee-modal-title">
+                    Add Employee
+                </h3>
+
+                <p id="employee-modal-subtitle">
+                    Enter employee details
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeEmployeeModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="employee-form"
+            onsubmit="saveEmployee(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Employee ID</label>
+
+                    <input
+                        type="text"
+                        id="employeeID"
+                        required
+                        placeholder="Example: E006">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Name</label>
+
+                    <input
+                        type="text"
+                        id="employeeName"
+                        required
+                        placeholder="Example: Rahul">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Designation</label>
+
+                    <input
+                        type="text"
+                        id="employeeDesignation"
+                        required
+                        placeholder="Example: Officer">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone</label>
+
+                    <input
+                        type="text"
+                        id="employeePhone"
+                        required
+                        maxlength="20"
+                        placeholder="Example: 90004">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeEmployeeModal()">
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="employee-save-btn">
+                    Save Employee
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     BAGGAGE TRACKING
+===================================================== -->
+
+<section id="tracking" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Baggage Tracking</h2>
+            <p>Track baggage movement and scan history</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openBaggageTrackingModal()">
+            + Add Scan
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="baggage-tracking-search"
+                    placeholder="Search tracking records..."
+                    oninput="filterBaggageTracking()">
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadBaggageTracking()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="baggage-tracking-table-container">
+
+            <div class="loading-state">
+                Loading baggage tracking...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div
+    id="baggage-tracking-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="baggage-tracking-modal-title">
+                    Add Tracking Scan
+                </h3>
+
+                <p id="baggage-tracking-modal-subtitle">
+                    Record a baggage scan
+                </p>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                onclick="closeBaggageTrackingModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="baggage-tracking-form"
+            onsubmit="saveBaggageTracking(event)">
+
+            <div class="form-grid">
+
+
+                <!-- Baggage ID -->
+
+                <div class="form-group">
+
+                    <label>Baggage ID</label>
+
+                    <select
+                        id="trackingBaggageID"
+                        required>
+
+                        <option value="">
+                            Select baggage
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Tracking ID -->
+
+                <div class="form-group">
+
+                    <label>Tracking ID</label>
+
+                    <input
+                        type="text"
+                        id="trackingID"
+                        required
+                        placeholder="Example: TR04">
+
+                </div>
+
+
+                <!-- Scan Location -->
+
+                <div class="form-group">
+
+                    <label>Scan Location</label>
+
+                    <input
+                        type="text"
+                        id="scanLocation"
+                        required
+                        placeholder="Example: Security">
+
+                </div>
+
+
+                <!-- Scan Time -->
+
+                <div class="form-group">
+
+                    <label>Scan Time</label>
+
+                    <input
+                        type="time"
+                        id="scanTime"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeBaggageTrackingModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="baggage-tracking-save-btn">
+
+                    Save Scan
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     TICKET-BAGGAGE
+===================================================== -->
+
+<section id="ticket-baggage" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Ticket-Baggage</h2>
+            <p>Manage baggage assigned to tickets</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openTicketBaggageModal()">
+            + Assign Baggage
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="ticket-baggage-search"
+                    placeholder="Search assignments..."
+                    oninput="filterTicketBaggage()">
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadTicketBaggage()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="ticket-baggage-table-container">
+
+            <div class="loading-state">
+                Loading ticket-baggage assignments...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TICKET-BAGGAGE MODAL
+===================================================== -->
+
+<div
+    id="ticket-baggage-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="ticket-baggage-modal-title">
+                    Assign Baggage
+                </h3>
+
+                <p id="ticket-baggage-modal-subtitle">
+                    Assign baggage to a ticket
+                </p>
+
+            </div>
+
+            <button
+                class="modal-close"
+                onclick="closeTicketBaggageModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="ticket-baggage-form"
+            onsubmit="saveTicketBaggage(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Reservation</label>
+
+                    <select
+                        id="tbReservation"
+                        required
+                        onchange="updateTicketBaggageTicketDropdown()">
+
+                        <option value="">
+                            Select reservation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Ticket</label>
+
+                    <select
+                        id="tbTicket"
+                        required>
+
+                        <option value="">
+                            Select ticket
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Baggage</label>
+
+                    <select
+                        id="tbBaggage"
+                        required>
+
+                        <option value="">
+                            Select baggage
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Checked-In Date</label>
+
+                    <input
+                        type="date"
+                        id="tbCheckedInDate"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeTicketBaggageModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="ticket-baggage-save-btn">
+
+                    Assign Baggage
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     PASSENGER PHONES
+===================================================== -->
+
+<section id="passenger-phones" class="content-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Passenger Phones</h2>
+            <p>Manage passenger contact numbers</p>
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openPassengerPhoneModal()">
+            + Add Phone
+        </button>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="table-toolbar">
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="passenger-phone-search"
+                    placeholder="Search passenger phones..."
+                    oninput="filterPassengerPhones()">
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadPassengerPhones()">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div id="passenger-phone-table-container">
+
+            <div class="loading-state">
+                Loading passenger phones...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PASSENGER PHONE MODAL
+===================================================== -->
+
+<div
+    id="passenger-phone-modal"
+    class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3 id="passenger-phone-modal-title">
+                    Add Phone
+                </h3>
+
+                <p id="passenger-phone-modal-subtitle">
+                    Add a phone number for a passenger
+                </p>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                onclick="closePassengerPhoneModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="passenger-phone-form"
+            onsubmit="savePassengerPhone(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>Passenger</label>
+
+                    <select
+                        id="phonePassenger"
+                        required>
+
+                        <option value="">
+                            Select passenger
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        type="text"
+                        id="phoneNumber"
+                        required
+                        placeholder="Example: 9876500006">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closePassengerPhoneModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="passenger-phone-save-btn">
+                    Save Phone
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     EER / RELATIONSHIPS
+===================================================== -->
+
+<section id="relationships" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>EER / Relationships</h2>
+            <p>Explore the database structure and table relationships</p>
+        </div>
+    </div>
+
+
+    <!-- Schema Statistics -->
+
+    <div class="eer-stats">
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">▦</div>
+            <div>
+                <span>Tables</span>
+                <strong>12</strong>
+            </div>
+        </div>
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">🔗</div>
+            <div>
+                <span>Relationships</span>
+                <strong>11</strong>
+            </div>
+        </div>
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">🔑</div>
+            <div>
+                <span>Composite Keys</span>
+                <strong>4</strong>
+            </div>
+        </div>
+
+        <div class="eer-stat-card">
+            <div class="eer-stat-icon">↔</div>
+            <div>
+                <span>Foreign Keys</span>
+                <strong>11</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Diagram -->
+
+    <div class="panel eer-panel">
+
+        <div class="eer-panel-header">
+
+            <div>
+                <h3>Entity Relationship Diagram</h3>
+                <p>
+                    Click a table to highlight its connected relationships.
+                </p>
+            </div>
+
+            <button
+                class="refresh-btn"
+                onclick="resetEERDiagram()">
+                ↺ Reset View
+            </button>
+
+        </div>
+
+
+        <div class="eer-legend">
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-dot pk"></span>
+                Primary Key
+            </div>
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-dot fk"></span>
+                Foreign Key
+            </div>
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-line"></span>
+                Relationship
+            </div>
+
+            <div class="eer-legend-item">
+                <span class="eer-legend-composite"></span>
+                Composite Key
+            </div>
+
+        </div>
+
+
+        <div id="database-schema-diagram" class="eer-diagram">
+
+
+            <!-- AIRLINES -->
+
+            <div
+                class="eer-table"
+                data-table="AIRLINES"
+                onclick="selectEERTable('AIRLINES')">
+
+                <div class="eer-table-header">
+                    <span>✈</span>
+                    AIRLINES
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    AirlineID
+                </div>
+
+                <div class="eer-field">
+                    AirlineName
+                </div>
+
+                <div class="eer-field">
+                    IATA_Code
+                </div>
+
+            </div>
+
+
+            <!-- AIRPORT -->
+
+            <div
+                class="eer-table"
+                data-table="AIRPORT"
+                onclick="selectEERTable('AIRPORT')">
+
+                <div class="eer-table-header">
+                    <span>⌖</span>
+                    AIRPORT
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    AirportID
+                </div>
+
+                <div class="eer-field">
+                    AirportName
+                </div>
+
+                <div class="eer-field">
+                    City
+                </div>
+
+                <div class="eer-field">
+                    Country
+                </div>
+
+            </div>
+
+
+            <!-- PASSENGER -->
+
+            <div
+                class="eer-table"
+                data-table="PASSENGER"
+                onclick="selectEERTable('PASSENGER')">
+
+                <div class="eer-table-header">
+                    <span>♟</span>
+                    PASSENGER
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    PassengerID
+                </div>
+
+                <div class="eer-field">
+                    Name
+                </div>
+
+                <div class="eer-field">
+                    Email
+                </div>
+
+                <div class="eer-field">
+                    DOB
+                </div>
+
+                <div class="eer-field">
+                    Street
+                </div>
+
+                <div class="eer-field">
+                    City
+                </div>
+
+                <div class="eer-field">
+                    PIN
+                </div>
+
+            </div>
+
+
+            <!-- EMPLOYEE -->
+
+            <div
+                class="eer-table"
+                data-table="EMPLOYEE"
+                onclick="selectEERTable('EMPLOYEE')">
+
+                <div class="eer-table-header">
+                    <span>♙</span>
+                    EMPLOYEE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    EmployeeID
+                </div>
+
+                <div class="eer-field">
+                    Name
+                </div>
+
+                <div class="eer-field">
+                    Designation
+                </div>
+
+                <div class="eer-field">
+                    Phone
+                </div>
+
+            </div>
+
+
+            <!-- FLIGHT -->
+
+            <div
+                class="eer-table"
+                data-table="FLIGHT"
+                onclick="selectEERTable('FLIGHT')">
+
+                <div class="eer-table-header">
+                    <span>➤</span>
+                    FLIGHT
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    FlightID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    AirlineID
+                </div>
+
+                <div class="eer-field">
+                    DepartureTime
+                </div>
+
+            </div>
+
+
+            <!-- RESERVATION -->
+
+            <div
+                class="eer-table"
+                data-table="RESERVATION"
+                onclick="selectEERTable('RESERVATION')">
+
+                <div class="eer-table-header">
+                    <span>▣</span>
+                    RESERVATION
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    ReservationID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    PassengerID
+                </div>
+
+                <div class="eer-field">
+                    BookingStatus
+                </div>
+
+                <div class="eer-field">
+                    Class
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    DepartureAirportID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    ArrivalAirportID
+                </div>
+
+            </div>
+
+
+            <!-- TICKET -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="TICKET"
+                onclick="selectEERTable('TICKET')">
+
+                <div class="eer-table-header">
+                    <span>🎫</span>
+                    TICKET
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    ReservationID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    TicketNo
+                </div>
+
+                <div class="eer-field">
+                    SeatNo
+                </div>
+
+                <div class="eer-field">
+                    Fare
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div
+                class="eer-table"
+                data-table="PAYMENT"
+                onclick="selectEERTable('PAYMENT')">
+
+                <div class="eer-table-header">
+                    <span>₹</span>
+                    PAYMENT
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    PaymentID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    ReservationID
+                </div>
+
+                <div class="eer-field fk-field">
+                    <span class="key-icon">FK</span>
+                    TicketNo
+                </div>
+
+                <div class="eer-field">
+                    Amount
+                </div>
+
+                <div class="eer-field">
+                    PaymentMethod
+                </div>
+
+            </div>
+
+
+            <!-- BAGGAGE -->
+
+            <div
+                class="eer-table"
+                data-table="BAGGAGE"
+                onclick="selectEERTable('BAGGAGE')">
+
+                <div class="eer-table-header">
+                    <span>🧳</span>
+                    BAGGAGE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    BaggageID
+                </div>
+
+                <div class="eer-field">
+                    NoOfPieces
+                </div>
+
+                <div class="eer-field">
+                    Weight
+                </div>
+
+            </div>
+
+
+            <!-- BAGGAGE TRACKING -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="BAGGAGE_TRACKING"
+                onclick="selectEERTable('BAGGAGE_TRACKING')">
+
+                <div class="eer-table-header">
+                    <span>◉</span>
+                    BAGGAGE_TRACKING
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    BaggageID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    TrackingID
+                </div>
+
+                <div class="eer-field">
+                    ScanLocation
+                </div>
+
+                <div class="eer-field">
+                    ScanTime
+                </div>
+
+            </div>
+
+
+            <!-- TICKET BAGGAGE -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="TICKET_BAGGAGE"
+                onclick="selectEERTable('TICKET_BAGGAGE')">
+
+                <div class="eer-table-header">
+                    <span>🔗</span>
+                    TICKET_BAGGAGE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    ReservationID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    TicketNo
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    BaggageID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field">
+                    CheckedInDate
+                </div>
+
+            </div>
+
+
+            <!-- PASSENGER PHONE -->
+
+            <div
+                class="eer-table composite-table"
+                data-table="PASSENGER_PHONE"
+                onclick="selectEERTable('PASSENGER_PHONE')">
+
+                <div class="eer-table-header">
+                    <span>☎</span>
+                    PASSENGER_PHONE
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    PassengerID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    Phone
+                </div>
+
+            </div>
+
+
+            <!-- RELATIONSHIP INFORMATION -->
+
+            <div class="eer-relationship-info">
+
+                <div class="eer-info-header">
+                    <span>↔</span>
+                    Relationship Map
+                </div>
+
+                <div class="eer-relationship-list">
+
+                    <div class="eer-relationship">
+                        <strong>AIRLINES → FLIGHT</strong>
+                        <span>1 : N</span>
+                        <p>One airline operates multiple flights.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>PASSENGER → RESERVATION</strong>
+                        <span>1 : N</span>
+                        <p>One passenger can make multiple reservations.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>AIRPORT → RESERVATION</strong>
+                        <span>1 : N</span>
+                        <p>Departure and arrival airports are referenced by reservations.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>RESERVATION → TICKET</strong>
+                        <span>1 : N</span>
+                        <p>A reservation can contain multiple tickets.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>RESERVATION + TICKET → PAYMENT</strong>
+                        <span>1 : N</span>
+                        <p>Payments reference the ticket composite key.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>BAGGAGE → BAGGAGE_TRACKING</strong>
+                        <span>1 : N</span>
+                        <p>A baggage item can have multiple tracking scans.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>TICKET ↔ BAGGAGE</strong>
+                        <span>M : N</span>
+                        <p>Mapped through the TICKET_BAGGAGE relation table.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>PASSENGER → PASSENGER_PHONE</strong>
+                        <span>1 : N</span>
+                        <p>A passenger can have multiple phone numbers.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Relational Mapping -->
+
+    <div class="panel eer-mapping-panel">
+
+        <div class="eer-panel-header">
+            <div>
+                <h3>Relational Mapping</h3>
+                <p>How EER concepts are represented in the relational schema</p>
+            </div>
+        </div>
+
+        <div class="mapping-grid">
+
+            <div class="mapping-card">
+                <span class="mapping-number">01</span>
+                <h4>Multivalued Attribute</h4>
+                <p>
+                    The multivalued <strong>Phone</strong> attribute of
+                    PASSENGER is mapped to the
+                    <strong>PASSENGER_PHONE</strong> relation.
+                </p>
+            </div>
+
+            <div class="mapping-card">
+                <span class="mapping-number">02</span>
+                <h4>M:N Relationship</h4>
+                <p>
+                    The <strong>TICKET ↔ BAGGAGE</strong> many-to-many
+                    relationship is represented using
+                    <strong>TICKET_BAGGAGE</strong>.
+                </p>
+            </div>
+
+            <div class="mapping-card">
+                <span class="mapping-number">03</span>
+                <h4>Composite Keys</h4>
+                <p>
+                    TICKET, BAGGAGE_TRACKING, TICKET_BAGGAGE and
+                    PASSENGER_PHONE use composite primary keys.
+                </p>
+            </div>
+
+            <div class="mapping-card">
+                <span class="mapping-number">04</span>
+                <h4>Foreign Keys</h4>
+                <p>
+                    Foreign keys maintain referential integrity between
+                    related relations.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =====================================================
+     INTERACTIVE EER DIAGRAM
+===================================================== -->
+
+<section id="eer-diagram" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>EER Diagram</h2>
+
+            <p>
+                Interactive conceptual model of the Airline Reservation
+                and Baggage Tracking System
+            </p>
+        </div>
+    </div>
+
+
+    <!-- EER TOOLBAR -->
+
+    <div class="eer-toolbar">
+
+        <div class="eer-toolbar-info">
+
+            <div class="eer-toolbar-icon">
+                ◇
+            </div>
+
+            <div>
+                <strong>Interactive EER Model</strong>
+
+                <span>
+                    Click an entity to explore its attributes,
+                    keys, relationships and database mapping.
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="eer-toolbar-actions">
+
+            <button
+                type="button"
+                class="eer-tool-btn"
+                onclick="resetInteractiveEER()">
+
+                ↻ Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- EER MAIN AREA -->
+
+    <div id="eer-workspace" class="eer-workspace">
+
+    <!-- =================================================
+         FULL PAGE INTERACTIVE EER CANVAS
+    ================================================== -->
+
+    <div
+        id="eer-diagram-area"
+        class="eer-diagram-area">
+
+        <!-- JavaScript creates the complete
+             interactive EER here -->
+
+    </div>
+
+
+    <!-- =================================================
+         CLICK-TO-OPEN DETAILS PANEL
+    ================================================== -->
+
+    <aside
+        id="eer-details"
+        class="eer-details-panel">
+
+    </aside>
+
+</div>
+
+
+    <!-- EER LEGEND -->
+
+    <div class="eer-legend">
+
+        <div class="eer-legend-title">
+
+            <h3>EER Notation</h3>
+
+            <p>
+                Symbols used in the conceptual database model
+            </p>
+
+        </div>
+
+
+        <div class="eer-legend-grid">
+
+            <div class="eer-legend-item">
+
+                <span class="legend-entity"></span>
+
+                <span>
+                    Strong Entity
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-weak-entity"></span>
+
+                <span>
+                    Weak Entity
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-attribute"></span>
+
+                <span>
+                    Attribute
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-multivalued"></span>
+
+                <span>
+                    Multivalued Attribute
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-relationship"></span>
+
+                <span>
+                    Relationship
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-isa">
+                    ISA
+                </span>
+
+                <span>
+                    Specialization
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-union">
+                    U
+                </span>
+
+                <span>
+                    Union Category
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-total"></span>
+
+                <span>
+                    Total Participation
+                </span>
+
+            </div>
+
+
+            <div class="eer-legend-item">
+
+                <span class="legend-partial"></span>
+
+                <span>
+                    Partial Participation
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+
+</section>
+
+           <section id="sql" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>SQL Console</h2>
+            <p>Write, build and execute SQL queries with guided tools</p>
+        </div>
+
+        <div class="sql-connection-status">
+            <span class="sql-status-dot"></span>
+            Database Connected
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         SQL TOOLBAR
+    ====================================================== -->
+
+    <div class="sql-toolbar">
+
+        <div class="sql-toolbar-left">
+
+            <button
+                type="button"
+                class="sql-tool-btn active"
+                id="sql-editor-tab">
+                <i class="fa-solid fa-code"></i>
+                SQL Editor
+            </button>
+
+            <button
+    type="button"
+    class="sql-tool-btn"
+    id="sql-builder-tab"
+    onclick="openSQLQueryBuilder()">
+
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    Query Builder
+
+</button>
+
+            <button
+    type="button"
+    class="sql-history-btn"
+    id="sql-history-btn"
+    onclick="toggleSQLHistory()">
+
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    History
+
+</button>
+
+        </div>
+
+        <div class="sql-toolbar-right">
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="sql-refresh-tables-btn">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                Refresh
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SQL MAIN WORKSPACE
+    ====================================================== -->
+
+    <div class="sql-workspace">
+
+
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
+        <aside class="sql-sidebar">
+
+            <div class="sql-sidebar-section">
+
+                <div class="sql-sidebar-heading">
+                    <span>
+                        <i class="fa-solid fa-database"></i>
+                        Tables
+                    </span>
+
+                    <span
+                        id="sql-table-count"
+                        class="sql-count">
+                        0
+                    </span>
+                </div>
+
+
+                <div
+                    id="sql-table-list"
+                    class="sql-table-list">
+
+                    <div class="sql-loading">
+                        Loading tables...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SELECTED TABLE INFO -->
+
+            <div
+                id="sql-table-info"
+                class="sql-table-info">
+
+                <div class="sql-empty-info">
+
+                    <i class="fa-regular fa-hand-pointer"></i>
+
+                    <p>
+                        Select a table to view its columns
+                        and records.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN SQL AREA
+        ================================================== -->
+
+        <div class="sql-main">
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <div class="sql-quick-actions">
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('select')">
+
+        <i class="fa-solid fa-table-list"></i>
+        SELECT
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('insert')">
+
+        <i class="fa-solid fa-plus"></i>
+        INSERT
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('update')">
+
+        <i class="fa-solid fa-pen"></i>
+        UPDATE
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('delete')">
+
+        <i class="fa-solid fa-trash"></i>
+        DELETE
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('create')">
+
+        <i class="fa-solid fa-sitemap"></i>
+        DDL
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('join')">
+
+        <i class="fa-solid fa-link"></i>
+        JOIN
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('aggregate')">
+
+        <i class="fa-solid fa-chart-column"></i>
+        Aggregate
+
+    </button>
+
+
+    <button
+        type="button"
+        class="sql-action-btn"
+        onclick="insertSQLTemplate('plsql')">
+
+        <i class="fa-solid fa-gears"></i>
+        Procedural SQL
+
+    </button>
+
+</div>
+
+            <!-- =================================================
+                 EDITOR CARD
+            ================================================== -->
+
+            <div class="sql-editor-card">
+
+                <div class="sql-editor-header">
+
+                    <div>
+
+                        <div class="sql-editor-title">
+                            <i class="fa-solid fa-terminal"></i>
+                            SQL Editor
+                        </div>
+
+                        <div class="sql-editor-subtitle">
+                            Write your SQL query or use a template
+                        </div>
+
+                    </div>
+
+
+                    <div class="sql-editor-actions">
+
+                        <button
+    type="button"
+    class="sql-small-btn"
+    id="sql-format-btn"
+    onclick="formatSQLQuery()">
+
+    <i class="fa-solid fa-align-left"></i>
+    Format
+
+</button>
+
+
+                       <button
+    type="button"
+    class="sql-small-btn"
+    id="sql-clear-btn"
+    onclick="clearSQLQuery()">
+
+    <i class="fa-solid fa-eraser"></i>
+    Clear
+
+</button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sql-editor-wrapper">
+
+                    <div
+                        id="sql-line-numbers"
+                        class="sql-line-numbers">
+                        1
+                    </div>
+
+
+                    <textarea
+                        id="sql-editor"
+                        class="sql-editor"
+                        spellcheck="false"
+                        placeholder="Write your SQL query here...
+
+Example:
+SELECT *
+FROM PASSENGER
+WHERE City = 'Chennai';
+
+Tip: Ctrl + Enter to execute the query."></textarea>
+
+                </div>
+
+
+                <div class="sql-editor-footer">
+
+                    <div class="sql-editor-hint">
+
+                        <i class="fa-regular fa-lightbulb"></i>
+
+                        <span>
+                            Ctrl + Enter to execute
+                        </span>
+
+                    </div>
+
+                    <button
+    type="button"
+    class="primary-btn sql-run-btn"
+    id="sql-run-btn"
+    onclick="executeSQLQuery()">
+
+    <i class="fa-solid fa-play"></i>
+    Run Query
+
+</button>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 QUERY STATUS
+            ================================================== -->
+
+            <div
+                id="sql-query-status"
+                class="sql-query-status"
+                hidden>
+
+            </div>
+
+
+            <!-- =================================================
+                 RESULT CARD
+            ================================================== -->
+
+            <div class="sql-result-card">
+
+                <div class="sql-result-header">
+
+                    <div>
+
+                        <div class="sql-result-title">
+
+                            <i class="fa-solid fa-table"></i>
+
+                            Query Result
+
+                        </div>
+
+                        <div
+                            id="sql-result-summary"
+                            class="sql-result-summary">
+
+                            Run a query to see results.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sql-result-actions">
+
+                        <button
+    type="button"
+    class="sql-small-btn"
+    id="sql-copy-result-btn"
+    onclick="copySQLResult()">
+
+    <i class="fa-regular fa-copy"></i>
+    Copy
+
+</button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="sql-result-container"
+                    class="sql-result-container">
+
+                    <div class="sql-empty-result">
+
+                        <div class="sql-empty-icon">
+                            <i class="fa-solid fa-terminal"></i>
+                        </div>
+
+                        <h3>No query executed</h3>
+
+                        <p>
+                            Write a query above and click
+                            <strong>Run Query</strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VIEW TABLE MODAL
+    ====================================================== -->
+
+    <div
+        id="sql-table-modal"
+        class="modal-overlay">
+
+        <div class="modal sql-table-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h3 id="sql-table-modal-title">
+                        Table
+                    </h3>
+
+                    <p id="sql-table-modal-subtitle">
+                        Complete table data
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeSQLTableModal()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="sql-table-modal-content"
+                class="sql-table-modal-content">
+
+                <div class="loading-state">
+                    Loading table...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         QUERY HISTORY PANEL
+    ====================================================== -->
+
+    <div
+        id="sql-history-panel"
+        class="sql-history-panel"
+        hidden>
+
+        <div class="sql-history-header">
+
+            <div>
+
+                <h3>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Query History
+                </h3>
+
+                <p>
+                    Previously executed queries
+                </p>
+
+            </div>
+
+
+            <button
+    type="button"
+    class="secondary-btn"
+    id="sql-clear-history-btn"
+    onclick="clearSQLHistory()">
+
+    <i class="fa-solid fa-trash"></i>
+    Clear History
+
+</button>
+
+        </div>
+
+
+        <div
+            id="sql-history-list"
+            class="sql-history-list">
+
+            <div class="sql-empty-history">
+
+                No queries executed yet.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+        </main>
+
+    </div>
+
+    <!-- Team Members Popup -->
+
+<div
+    id="team-members-popup"
+    class="team-members-popup">
+
+    <div class="team-popup-header">
+
+        <div>
+            <h3>Team Members</h3>
+            <p>AirTrack Project Team</p>
+        </div>
+
+        <button
+            class="team-popup-close"
+            type="button"
+            onclick="toggleTeamMembers()">
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="team-member-list">
+
+        <div class="team-member">
+
+            <div class="team-member-icon">
+                👤
+            </div>
+
+            <div>
+                <strong>Arthesh</strong>
+                <span>Team Member</span>
+            </div>
+
+        </div>
+
+
+        <div class="team-member">
+
+            <div class="team-member-icon">
+                👤
+            </div>
+
+            <div>
+                <strong>Parth</strong>
+                <span>Team Member</span>
+            </div>
+
+        </div>
+
+
+        <div class="team-member">
+
+            <div class="team-member-icon">
+                👤
+            </div>
+
+            <div>
+                <strong>Tharshitha</strong>
+                <span>Team Member</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    <script src="script.js"></script>
+    <script src="dashboard-router.js"></script>
+    <script src="dashboard-home-navigation.js"></script>
+</body>
+</html>
