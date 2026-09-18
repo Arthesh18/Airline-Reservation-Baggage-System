@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/sql")
 @CrossOrigin(origins = {
         "http://127.0.0.1:5500",
-        "http://localhost:5500"
+        "http://localhost:5500",
+        "https://airline-reservation-frontend-0bns.onrender.com"
 })
 public class SqlController {
     private final JdbcTemplate jdbcTemplate;
