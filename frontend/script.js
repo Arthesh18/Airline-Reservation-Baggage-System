@@ -8993,14 +8993,7 @@ const interactiveEERRelationships = [
         cardinalityFrom: "1",
         cardinalityTo: "N"
     },
-    {
-    id: "airlines-airport",
-    from: "AIRLINES",
-    to: "AIRPORT",
-    label: "BASED AT",
-    cardinalityFrom: "M",
-    cardinalityTo: "N"
-    },
+    
     {
         id: "reservation-airport",
         from: "RESERVATION",
@@ -9197,7 +9190,7 @@ const interactiveEERAttributePositions = {
     "passenger-id": { x: 90, y: 70 },
     "passenger-name": { x: 170, y: 65 },
     "passenger-email": { x: 250, y: 70 },
-    "passenger-dob": { x: 75, y: 225 },
+    "passenger-dob": { x: 55, y: 225 },
     "passenger-address": { x: 50, y: 100 },
     "passenger-phone": { x: 245, y: 225 },
 
@@ -9219,13 +9212,13 @@ const interactiveEERAttributePositions = {
     "employee-phone": { x: 1270, y: 110 },
 
     // AIRLINES
-    "airlines-id": { x: 555, y: 460 },
-    "airline-name": { x: 650, y: 365 },
-    "airline-iata": { x: 750, y: 365 },
+    "airlines-id": { x: 535, y: 460 },
+    "airline-name": { x: 600, y: 365 },
+    "airline-iata": { x: 770, y: 365 },
 
     // FLIGHT
     "flight-id": { x: 855, y: 365 },
-    "flight-time": { x: 950, y: 355 },
+    "flight-time": { x: 920, y: 340 },
 
     // TICKET
     "ticket-no": { x: 350, y: 575 },
@@ -9272,7 +9265,7 @@ const interactiveEERPositions = {
     },
 
     EMPLOYEE: {
-        x: 1110,
+        x: 1170,
         y: 180
     },
 
@@ -9312,12 +9305,12 @@ const interactiveEERPositions = {
     ===================================================== */
 
     FULL_TIME_EMPLOYEE: {
-        x: 1020,
+        x: 1080,
         y: 390
     },
 
     PART_TIME_EMPLOYEE: {
-        x: 1200,
+        x: 1260,
         y: 390
     },
 
@@ -9327,12 +9320,12 @@ const interactiveEERPositions = {
     ===================================================== */
 
     AIRLINES: {
-        x: 700,
+        x: 755,
         y: 450
     },
 
     FLIGHT: {
-        x: 950,
+        x: 1005,
         y: 450
     },
 
@@ -9402,7 +9395,7 @@ const interactiveEERRelationshipPositions = {
     ===================================================== */
 
     "airlines-flight": {
-        x: 825,
+        x: 875,
         y: 450
     },
 
@@ -9445,7 +9438,7 @@ const interactiveEERRelationshipPositions = {
         x: 1050,
         y: 650
     },
-    "airlines-airport": { x: 730, y: 300 }
+    "airlines-airport": { x: 755, y: 300 }
 };
 /* =========================================================
    INITIALIZE INTERACTIVE EER
@@ -9933,7 +9926,7 @@ function createUnionNode(container) {
      */
 
     node.style.left =
-        "1110px";
+        "1170px";
 
 
     node.style.top =
@@ -16624,6 +16617,7 @@ function toggleDashboardNavigation() {
     navigation.classList.toggle("open");
 
 }
+
 /* =========================
    INITIAL LOAD
 ========================= */

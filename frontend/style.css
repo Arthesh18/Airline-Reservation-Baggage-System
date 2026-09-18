@@ -5915,3 +5915,5578 @@ nav {
         translateY(0);
 
 }
+/* ============================================================
+   AIRTRACK — PREMIUM OPERATIONS DASHBOARD
+   Visual layer only.
+   Existing CRUD/API/SQL functionality is untouched.
+============================================================ */
+
+
+/* ============================================================
+   GLOBAL DASHBOARD
+============================================================ */
+
+body {
+
+    background:
+        radial-gradient(
+            circle at 80% -10%,
+            rgba(37, 110, 220, 0.08),
+            transparent 35%
+        ),
+        #f3f7fb;
+
+}
+
+
+/* ============================================================
+   HIDE OLD SIDEBAR
+============================================================ */
+
+.sidebar {
+
+    display: none !important;
+
+}
+
+
+/* ============================================================
+   MAIN CONTENT — FULL WIDTH
+============================================================ */
+
+.main-content {
+
+    margin-left: 0 !important;
+
+    width: 100% !important;
+
+    min-width: 0;
+
+}
+
+
+/* ============================================================
+   TOPBAR
+============================================================ */
+
+.topbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+    height: 72px;
+
+    padding:
+        0 32px;
+
+    background:
+        rgba(255,255,255,0.88) !important;
+
+    border-bottom:
+        1px solid #dce6ef !important;
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 8px 30px rgba(20,45,70,0.05);
+
+}
+
+
+/* ============================================================
+   TOPBAR TITLE
+============================================================ */
+
+.topbar h1 {
+
+    font-size:
+        21px !important;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        -0.5px;
+
+    color:
+        #081b2d;
+
+}
+
+
+.topbar p,
+.topbar .subtitle {
+
+    color:
+        #7890a4 !important;
+
+}
+
+
+/* ============================================================
+   AIRLINE ACCENT
+============================================================ */
+
+.topbar::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -1px;
+
+    width: 150px;
+
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #147cff,
+            #43baff,
+            transparent
+        );
+
+}
+
+
+/* ============================================================
+   CONTENT AREA
+============================================================ */
+
+.content {
+
+    padding:
+        30px 34px 50px !important;
+
+}
+
+
+/* ============================================================
+   PAGE HEADERS
+============================================================ */
+
+.page-header {
+
+    margin-bottom:
+        22px;
+
+}
+
+
+.page-header h2 {
+
+    font-size:
+        28px !important;
+
+    color:
+        #071a2d !important;
+
+    letter-spacing:
+        -0.8px;
+
+}
+
+
+.page-header p {
+
+    color:
+        #72899d !important;
+
+}
+
+
+/* ============================================================
+   DATA CONTAINERS
+============================================================ */
+
+.data-card,
+.table-card,
+.content-card,
+.section-card {
+
+    border:
+        1px solid #dce7f0 !important;
+
+    border-radius:
+        18px !important;
+
+    background:
+        rgba(255,255,255,0.92) !important;
+
+    box-shadow:
+        0 12px 40px rgba(22,52,80,0.055) !important;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+}
+
+
+.data-card:hover,
+.table-card:hover,
+.content-card:hover,
+.section-card:hover {
+
+    border-color:
+        #c9dced !important;
+
+    box-shadow:
+        0 18px 50px rgba(22,52,80,0.08) !important;
+
+}
+
+
+/* ============================================================
+   TABLE WRAPPER
+============================================================ */
+
+.table-container {
+
+    border:
+        1px solid #dce7f0;
+
+    border-radius:
+        16px;
+
+    overflow:
+        hidden;
+
+    background:
+        white;
+
+}
+
+
+/* ============================================================
+   DATA TABLE
+============================================================ */
+
+.data-table {
+
+    border-collapse:
+        separate;
+
+    border-spacing:
+        0;
+
+}
+
+
+.data-table thead th {
+
+    background:
+        #f4f8fc !important;
+
+    color:
+        #6c8296 !important;
+
+    font-size:
+        10px !important;
+
+    font-weight:
+        800 !important;
+
+    letter-spacing:
+        .8px;
+
+    text-transform:
+        uppercase;
+
+    border-bottom:
+        1px solid #dce7f0 !important;
+
+}
+
+
+.data-table tbody tr {
+
+    transition:
+        background .18s ease;
+
+}
+
+
+.data-table tbody tr:hover {
+
+    background:
+        #f7fbff !important;
+
+}
+
+
+.data-table tbody td {
+
+    border-bottom:
+        1px solid #edf2f6 !important;
+
+    color:
+        #23384b !important;
+
+}
+
+
+/* ============================================================
+   ID / KEY CELLS
+============================================================ */
+
+.data-table tbody td:first-child {
+
+    font-weight:
+        750;
+
+    color:
+        #126fd5 !important;
+
+}
+
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+
+button {
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+
+}
+
+
+button:hover {
+
+    transform:
+        translateY(0);
+
+}
+
+/* ============================================================
+   PRIMARY BUTTONS
+============================================================ */
+
+.btn-primary,
+.primary-btn,
+button[type="submit"] {
+
+    background:
+        linear-gradient(
+            135deg,
+            #176ff0,
+            #0756c7
+        ) !important;
+
+    border:
+        none !important;
+
+    box-shadow:
+        0 8px 20px rgba(23,111,240,0.20);
+
+}
+
+
+.btn-primary:hover,
+.primary-btn:hover,
+button[type="submit"]:hover {
+
+    box-shadow:
+        0 12px 28px rgba(23,111,240,0.28);
+
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.search-box,
+.search-container {
+
+    background:
+        white !important;
+
+    border:
+        1px solid #d9e5ef !important;
+
+    border-radius:
+        12px !important;
+
+    transition:
+        .2s ease;
+
+}
+
+
+.search-box:focus-within,
+.search-container:focus-within {
+
+    border-color:
+        #3d98f5 !important;
+
+    box-shadow:
+        0 0 0 4px rgba(61,152,245,0.08);
+
+}
+
+
+/* ============================================================
+   INPUTS
+============================================================ */
+
+input,
+select,
+textarea {
+
+    border-color:
+        #d7e2eb !important;
+
+    border-radius:
+        10px !important;
+
+    background:
+        #ffffff !important;
+
+    color:
+        #172b3e !important;
+
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color:
+        #348df0 !important;
+
+    box-shadow:
+        0 0 0 4px rgba(52,141,240,0.08) !important;
+
+    outline:
+        none;
+
+}
+
+
+/* ============================================================
+   MODALS
+============================================================ */
+
+.modal {
+
+    border:
+        1px solid #dbe7f0 !important;
+
+    border-radius:
+        20px !important;
+
+    box-shadow:
+        0 30px 90px rgba(4,25,45,0.25) !important;
+
+}
+
+
+.modal-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbfe,
+            #eef6fc
+        );
+
+    border-bottom:
+        1px solid #e1eaf1 !important;
+
+}
+
+
+.modal-header h3 {
+
+    color:
+        #081b2d !important;
+
+}
+
+
+/* ============================================================
+   DASHBOARD HERO
+============================================================ */
+
+.dashboard-hero {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #071a2d,
+            #0c3556 55%,
+            #126dd3
+        ) !important;
+
+    box-shadow:
+        0 20px 55px rgba(5,35,65,0.18);
+
+}
+
+
+.dashboard-hero::before {
+
+    content:
+        "✈";
+
+    position:
+        absolute;
+
+    right:
+        45px;
+
+    top:
+        15px;
+
+    font-size:
+        110px;
+
+    opacity:
+        .08;
+
+    transform:
+        rotate(-8deg);
+
+}
+
+
+.dashboard-hero::after {
+
+    content: "";
+
+    position:
+        absolute;
+
+    width:
+        280px;
+
+    height:
+        280px;
+
+    right:
+        -90px;
+
+    bottom:
+        -160px;
+
+    border-radius:
+        50%;
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+        0 0 0 35px rgba(255,255,255,.025),
+        0 0 0 70px rgba(255,255,255,.02);
+
+}
+
+
+/* ============================================================
+   DASHBOARD STAT CARDS
+============================================================ */
+
+.stat-card {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid #dce7f0 !important;
+
+    border-radius:
+        17px !important;
+
+    background:
+        rgba(255,255,255,.94) !important;
+
+    box-shadow:
+        0 10px 30px rgba(24,56,84,.05) !important;
+
+    transition:
+        .25s ease;
+
+}
+
+
+.stat-card::before {
+
+    content: "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    width:
+        100%;
+
+    height:
+        3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1675ed,
+            #46b9ff
+        );
+
+    transform:
+        translateX(-100%);
+
+    transition:
+        .45s ease;
+
+}
+
+
+.stat-card:hover::before {
+
+    transform:
+        translateX(0);
+
+}
+
+
+.stat-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 18px 42px rgba(24,56,84,.09) !important;
+
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.system-status {
+
+    color:
+        #159b63 !important;
+
+    font-weight:
+        700;
+
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
+
+.action-btn {
+
+    border-radius:
+        9px !important;
+
+}
+
+
+.edit-btn {
+
+    background:
+        #eef6ff !important;
+
+    color:
+        #176fe0 !important;
+
+}
+
+
+.delete-btn {
+
+    background:
+        #fff1f2 !important;
+
+    color:
+        #df4b58 !important;
+
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+::-webkit-scrollbar {
+
+    width:
+        8px;
+
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        #edf2f6;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #b9cad8;
+
+    border-radius:
+        10px;
+
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #8fa8bb;
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 800px) {
+
+    .topbar {
+
+        padding:
+            0 18px;
+
+    }
+
+
+    .content {
+
+        padding:
+            22px 16px 40px !important;
+
+    }
+
+}
+/* ============================================================
+   COMPACT SYSTEM NAVIGATION
+============================================================ */
+
+.dashboard-navigation {
+
+    position:
+        relative;
+
+}
+
+
+.dashboard-nav-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    height:
+        40px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid #d8e4ed;
+
+    border-radius:
+        10px;
+
+    background:
+        #ffffff;
+
+    color:
+        #173047;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    cursor:
+        pointer;
+
+}
+
+
+.dashboard-nav-button:hover {
+
+    border-color:
+        #9fc8ea;
+
+    background:
+        #f7fbff;
+
+    box-shadow:
+        0 6px 20px rgba(20,80,130,.08);
+
+}
+
+
+.nav-menu-icon {
+
+    color:
+        #1677ed;
+
+    font-size:
+        15px;
+
+}
+
+
+.nav-chevron {
+
+    color:
+        #7e94a6;
+
+    font-size:
+        13px;
+
+    transition:
+        transform .2s ease;
+
+}
+
+
+.dashboard-navigation.open
+.nav-chevron {
+
+    transform:
+        rotate(180deg);
+
+}
+
+
+/* ============================================================
+   DROPDOWN
+============================================================ */
+
+.dashboard-nav-menu {
+
+    position:
+        absolute;
+
+    top:
+        calc(100% + 10px);
+
+    right:
+        0;
+
+    width:
+        245px;
+
+    max-height:
+        600px;
+
+    overflow-y:
+        auto;
+
+    padding:
+        9px;
+
+    border:
+        1px solid #d8e5ef;
+
+    border-radius:
+        16px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    box-shadow:
+        0 25px 70px rgba(8,35,58,.18);
+
+    backdrop-filter:
+        blur(18px);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    transform:
+        translateY(-8px)
+        scale(.98);
+
+    transform-origin:
+        top right;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease,
+        visibility .2s ease;
+
+}
+
+
+.dashboard-navigation.open
+.dashboard-nav-menu {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* ============================================================
+   MENU HEADER
+============================================================ */
+
+.nav-menu-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        10px 11px 12px;
+
+    color:
+        #73899c;
+
+    font-size:
+        9px;
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.nav-menu-title span {
+
+    color:
+        #1677ed;
+
+    font-size:
+        14px;
+
+}
+
+
+/* ============================================================
+   MENU ITEMS
+============================================================ */
+
+.dashboard-nav-menu button {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    padding:
+        10px 11px;
+
+    margin:
+        2px 0;
+
+    border:
+        none;
+
+    border-radius:
+        9px;
+
+    background:
+        transparent;
+
+    color:
+        #324b60;
+
+    text-align:
+        left;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+    transform:
+        none;
+
+}
+
+
+.dashboard-nav-menu button span {
+
+    width:
+        24px;
+
+    height:
+        24px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        7px;
+
+    background:
+        #f0f6fb;
+
+    color:
+        #347fb9;
+
+    font-size:
+        12px;
+
+}
+
+
+.dashboard-nav-menu button:hover {
+
+    background:
+        #edf6ff;
+
+    color:
+        #0e6ed7;
+
+}
+
+
+.dashboard-nav-menu button:hover span {
+
+    background:
+        #dceeff;
+
+    color:
+        #126fd5;
+
+}
+
+
+/* ============================================================
+   DIVIDER
+============================================================ */
+
+.nav-menu-divider {
+
+    height:
+        1px;
+
+    margin:
+        8px 6px;
+
+    background:
+        #e4edf3;
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 650px) {
+
+    .dashboard-nav-button span:nth-child(2) {
+
+        display:
+            none;
+
+    }
+
+
+    .dashboard-nav-menu {
+
+        position:
+            fixed;
+
+        top:
+            66px;
+
+        right:
+            12px;
+
+        width:
+            min(280px, calc(100vw - 24px));
+
+    }
+
+}
+/* ============================================================
+   TOPBAR DATABASE LINKS
+============================================================ */
+
+.topbar-db-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    height: 40px;
+
+    padding: 0 11px;
+
+    border: 1px solid transparent;
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #50687c;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+
+}
+
+
+.topbar-db-link span:first-child {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 22px;
+
+    height: 22px;
+
+    border-radius: 6px;
+
+    background: #eef6fc;
+
+    color: #237bc1;
+
+    font-size: 11px;
+
+}
+
+
+.topbar-db-link:hover {
+
+    background: #f1f7fc;
+
+    border-color: #d9e7f1;
+
+    color: #126fd0;
+
+    transform: translateY(-1px);
+
+}
+
+
+.topbar-db-link:hover span:first-child {
+
+    background: #e1f0fc;
+
+    color: #126fd0;
+
+}
+
+
+/* Keep Tables visually consistent */
+
+.dashboard-nav-button {
+
+    min-width: 88px;
+
+}
+
+
+/* ============================================================
+   TOPBAR SPACING
+============================================================ */
+
+.topbar-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+/* Slightly stronger separation for Airport Home */
+
+.topbar-right .home-button {
+
+    margin-left: 4px;
+
+}
+/* Fix Tables dropdown arrow */
+
+.dashboard-nav-button .nav-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 14px;
+    height: 14px;
+
+    margin-left: 1px;
+
+    color: #6f8497;
+    font-size: 12px;
+    line-height: 1;
+
+    transform: translateY(-1px);
+}
+
+.dashboard-navigation.open .dashboard-nav-button .nav-chevron {
+    transform: translateY(1px) rotate(180deg);
+}
+/* ============================================================
+   TABLES CHEVRON — CLEAN CSS ARROW
+============================================================ */
+
+.dashboard-nav-button .nav-chevron {
+    display: block;
+
+    width: 7px;
+    height: 7px;
+
+    margin-left: 2px;
+    margin-top: -3px;
+
+    border-right: 1.5px solid #6f8497;
+    border-bottom: 1.5px solid #6f8497;
+
+    transform: rotate(45deg);
+
+    transition: transform 0.2s ease;
+}
+
+
+/* When dropdown is open */
+
+.dashboard-navigation.open
+.dashboard-nav-button .nav-chevron {
+
+    margin-top: 3px;
+
+    transform: rotate(225deg);
+
+}
+/* ============================================================
+   AIRTRACK — AIRPORT TERMINAL DASHBOARD THEME
+   Matches the visual language of airport-home.css
+   Visual-only override — existing functionality untouched.
+============================================================ */
+
+
+/* ============================================================
+   GLOBAL
+============================================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(
+            circle at 82% -10%,
+            rgba(20, 119, 255, 0.20),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 10% 35%,
+            rgba(32, 173, 225, 0.08),
+            transparent 28%
+        ),
+        #061426 !important;
+
+    color: #eaf4ff !important;
+}
+
+
+/* ============================================================
+   MAIN APPLICATION
+============================================================ */
+
+#app {
+    min-height: 100vh;
+    background:
+        linear-gradient(
+            180deg,
+            #061426 0%,
+            #071a2c 48%,
+            #081c30 100%
+        );
+}
+
+
+/* ============================================================
+   HIDE OLD SIDEBAR
+============================================================ */
+
+.sidebar {
+    display: none !important;
+}
+
+.main-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    min-width: 0;
+    background: transparent !important;
+}
+
+
+/* ============================================================
+   TOP NAVIGATION
+============================================================ */
+
+.topbar {
+    position: sticky !important;
+    top: 0;
+    z-index: 500;
+
+    height: 70px !important;
+
+    padding:
+        0 34px !important;
+
+    background:
+        rgba(5, 19, 34, 0.88) !important;
+
+    border-bottom:
+        1px solid rgba(83, 157, 215, 0.18) !important;
+
+    backdrop-filter:
+        blur(22px);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.22) !important;
+}
+
+
+/* blue terminal line under navbar */
+
+.topbar::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: -1px;
+
+    width: 220px;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1595ff,
+            #4ec8ff,
+            transparent
+        );
+}
+
+
+/* ============================================================
+   TOPBAR TITLE
+============================================================ */
+
+.topbar h1 {
+    color: #ffffff !important;
+
+    font-size: 21px !important;
+
+    font-weight: 750;
+
+    letter-spacing:
+        -0.5px;
+}
+
+.topbar p,
+.topbar .subtitle {
+    color:
+        #7696b1 !important;
+
+    font-size:
+        11px !important;
+}
+
+
+/* ============================================================
+   TOPBAR RIGHT SIDE
+============================================================ */
+
+.topbar-right {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px !important;
+}
+
+
+/* ============================================================
+   SYSTEM STATUS
+============================================================ */
+
+.system-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        7px 10px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(22, 201, 135, 0.07);
+
+    border:
+        1px solid rgba(36, 201, 135, 0.13);
+
+    color:
+        #3de0a0 !important;
+
+    font-size:
+        9px !important;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .5px;
+}
+
+
+/* ============================================================
+   USER / TEAM BUTTON
+============================================================ */
+
+.user-avatar,
+.team-button {
+    border:
+        1px solid rgba(115, 175, 220, 0.18) !important;
+
+    background:
+        rgba(255,255,255,0.07) !important;
+
+    color:
+        #d9edff !important;
+
+    backdrop-filter:
+        blur(14px);
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 11px !important;
+}
+
+.team-button {
+    min-width: 42px;
+
+    height: 40px;
+
+    border-radius: 11px !important;
+}
+
+.team-button:hover {
+    background:
+        rgba(31, 139, 230, 0.15) !important;
+
+    border-color:
+        rgba(70, 174, 255, 0.45) !important;
+
+    box-shadow:
+        0 8px 25px rgba(0, 130, 255, 0.15);
+}
+
+
+/* ============================================================
+   TOP DATABASE NAVIGATION
+============================================================ */
+
+.dashboard-nav-button,
+.topbar-db-link {
+    border:
+        1px solid rgba(110, 169, 211, 0.20) !important;
+
+    background:
+        rgba(255,255,255,0.055) !important;
+
+    color:
+        #b9d2e8 !important;
+
+    backdrop-filter:
+        blur(16px);
+}
+
+.dashboard-nav-button:hover,
+.topbar-db-link:hover {
+    background:
+        rgba(29, 133, 225, 0.14) !important;
+
+    border-color:
+        rgba(69, 169, 245, 0.40) !important;
+
+    color:
+        #ffffff !important;
+
+    box-shadow:
+        0 8px 25px rgba(0, 126, 255, 0.12);
+}
+
+.nav-menu-icon {
+    color:
+        #43b7ff !important;
+}
+
+.nav-chevron {
+    border-color:
+        #7394ae !important;
+}
+
+
+/* ============================================================
+   CONTENT AREA
+============================================================ */
+
+.content {
+    position: relative;
+
+    min-height: calc(100vh - 70px);
+
+    padding:
+        34px 38px 70px !important;
+
+    background:
+        radial-gradient(
+            circle at 75% 5%,
+            rgba(22, 119, 255, 0.09),
+            transparent 28%
+        );
+}
+
+
+/* subtle airport grid */
+
+.content::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 70px 0 0 0;
+
+    pointer-events: none;
+
+    opacity: 0.12;
+
+    background-image:
+        linear-gradient(
+            rgba(78, 160, 215, 0.09) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(78, 160, 215, 0.09) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        55px 55px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 85%
+        );
+}
+
+
+/* ============================================================
+   PAGE HEADERS
+============================================================ */
+
+.page-header {
+    position: relative;
+
+    margin-bottom:
+        24px !important;
+}
+
+.page-header h2 {
+    color:
+        #ffffff !important;
+
+    font-size:
+        28px !important;
+
+    font-weight:
+        750 !important;
+
+    letter-spacing:
+        -0.8px;
+}
+
+.page-header p {
+    color:
+        #7694ac !important;
+
+    font-size:
+        11px !important;
+}
+
+
+/* small blue accent */
+
+.page-header::before {
+    content:
+        "AIRLINE OPERATIONS";
+
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        #4abaff;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.7px;
+}
+
+
+/* ============================================================
+   ALL MAIN CARDS
+============================================================ */
+
+.data-card,
+.table-card,
+.content-card,
+.section-card,
+.panel,
+.data-container {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        rgba(11, 31, 50, 0.78) !important;
+
+    border:
+        1px solid rgba(93, 155, 199, 0.18) !important;
+
+    border-radius:
+        19px !important;
+
+    box-shadow:
+        0 22px 65px rgba(0,0,0,0.20) !important;
+
+    backdrop-filter:
+        blur(18px);
+
+    color:
+        #dbeeff !important;
+
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+
+.data-card:hover,
+.table-card:hover,
+.content-card:hover,
+.section-card:hover,
+.panel:hover {
+
+    border-color:
+        rgba(72, 170, 239, 0.30) !important;
+
+    box-shadow:
+        0 26px 75px rgba(0,0,0,0.27) !important;
+}
+
+
+/* ============================================================
+   CARD LIGHT EFFECT
+============================================================ */
+
+.data-card::before,
+.table-card::before,
+.content-card::before,
+.section-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(77, 185, 255, 0.55),
+            transparent
+        );
+
+    opacity:
+        .55;
+
+    pointer-events:
+        none;
+}
+
+
+/* ============================================================
+   DASHBOARD WELCOME / HERO
+============================================================ */
+
+.welcome-card,
+.dashboard-hero {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height:
+        220px !important;
+
+    border-radius:
+        24px !important;
+
+    padding:
+        38px !important;
+
+    background:
+        linear-gradient(
+            115deg,
+            #061426 0%,
+            #09243e 48%,
+            #0d4d86 100%
+        ) !important;
+
+    border:
+        1px solid rgba(84, 173, 232, 0.24) !important;
+
+    box-shadow:
+        0 25px 75px rgba(0,0,0,0.28) !important;
+
+}
+
+
+/* large blue glow */
+
+.welcome-card::before,
+.dashboard-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width:
+        400px;
+
+    height:
+        400px;
+
+    right:
+        -100px;
+
+    top:
+        -220px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(19, 120, 255, 0.25);
+
+    filter:
+        blur(15px);
+
+    pointer-events:
+        none;
+}
+
+
+/* secondary glow */
+
+.welcome-card::after,
+.dashboard-hero::after {
+
+    content:
+        "✈";
+
+    position:
+        absolute;
+
+    right:
+        55px;
+
+    top:
+        20px;
+
+    font-size:
+        120px;
+
+    color:
+        #ffffff;
+
+    opacity:
+        .08;
+
+    transform:
+        rotate(-10deg);
+
+    pointer-events:
+        none;
+}
+
+
+/* ============================================================
+   WELCOME TEXT
+============================================================ */
+
+.welcome-card > *,
+.dashboard-hero > * {
+    position:
+        relative;
+
+    z-index:
+        2;
+}
+
+.eyebrow {
+    color:
+        #55bfff !important;
+
+    font-size:
+        9px !important;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.6px;
+}
+
+.welcome-card h2 {
+    color:
+        #ffffff !important;
+
+    font-size:
+        30px !important;
+
+    font-weight:
+        750;
+}
+
+.welcome-card h2 span {
+    color:
+        #55b9ff !important;
+}
+
+.welcome-card p {
+    color:
+        #91b6d3 !important;
+
+    font-size:
+        12px !important;
+}
+
+
+/* ============================================================
+   STAT CARDS
+============================================================ */
+
+.stats-grid {
+    gap:
+        14px !important;
+}
+
+.stat-card {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    min-height:
+        88px;
+
+    background:
+        rgba(10, 31, 50, 0.82) !important;
+
+    border:
+        1px solid rgba(91, 158, 202, 0.18) !important;
+
+    border-radius:
+        17px !important;
+
+    box-shadow:
+        0 16px 45px rgba(0,0,0,0.16) !important;
+
+    color:
+        white !important;
+
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+.stat-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(65, 169, 241, 0.38) !important;
+
+    box-shadow:
+        0 22px 55px rgba(0,0,0,0.25) !important;
+}
+
+
+.stat-card::before {
+
+    content: "";
+
+    position:
+        absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1677ff,
+            #56c5ff
+        );
+}
+
+
+/* ============================================================
+   STAT ICONS
+============================================================ */
+
+.stat-icon {
+
+    background:
+        rgba(27, 129, 225, 0.13) !important;
+
+    border:
+        1px solid rgba(57, 158, 230, 0.18);
+
+    color:
+        #55bcff !important;
+
+    border-radius:
+        12px !important;
+}
+
+.stat-card p {
+    color:
+        #7795ad !important;
+}
+
+.stat-card h3 {
+    color:
+        #ffffff !important;
+}
+
+
+/* ============================================================
+   PANELS
+============================================================ */
+
+.dashboard-grid {
+    gap:
+        18px !important;
+}
+
+.panel-header h3 {
+    color:
+        #ffffff !important;
+}
+
+.panel-header p {
+    color:
+        #7896ad !important;
+}
+
+
+/* ============================================================
+   OVERVIEW LIST
+============================================================ */
+
+.overview-list div {
+
+    border-bottom:
+        1px solid rgba(101, 157, 193, 0.12) !important;
+
+    color:
+        #d9eaf7 !important;
+}
+
+.overview-list span {
+    color:
+        #7694ab !important;
+}
+
+
+/* ============================================================
+   QUICK ACTIONS
+============================================================ */
+
+.quick-actions button {
+
+    background:
+        rgba(255,255,255,0.035) !important;
+
+    border:
+        1px solid rgba(94, 155, 194, 0.17) !important;
+
+    color:
+        #cfe3f2 !important;
+
+    border-radius:
+        12px !important;
+
+    transition:
+        all .2s ease;
+}
+
+.quick-actions button:hover {
+
+    background:
+        rgba(27, 130, 225, 0.12) !important;
+
+    border-color:
+        rgba(63, 167, 238, 0.40) !important;
+
+    color:
+        #ffffff !important;
+
+    transform:
+        translateY(-2px);
+}
+
+.quick-actions span {
+    color:
+        #49baff !important;
+}
+
+
+/* ============================================================
+   SECTION HEADERS
+============================================================ */
+
+.section-header h2 {
+    color:
+        #ffffff !important;
+
+    font-size:
+        25px !important;
+}
+
+.section-header p {
+    color:
+        #7693aa !important;
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.search-box,
+.search-container {
+
+    background:
+        rgba(255,255,255,0.055) !important;
+
+    border:
+        1px solid rgba(101, 163, 202, 0.22) !important;
+
+    border-radius:
+        13px !important;
+
+    backdrop-filter:
+        blur(16px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.search-box span {
+    color:
+        #4dbaff !important;
+}
+
+.search-box input {
+
+    background:
+        transparent !important;
+
+    color:
+        #ffffff !important;
+}
+
+.search-box input::placeholder {
+    color:
+        #6f8ba1 !important;
+}
+
+.search-box:focus-within,
+.search-container:focus-within {
+
+    border-color:
+        rgba(69, 174, 247, 0.55) !important;
+
+    box-shadow:
+        0 0 0 4px rgba(28, 137, 226, 0.10),
+        0 12px 30px rgba(0,0,0,0.12);
+}
+
+
+/* ============================================================
+   REFRESH BUTTON
+============================================================ */
+
+.refresh-btn {
+
+    background:
+        rgba(255,255,255,0.05) !important;
+
+    border:
+        1px solid rgba(99, 160, 198, 0.20) !important;
+
+    color:
+        #bcd4e6 !important;
+
+    border-radius:
+        10px !important;
+}
+
+.refresh-btn:hover {
+
+    background:
+        rgba(25, 131, 224, 0.12) !important;
+
+    border-color:
+        rgba(66, 169, 237, 0.42) !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+/* ============================================================
+   TABLE WRAPPER
+============================================================ */
+
+.table-container {
+
+    overflow:
+        hidden;
+
+    background:
+        rgba(8, 27, 45, 0.82) !important;
+
+    border:
+        1px solid rgba(91, 155, 198, 0.18) !important;
+
+    border-radius:
+        17px !important;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.18);
+}
+
+
+/* ============================================================
+   DATA TABLE
+============================================================ */
+
+.data-table {
+
+    color:
+        #dbeeff !important;
+}
+
+.data-table thead th {
+
+    background:
+        rgba(19, 55, 82, 0.78) !important;
+
+    color:
+        #6fa4c7 !important;
+
+    border-bottom:
+        1px solid rgba(92, 157, 199, 0.18) !important;
+
+    font-size:
+        9px !important;
+
+    letter-spacing:
+        1px;
+}
+
+.data-table tbody td {
+
+    background:
+        transparent !important;
+
+    color:
+        #c8dceb !important;
+
+    border-bottom:
+        1px solid rgba(89, 145, 183, 0.10) !important;
+}
+
+.data-table tbody tr {
+
+    transition:
+        background .18s ease;
+}
+
+.data-table tbody tr:hover {
+
+    background:
+        rgba(31, 137, 225, 0.08) !important;
+}
+
+.data-table tbody td:first-child {
+
+    color:
+        #55baff !important;
+
+    font-weight:
+        750;
+}
+
+
+/* ============================================================
+   ID BADGES
+============================================================ */
+
+.id-badge {
+
+    background:
+        rgba(29, 132, 225, 0.12) !important;
+
+    border:
+        1px solid rgba(56, 157, 229, 0.18);
+
+    color:
+        #55baff !important;
+
+    border-radius:
+        7px !important;
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
+
+.edit-action,
+.edit-btn {
+
+    background:
+        rgba(30, 132, 229, 0.12) !important;
+
+    color:
+        #55baff !important;
+
+    border:
+        1px solid rgba(55, 157, 230, 0.12);
+}
+
+.edit-action:hover,
+.edit-btn:hover {
+
+    background:
+        rgba(30, 132, 229, 0.22) !important;
+
+    color:
+        #ffffff !important;
+}
+
+.delete-action,
+.delete-btn {
+
+    background:
+        rgba(225, 65, 81, 0.10) !important;
+
+    color:
+        #ff7d88 !important;
+
+    border:
+        1px solid rgba(225, 65, 81, 0.12);
+}
+
+.delete-action:hover,
+.delete-btn:hover {
+
+    background:
+        rgba(225, 65, 81, 0.18) !important;
+}
+
+
+/* ============================================================
+   TABLE FOOTER
+============================================================ */
+
+.table-footer {
+
+    color:
+        #6f8ca4 !important;
+
+    border-top:
+        1px solid rgba(92, 150, 188, 0.12) !important;
+}
+
+
+/* ============================================================
+   PRIMARY BUTTONS
+============================================================ */
+
+.primary-btn,
+.btn-primary,
+button[type="submit"] {
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685ff,
+            #0865d1
+        ) !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid rgba(93, 190, 255, 0.45) !important;
+
+    border-radius:
+        10px !important;
+
+    box-shadow:
+        0 9px 28px rgba(12, 111, 220, 0.25) !important;
+
+    font-weight:
+        750;
+}
+
+.primary-btn:hover,
+.btn-primary:hover,
+button[type="submit"]:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2a98ff,
+            #0870df
+        ) !important;
+
+    box-shadow:
+        0 13px 35px rgba(12, 111, 220, 0.38) !important;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* ============================================================
+   FORM INPUTS
+============================================================ */
+
+input,
+select,
+textarea {
+
+    background:
+        rgba(7, 28, 47, 0.92) !important;
+
+    border:
+        1px solid rgba(100, 161, 199, 0.20) !important;
+
+    color:
+        #e8f5ff !important;
+
+    border-radius:
+        10px !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+
+    color:
+        #68849a !important;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+
+    border-color:
+        rgba(79, 168, 230, 0.34) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color:
+        #2999f5 !important;
+
+    box-shadow:
+        0 0 0 4px rgba(35, 144, 232, 0.11) !important;
+
+    outline:
+        none;
+}
+
+
+/* ============================================================
+   FORM LABELS
+============================================================ */
+
+.form-group label {
+
+    color:
+        #8eabc0 !important;
+
+    font-size:
+        10px !important;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .3px;
+}
+
+
+/* ============================================================
+   SELECT OPTIONS
+============================================================ */
+
+select option {
+
+    background:
+        #0b2038;
+
+    color:
+        #ffffff;
+}
+
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.modal-overlay {
+
+    background:
+        rgba(1, 10, 20, 0.72) !important;
+
+    backdrop-filter:
+        blur(9px) !important;
+}
+
+
+.modal {
+
+    background:
+        #0a2037 !important;
+
+    border:
+        1px solid rgba(90, 163, 207, 0.25) !important;
+
+    border-radius:
+        20px !important;
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,0.48) !important;
+
+    color:
+        #e5f3ff;
+}
+
+
+/* modal header */
+
+.modal-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2944,
+            #0a2037
+        ) !important;
+
+    border-bottom:
+        1px solid rgba(98, 158, 195, 0.16) !important;
+}
+
+.modal-header h3 {
+
+    color:
+        #ffffff !important;
+}
+
+.modal-header p {
+
+    color:
+        #7796ad !important;
+}
+
+
+/* close */
+
+.modal-close {
+
+    background:
+        rgba(255,255,255,0.06) !important;
+
+    color:
+        #8ca8bc !important;
+
+    border:
+        1px solid rgba(101, 161, 198, 0.14);
+}
+
+.modal-close:hover {
+
+    background:
+        rgba(42, 147, 233, 0.15) !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+/* modal footer */
+
+.modal-actions {
+
+    border-top:
+        1px solid rgba(96, 153, 188, 0.14) !important;
+}
+
+.secondary-btn {
+
+    background:
+        rgba(255,255,255,0.055) !important;
+
+    border:
+        1px solid rgba(96, 157, 197, 0.17) !important;
+
+    color:
+        #a9c2d5 !important;
+
+    border-radius:
+        10px !important;
+}
+
+.secondary-btn:hover {
+
+    background:
+        rgba(255,255,255,0.10) !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+/* ============================================================
+   STATUS BADGES
+============================================================ */
+
+.status-confirmed {
+
+    background:
+        rgba(36, 201, 135, 0.13) !important;
+
+    color:
+        #43dda0 !important;
+
+    border:
+        1px solid rgba(36, 201, 135, 0.16);
+}
+
+.status-pending {
+
+    background:
+        rgba(244, 184, 63, 0.13) !important;
+
+    color:
+        #ffd16b !important;
+
+    border:
+        1px solid rgba(244, 184, 63, 0.15);
+}
+
+.status-cancelled {
+
+    background:
+        rgba(235, 76, 90, 0.13) !important;
+
+    color:
+        #ff7d88 !important;
+
+    border:
+        1px solid rgba(235, 76, 90, 0.15);
+}
+
+.status-default {
+
+    background:
+        rgba(255,255,255,0.07) !important;
+
+    color:
+        #9bb3c5 !important;
+}
+
+
+/* ============================================================
+   LOADING / EMPTY / ERROR
+============================================================ */
+
+.loading-state,
+.empty-state {
+
+    color:
+        #718da3 !important;
+}
+
+.empty-state h3 {
+
+    color:
+        #ffffff !important;
+}
+
+.empty-state p {
+
+    color:
+        #718da3 !important;
+}
+
+.error-state {
+
+    color:
+        #ff7d88 !important;
+}
+
+.error-state p {
+
+    color:
+        #718da3 !important;
+}
+
+
+/* ============================================================
+   EER DIAGRAM
+============================================================ */
+
+.eer-panel,
+.eer-workspace,
+.eer-legend {
+
+    background:
+        rgba(7, 28, 47, 0.82) !important;
+
+    border:
+        1px solid rgba(88, 153, 196, 0.18) !important;
+
+    border-radius:
+        19px !important;
+
+    box-shadow:
+        0 22px 65px rgba(0,0,0,0.20) !important;
+}
+
+.eer-toolbar {
+
+    background:
+        rgba(7, 25, 43, 0.92) !important;
+
+    border-bottom:
+        1px solid rgba(89, 154, 198, 0.16) !important;
+}
+
+.eer-toolbar-info strong {
+
+    color:
+        #ffffff !important;
+}
+
+.eer-toolbar-info span {
+
+    color:
+        #7897ae !important;
+}
+
+.eer-tool-btn {
+
+    background:
+        rgba(255,255,255,0.055) !important;
+
+    border:
+        1px solid rgba(99, 160, 200, 0.18) !important;
+
+    color:
+        #a9c4d8 !important;
+
+    border-radius:
+        9px !important;
+}
+
+.eer-tool-btn:hover {
+
+    background:
+        rgba(29, 133, 225, 0.14) !important;
+
+    border-color:
+        rgba(69, 171, 239, 0.38) !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+/* EER nodes */
+
+.eer-node {
+
+    background:
+        rgba(10, 34, 55, 0.95) !important;
+
+    border:
+        1px solid rgba(69, 161, 222, 0.30) !important;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.25);
+}
+
+.eer-node:hover {
+
+    border-color:
+        rgba(77, 190, 255, 0.65) !important;
+
+    box-shadow:
+        0 18px 45px rgba(0, 125, 220, 0.18);
+}
+
+.eer-node-title {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d4169,
+            #0b2b47
+        ) !important;
+
+    color:
+        #ffffff !important;
+}
+
+.eer-field {
+
+    color:
+        #a9c5d8 !important;
+
+    border-color:
+        rgba(87, 145, 181, 0.12) !important;
+}
+
+
+/* ============================================================
+   DATABASE / SQL CONSOLE
+============================================================ */
+
+#sql-console,
+.sql-console,
+.sql-editor-panel,
+.sql-result-panel {
+
+    color:
+        #dceeff;
+}
+
+.sql-editor-panel,
+.sql-result-panel {
+
+    background:
+        rgba(7, 27, 45, 0.86) !important;
+
+    border:
+        1px solid rgba(91, 156, 200, 0.18) !important;
+
+    border-radius:
+        18px !important;
+
+    box-shadow:
+        0 22px 65px rgba(0,0,0,0.20);
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+.toast {
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.35);
+
+    backdrop-filter:
+        blur(16px);
+}
+
+.toast.success {
+
+    background:
+        rgba(18, 126, 88, 0.92) !important;
+}
+
+.toast.error {
+
+    background:
+        rgba(169, 45, 57, 0.94) !important;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+::-webkit-scrollbar {
+    width:
+        8px;
+
+    height:
+        8px;
+}
+
+::-webkit-scrollbar-track {
+
+    background:
+        #061426;
+}
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #244761;
+
+    border-radius:
+        10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #34749c;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .content {
+        padding:
+            25px 20px 50px !important;
+    }
+
+    .topbar {
+        padding:
+            0 20px !important;
+    }
+
+    .topbar-db-link {
+        padding:
+            0 8px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .topbar {
+        height:
+            64px !important;
+    }
+
+    .topbar h1 {
+        font-size:
+            18px !important;
+    }
+
+    .topbar p {
+        display:
+            none;
+    }
+
+    .content {
+        padding:
+            22px 15px 40px !important;
+    }
+
+    .welcome-card,
+    .dashboard-hero {
+        padding:
+            27px !important;
+
+        min-height:
+            190px !important;
+    }
+
+    .welcome-card h2 {
+        font-size:
+            24px !important;
+    }
+
+    .stat-card {
+        min-height:
+            80px;
+    }
+
+}
+/* ============================================================
+   AIRTRACK — FINAL DATABASE CENTER THEME
+   EER + DATABASE SCHEMA + SQL CONSOLE
+
+   IMPORTANT:
+   This block is intentionally scoped.
+   Passenger / Reservation / Flight / Ticket tables remain
+   with the existing dashboard styling.
+============================================================ */
+
+
+/* ============================================================
+   1. DATABASE SCHEMA
+   #relationships
+============================================================ */
+
+#relationships {
+    color: #dceeff !important;
+
+    background:
+        radial-gradient(
+            circle at 85% 0%,
+            rgba(21, 117, 218, 0.12),
+            transparent 32%
+        ),
+        transparent !important;
+}
+
+
+/* Header */
+
+#relationships .section-header h2 {
+    color: #ffffff !important;
+}
+
+#relationships .section-header p {
+    color: #7898b1 !important;
+}
+
+
+/* ============================================================
+   SCHEMA STAT CARDS
+============================================================ */
+
+#relationships .eer-stats {
+    gap: 15px;
+}
+
+#relationships .eer-stat-card {
+    background:
+        rgba(10, 31, 50, 0.82) !important;
+
+    border:
+        1px solid rgba(81, 154, 202, 0.18) !important;
+
+    border-radius:
+        17px !important;
+
+    box-shadow:
+        0 16px 42px rgba(0, 0, 0, 0.20) !important;
+
+    color:
+        #dceeff !important;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+}
+
+#relationships .eer-stat-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #167cff,
+            #48c4ff
+        );
+}
+
+#relationships .eer-stat-icon {
+    background:
+        rgba(24, 130, 224, 0.13) !important;
+
+    color:
+        #4bbaff !important;
+
+    border:
+        1px solid rgba(69, 169, 235, 0.18);
+}
+
+#relationships .eer-stat-card span {
+    color:
+        #7897ae !important;
+}
+
+#relationships .eer-stat-card strong {
+    color:
+        #ffffff !important;
+}
+
+
+/* ============================================================
+   SCHEMA PANELS
+============================================================ */
+
+#relationships .eer-panel,
+#relationships .eer-mapping-panel {
+
+    background:
+        rgba(8, 28, 46, 0.86) !important;
+
+    border:
+        1px solid rgba(88, 157, 199, 0.18) !important;
+
+    border-radius:
+        19px !important;
+
+    box-shadow:
+        0 22px 65px rgba(0, 0, 0, 0.22) !important;
+
+    color:
+        #dceeff !important;
+}
+
+
+/* ============================================================
+   SCHEMA PANEL HEADER
+============================================================ */
+
+#relationships .eer-panel-header {
+
+    background:
+        rgba(7, 28, 46, 0.92) !important;
+
+    border-bottom:
+        1px solid rgba(89, 153, 194, 0.16) !important;
+
+}
+
+#relationships .eer-panel-header h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#relationships .eer-panel-header p {
+
+    color:
+        #7896ad !important;
+
+}
+
+
+/* ============================================================
+   SCHEMA LEGEND
+============================================================ */
+
+#relationships .eer-legend {
+
+    background:
+        rgba(7, 25, 42, 0.90) !important;
+
+    border-bottom:
+        1px solid rgba(87, 149, 190, 0.14) !important;
+
+}
+
+#relationships .eer-legend-item {
+
+    color:
+        #9bb6ca !important;
+
+}
+
+#relationships .eer-legend-dot.pk {
+
+    background:
+        #38aaff !important;
+
+}
+
+#relationships .eer-legend-dot.fk {
+
+    background:
+        #9a7cff !important;
+
+}
+
+#relationships .eer-legend-line {
+
+    background:
+        #58758d !important;
+
+}
+
+#relationships .eer-legend-composite {
+
+    border-color:
+        #ffbd54 !important;
+
+}
+
+
+/* ============================================================
+   SCHEMA DIAGRAM BACKGROUND
+============================================================ */
+
+#relationships .eer-diagram {
+
+    background:
+        radial-gradient(
+            circle at 1px 1px,
+            rgba(73, 137, 178, 0.20) 1px,
+            transparent 1px
+        ) !important;
+
+    background-size:
+        24px 24px !important;
+
+}
+
+
+/* ============================================================
+   SCHEMA TABLE CARDS
+============================================================ */
+
+#relationships .eer-table {
+
+    background:
+        rgba(9, 34, 54, 0.94) !important;
+
+    border:
+        1px solid rgba(71, 158, 215, 0.23) !important;
+
+    border-radius:
+        12px !important;
+
+    box-shadow:
+        0 10px 27px rgba(0, 0, 0, 0.24) !important;
+
+    color:
+        #dceeff !important;
+
+}
+
+#relationships .eer-table:hover {
+
+    background:
+        rgba(12, 43, 68, 0.98) !important;
+
+    border-color:
+        rgba(73, 184, 247, 0.55) !important;
+
+    box-shadow:
+        0 14px 35px rgba(0, 119, 218, 0.18) !important;
+
+}
+
+
+/* Table title */
+
+#relationships .eer-table-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0c426a,
+            #092c48
+        ) !important;
+
+    color:
+        #ffffff !important;
+
+    border-bottom:
+        1px solid rgba(74, 171, 227, 0.18);
+
+}
+
+
+/* Fields */
+
+#relationships .eer-field {
+
+    color:
+        #a8c2d5 !important;
+
+    border-bottom:
+        1px solid rgba(80, 139, 176, 0.12) !important;
+
+}
+
+#relationships .eer-field.pk-field {
+
+    color:
+        #51baff !important;
+
+}
+
+#relationships .eer-field.fk-field {
+
+    color:
+        #b093ff !important;
+
+}
+
+
+/* Key icons */
+
+#relationships .key-icon {
+
+    background:
+        rgba(32, 139, 231, 0.14) !important;
+
+    color:
+        #51baff !important;
+
+}
+
+#relationships .fk-field .key-icon {
+
+    background:
+        rgba(137, 92, 237, 0.15) !important;
+
+    color:
+        #b092ff !important;
+
+}
+
+#relationships .fk-mini {
+
+    background:
+        rgba(137, 92, 237, 0.15) !important;
+
+    color:
+        #b092ff !important;
+
+}
+
+
+/* ============================================================
+   RELATIONSHIP MAP
+============================================================ */
+
+#relationships .eer-relationship-info {
+
+    background:
+        rgba(8, 29, 47, 0.92) !important;
+
+    border:
+        1px solid rgba(88, 157, 199, 0.18) !important;
+
+    border-radius:
+        15px !important;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.20) !important;
+
+}
+
+#relationships .eer-info-header {
+
+    background:
+        rgba(12, 42, 65, 0.92) !important;
+
+    color:
+        #ffffff !important;
+
+    border-bottom:
+        1px solid rgba(87, 150, 191, 0.15) !important;
+
+}
+
+#relationships .eer-relationship {
+
+    border-bottom:
+        1px solid rgba(83, 143, 179, 0.12) !important;
+
+}
+
+#relationships .eer-relationship:nth-child(odd) {
+
+    border-right:
+        1px solid rgba(83, 143, 179, 0.12) !important;
+
+}
+
+#relationships .eer-relationship strong {
+
+    color:
+        #dceeff !important;
+
+}
+
+#relationships .eer-relationship > span {
+
+    background:
+        rgba(29, 132, 225, 0.13) !important;
+
+    color:
+        #58baff !important;
+
+}
+
+#relationships .eer-relationship p {
+
+    color:
+        #7897ad !important;
+
+}
+
+
+/* ============================================================
+   RELATIONAL MAPPING
+============================================================ */
+
+#relationships .mapping-grid {
+
+    background:
+        transparent !important;
+
+}
+
+#relationships .mapping-card {
+
+    border-right:
+        1px solid rgba(86, 147, 184, 0.13) !important;
+
+}
+
+#relationships .mapping-number {
+
+    background:
+        rgba(29, 133, 225, 0.14) !important;
+
+    color:
+        #55baff !important;
+
+}
+
+#relationships .mapping-card h4 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#relationships .mapping-card p {
+
+    color:
+        #7897ae !important;
+
+}
+
+#relationships .mapping-card strong {
+
+    color:
+        #a9d5f5 !important;
+
+}
+
+
+/* ============================================================
+   2. INTERACTIVE EER
+   #eer-diagram
+============================================================ */
+
+#eer-diagram {
+
+    color:
+        #dceeff !important;
+
+}
+
+
+/* Header */
+
+#eer-diagram .section-header h2 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#eer-diagram .section-header p {
+
+    color:
+        #7898b1 !important;
+
+}
+
+
+/* ============================================================
+   EER TOOLBAR
+============================================================ */
+
+#eer-diagram .eer-toolbar {
+
+    background:
+        rgba(8, 29, 47, 0.88) !important;
+
+    border:
+        1px solid rgba(84, 157, 201, 0.18) !important;
+
+    border-radius:
+        16px !important;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.20) !important;
+
+}
+
+#eer-diagram .eer-toolbar-icon {
+
+    background:
+        rgba(29, 133, 225, 0.14) !important;
+
+    color:
+        #55baff !important;
+
+}
+
+#eer-diagram .eer-toolbar-info strong {
+
+    color:
+        #ffffff !important;
+
+}
+
+#eer-diagram .eer-toolbar-info span {
+
+    color:
+        #7897ae !important;
+
+}
+
+#eer-diagram .eer-tool-btn {
+
+    background:
+        rgba(255,255,255,0.045) !important;
+
+    border:
+        1px solid rgba(93, 157, 199, 0.18) !important;
+
+    color:
+        #a9c3d6 !important;
+
+}
+
+#eer-diagram .eer-tool-btn:hover {
+
+    background:
+        rgba(28, 133, 226, 0.13) !important;
+
+    border-color:
+        rgba(69, 174, 240, 0.45) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* ============================================================
+   EER CANVAS
+============================================================ */
+
+#eer-diagram #eer-diagram-area {
+
+    background:
+        linear-gradient(
+            rgba(72, 143, 185, 0.075) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(72, 143, 185, 0.075) 1px,
+            transparent 1px
+        ),
+        radial-gradient(
+            circle at 80% 10%,
+            rgba(20, 116, 220, 0.12),
+            transparent 28%
+        ),
+        #061a2b !important;
+
+    background-size:
+        28px 28px,
+        28px 28px,
+        auto !important;
+
+    border:
+        1px solid rgba(78, 158, 207, 0.20) !important;
+
+    border-radius:
+        18px !important;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.26) !important;
+
+}
+
+
+/* ============================================================
+   EER CANVAS TITLE
+============================================================ */
+
+#eer-diagram #eer-diagram-area::before {
+
+    background:
+        rgba(8, 38, 62, 0.88) !important;
+
+    border:
+        1px solid rgba(74, 162, 213, 0.24) !important;
+
+    color:
+        #68c4ff !important;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.18);
+
+}
+
+
+/* ============================================================
+   EER CONNECTIONS
+============================================================ */
+
+#eer-diagram .eer-connection {
+
+    stroke:
+        #52738b !important;
+
+}
+
+#eer-diagram .eer-connection.eer-highlighted {
+
+    stroke:
+        #42b6ff !important;
+
+    filter:
+        drop-shadow(
+            0 0 5px rgba(66,182,255,0.35)
+        );
+
+}
+
+#eer-diagram .eer-attribute-line {
+
+    stroke:
+        #4d7089 !important;
+
+}
+
+
+/* ============================================================
+   EER ENTITY NODES
+============================================================ */
+
+#eer-diagram .eer-node {
+
+    background:
+        rgba(9, 35, 56, 0.96) !important;
+
+    border:
+        2px solid rgba(72, 161, 216, 0.38) !important;
+
+    color:
+        #e7f5ff !important;
+
+    box-shadow:
+        0 10px 27px rgba(0,0,0,0.25) !important;
+
+}
+
+#eer-diagram .eer-node:hover {
+
+    background:
+        rgba(12, 47, 73, 0.98) !important;
+
+    border-color:
+        #4abaff !important;
+
+    box-shadow:
+        0 0 0 4px rgba(62,174,240,0.10),
+        0 15px 35px rgba(0,0,0,0.30) !important;
+
+}
+
+#eer-diagram .eer-node.eer-selected {
+
+    background:
+        rgba(12, 57, 91, 0.98) !important;
+
+    border-color:
+        #3fb8ff !important;
+
+    box-shadow:
+        0 0 0 4px rgba(63,184,255,0.13),
+        0 15px 40px rgba(0,120,220,0.18) !important;
+
+}
+
+#eer-diagram .eer-node.eer-related {
+
+    border-color:
+        #957cff !important;
+
+}
+
+
+/* ============================================================
+   EER WEAK ENTITY
+============================================================ */
+
+#eer-diagram .eer-weak-entity {
+
+    background:
+        rgba(44, 38, 21, 0.94) !important;
+
+    border:
+        4px double #b7a36a !important;
+
+}
+
+
+/* ============================================================
+   EER CONCEPT
+============================================================ */
+
+#eer-diagram .eer-concept {
+
+    background:
+        rgba(18, 38, 52, 0.94) !important;
+
+    border:
+        2px dashed #66869c !important;
+
+    color:
+        #bdd3e2 !important;
+
+}
+
+
+/* ============================================================
+   RELATIONSHIP DIAMONDS
+============================================================ */
+
+#eer-diagram .eer-relationship-node {
+
+    background:
+        #382318 !important;
+
+    border:
+        2px solid #e7793c !important;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,0.24) !important;
+
+}
+
+#eer-diagram .eer-relationship-node span {
+
+    color:
+        #ffb17e !important;
+
+}
+
+#eer-diagram .eer-relationship-node:hover {
+
+    background:
+        #4b2919 !important;
+
+    border-color:
+        #ff9255 !important;
+
+}
+
+
+/* ============================================================
+   ISA
+============================================================ */
+
+#eer-diagram .eer-isa-node {
+
+    border-bottom-color:
+        #29375c !important;
+
+}
+
+#eer-diagram .eer-isa-node::after {
+
+    color:
+        #92a9ff !important;
+
+}
+
+
+/* ============================================================
+   UNION
+============================================================ */
+
+#eer-diagram .eer-union-node {
+
+    background:
+        #25183a !important;
+
+    border-color:
+        #9c72ff !important;
+
+    color:
+        #c3a7ff !important;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.25) !important;
+
+}
+
+#eer-diagram .eer-union-node:hover {
+
+    background:
+        #30204b !important;
+
+}
+
+
+/* ============================================================
+   ATTRIBUTES
+============================================================ */
+
+#eer-diagram .eer-attribute-node {
+
+    background:
+        rgba(12, 35, 54, 0.96) !important;
+
+    border-color:
+        #62849b !important;
+
+    color:
+        #a9c1d1 !important;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.20) !important;
+
+}
+
+#eer-diagram .eer-attribute-node:hover {
+
+    background:
+        #103d5e !important;
+
+    border-color:
+        #4abaff !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+#eer-diagram .eer-attribute-node.multivalued {
+
+    border-color:
+        #7795a8 !important;
+
+}
+
+#eer-diagram .eer-attribute-node.primary {
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* ============================================================
+   CARDINALITY
+============================================================ */
+
+#eer-diagram .eer-cardinality {
+
+    background:
+        rgba(7, 29, 47, 0.96) !important;
+
+    border:
+        1px solid rgba(81, 155, 200, 0.24) !important;
+
+    color:
+        #7bcaff !important;
+
+}
+
+
+/* ============================================================
+   EER DETAILS DRAWER
+============================================================ */
+
+#eer-diagram #eer-details {
+
+    background:
+        rgba(8, 30, 49, 0.97) !important;
+
+    border:
+        1px solid rgba(81, 158, 205, 0.25) !important;
+
+    color:
+        #dceeff !important;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.45) !important;
+
+}
+
+#eer-diagram .eer-details-empty-icon {
+
+    background:
+        rgba(28, 135, 228, 0.13) !important;
+
+    color:
+        #51baff !important;
+
+}
+
+#eer-diagram .eer-details-empty h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#eer-diagram .eer-details-empty p {
+
+    color:
+        #7897ae !important;
+
+}
+
+#eer-diagram .eer-detail-header {
+
+    border-bottom:
+        1px solid rgba(85, 145, 181, 0.16) !important;
+
+}
+
+#eer-diagram .eer-detail-type {
+
+    background:
+        rgba(30, 137, 226, 0.13) !important;
+
+    color:
+        #55baff !important;
+
+}
+
+#eer-diagram .eer-detail-header h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#eer-diagram .eer-detail-header p {
+
+    color:
+        #7897ae !important;
+
+}
+
+#eer-diagram .eer-detail-section h4 {
+
+    color:
+        #90b1c8 !important;
+
+}
+
+#eer-diagram .eer-detail-section li {
+
+    background:
+        rgba(255,255,255,0.045) !important;
+
+    color:
+        #a8c0d1 !important;
+
+}
+
+#eer-diagram .eer-detail-section li::before {
+
+    color:
+        #4abaff !important;
+
+}
+
+#eer-diagram .eer-detail-actions {
+
+    border-top:
+        1px solid rgba(85, 145, 181, 0.16) !important;
+
+}
+
+#eer-diagram .eer-readonly {
+
+    background:
+        rgba(255,255,255,0.045) !important;
+
+    color:
+        #7897ae !important;
+
+}
+
+
+/* ============================================================
+   3. SQL CONSOLE
+   Actual section ID is #sql
+============================================================ */
+
+#sql {
+
+    color:
+        #dceeff !important;
+
+}
+
+
+/* ============================================================
+   SQL TOOLBAR
+============================================================ */
+
+#sql .sql-toolbar {
+
+    margin-bottom:
+        18px;
+
+}
+
+#sql .sql-tool-btn,
+#sql .sql-history-btn {
+
+    background:
+        rgba(9, 31, 50, 0.84) !important;
+
+    border:
+        1px solid rgba(83, 154, 198, 0.20) !important;
+
+    color:
+        #a9c2d5 !important;
+
+    border-radius:
+        10px !important;
+
+}
+
+#sql .sql-tool-btn:hover,
+#sql .sql-history-btn:hover {
+
+    background:
+        rgba(24, 129, 220, 0.14) !important;
+
+    border-color:
+        rgba(68, 174, 239, 0.45) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-tool-btn.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            #147fe9,
+            #0759bd
+        ) !important;
+
+    border-color:
+        rgba(76, 183, 246, 0.45) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* ============================================================
+   SQL CONNECTION STATUS
+============================================================ */
+
+#sql .sql-connection-status {
+
+    background:
+        rgba(8, 31, 50, 0.86) !important;
+
+    border:
+        1px solid rgba(83, 155, 200, 0.20) !important;
+
+    color:
+        #b4cbdc !important;
+
+}
+
+#sql .sql-status-dot {
+
+    background:
+        #25d993 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(37,217,147,0.10) !important;
+
+}
+
+
+/* ============================================================
+   SQL WORKSPACE
+============================================================ */
+
+#sql .sql-workspace {
+
+    gap:
+        18px;
+
+}
+
+
+/* ============================================================
+   SQL SIDEBAR
+============================================================ */
+
+#sql .sql-sidebar {
+
+    background:
+        rgba(7, 29, 47, 0.90) !important;
+
+    border:
+        1px solid rgba(83, 154, 199, 0.18) !important;
+
+    border-radius:
+        16px !important;
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.20) !important;
+
+}
+
+#sql .sql-sidebar-section {
+
+    background:
+        transparent !important;
+
+}
+
+#sql .sql-sidebar-heading {
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-sidebar-heading i {
+
+    color:
+        #4bbaff !important;
+
+}
+
+#sql .sql-count {
+
+    background:
+        rgba(30, 137, 226, 0.13) !important;
+
+    color:
+        #55baff !important;
+
+}
+
+#sql .sql-table-item {
+
+    background:
+        rgba(255,255,255,0.035) !important;
+
+    border:
+        1px solid transparent !important;
+
+    color:
+        #9eb9cb !important;
+
+}
+
+#sql .sql-table-item:hover {
+
+    background:
+        rgba(28, 134, 225, 0.10) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-table-item.active {
+
+    background:
+        rgba(28, 137, 231, 0.14) !important;
+
+    border-color:
+        rgba(68, 174, 239, 0.28) !important;
+
+    color:
+        #55baff !important;
+
+}
+
+#sql .sql-table-info {
+
+    background:
+        rgba(4, 22, 37, 0.60) !important;
+
+    border-top:
+        1px solid rgba(84, 145, 181, 0.14) !important;
+
+}
+
+#sql .sql-empty-info {
+
+    color:
+        #627f95 !important;
+
+}
+
+#sql .sql-table-info-title {
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-column-item {
+
+    background:
+        rgba(255,255,255,0.035) !important;
+
+    border:
+        1px solid rgba(85, 145, 181, 0.12) !important;
+
+}
+
+#sql .sql-column-name {
+
+    color:
+        #a8c2d4 !important;
+
+}
+
+#sql .sql-column-type {
+
+    color:
+        #617f95 !important;
+
+}
+
+#sql .sql-table-view-btn {
+
+    background:
+        rgba(255,255,255,0.045) !important;
+
+    border:
+        1px solid rgba(85, 153, 197, 0.20) !important;
+
+    color:
+        #9ebbd0 !important;
+
+}
+
+#sql .sql-table-view-btn:hover {
+
+    background:
+        rgba(27, 132, 225, 0.12) !important;
+
+    border-color:
+        rgba(69, 173, 239, 0.40) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* ============================================================
+   SQL QUICK ACTIONS
+============================================================ */
+
+#sql .sql-action-btn {
+
+    background:
+        rgba(8, 30, 49, 0.82) !important;
+
+    border:
+        1px solid rgba(83, 153, 198, 0.18) !important;
+
+    color:
+        #9eb8ca !important;
+
+}
+
+#sql .sql-action-btn:hover {
+
+    background:
+        rgba(27, 133, 226, 0.12) !important;
+
+    border-color:
+        rgba(69, 173, 239, 0.42) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-action-btn i {
+
+    color:
+        #4dbaff !important;
+
+}
+
+
+/* ============================================================
+   SQL EDITOR CARD
+============================================================ */
+
+#sql .sql-editor-card,
+#sql .sql-result-card {
+
+    background:
+        rgba(7, 29, 47, 0.90) !important;
+
+    border:
+        1px solid rgba(84, 155, 200, 0.18) !important;
+
+    border-radius:
+        16px !important;
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,0.22) !important;
+
+}
+
+#sql .sql-editor-header,
+#sql .sql-result-header {
+
+    background:
+        rgba(9, 34, 55, 0.90) !important;
+
+    border-bottom:
+        1px solid rgba(85, 149, 187, 0.14) !important;
+
+}
+
+#sql .sql-editor-title,
+#sql .sql-result-title {
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-editor-title i,
+#sql .sql-result-title i {
+
+    color:
+        #4bbaff !important;
+
+}
+
+#sql .sql-editor-subtitle,
+#sql .sql-result-summary {
+
+    color:
+        #6f8da4 !important;
+
+}
+
+
+/* ============================================================
+   SQL SMALL BUTTONS
+============================================================ */
+
+#sql .sql-small-btn {
+
+    background:
+        rgba(255,255,255,0.045) !important;
+
+    border:
+        1px solid rgba(88, 154, 198, 0.18) !important;
+
+    color:
+        #9db7c9 !important;
+
+}
+
+#sql .sql-small-btn:hover {
+
+    background:
+        rgba(28, 135, 226, 0.12) !important;
+
+    border-color:
+        rgba(68, 173, 239, 0.40) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+
+/* ============================================================
+   SQL EDITOR
+============================================================ */
+
+#sql .sql-editor-wrapper {
+
+    background:
+        #061421 !important;
+
+}
+
+#sql .sql-line-numbers {
+
+    background:
+        #071827 !important;
+
+    border-right:
+        1px solid #173248 !important;
+
+    color:
+        #4f7189 !important;
+
+}
+
+#sql .sql-editor,
+#sql #sql-editor {
+
+    background:
+        #061421 !important;
+
+    color:
+        #dceeff !important;
+
+    border:
+        none !important;
+
+    border-radius:
+        0 !important;
+
+    box-shadow:
+        none !important;
+
+}
+
+#sql .sql-editor::placeholder {
+
+    color:
+        #4d6d83 !important;
+
+}
+
+#sql .sql-editor::selection {
+
+    background:
+        #164568 !important;
+
+}
+
+
+/* ============================================================
+   SQL EDITOR FOOTER
+============================================================ */
+
+#sql .sql-editor-footer {
+
+    background:
+        #071827 !important;
+
+    border-top:
+        1px solid #173248 !important;
+
+}
+
+#sql .sql-editor-hint {
+
+    color:
+        #6e8ba0 !important;
+
+}
+
+#sql .sql-editor-hint i {
+
+    color:
+        #ffc45b !important;
+
+}
+
+
+/* ============================================================
+   SQL RESULT
+============================================================ */
+
+#sql .sql-result-container {
+
+    background:
+        rgba(6, 25, 41, 0.90) !important;
+
+    border:
+        none !important;
+
+}
+
+#sql .sql-empty-result {
+
+    background:
+        rgba(6, 25, 41, 0.90) !important;
+
+    color:
+        #67869b !important;
+
+}
+
+#sql .sql-empty-icon {
+
+    background:
+        rgba(30, 137, 226, 0.12) !important;
+
+    color:
+        #4bbaff !important;
+
+}
+
+#sql .sql-empty-result h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-empty-result p {
+
+    color:
+        #67869b !important;
+
+}
+
+
+/* ============================================================
+   SQL RESULT TABLE
+============================================================ */
+
+#sql .sql-result-table {
+
+    color:
+        #dceeff !important;
+
+}
+
+#sql .sql-result-table th {
+
+    background:
+        #0b2b45 !important;
+
+    color:
+        #78b7d8 !important;
+
+    border-bottom:
+        1px solid rgba(80, 150, 192, 0.20) !important;
+
+}
+
+#sql .sql-result-table td {
+
+    background:
+        transparent !important;
+
+    color:
+        #a8c1d2 !important;
+
+    border-bottom:
+        1px solid rgba(77, 137, 174, 0.10) !important;
+
+}
+
+#sql .sql-result-table tbody tr:hover {
+
+    background:
+        rgba(26, 132, 224, 0.08) !important;
+
+}
+
+
+/* ============================================================
+   SQL QUERY STATUS
+============================================================ */
+
+#sql .sql-query-status.success {
+
+    background:
+        rgba(20, 145, 99, 0.12) !important;
+
+    border:
+        1px solid rgba(40, 211, 151, 0.18) !important;
+
+    color:
+        #55dda8 !important;
+
+}
+
+#sql .sql-query-status.error {
+
+    background:
+        rgba(191, 49, 66, 0.12) !important;
+
+    border:
+        1px solid rgba(255, 91, 105, 0.18) !important;
+
+    color:
+        #ff8b95 !important;
+
+}
+
+
+/* ============================================================
+   SQL HISTORY
+============================================================ */
+
+#sql .sql-history-panel {
+
+    background:
+        rgba(7, 29, 47, 0.90) !important;
+
+    border:
+        1px solid rgba(84, 155, 200, 0.18) !important;
+
+    border-radius:
+        16px !important;
+
+}
+
+#sql .sql-history-header {
+
+    background:
+        rgba(9, 34, 55, 0.90) !important;
+
+    border-bottom:
+        1px solid rgba(85, 149, 187, 0.14) !important;
+
+}
+
+#sql .sql-history-header h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql .sql-history-header h3 i {
+
+    color:
+        #4bbaff !important;
+
+}
+
+#sql .sql-history-header p {
+
+    color:
+        #6e8ca2 !important;
+
+}
+
+#sql .sql-history-item {
+
+    border-bottom:
+        1px solid rgba(80, 140, 177, 0.10) !important;
+
+}
+
+#sql .sql-history-query {
+
+    color:
+        #a9c2d3 !important;
+
+}
+
+#sql .sql-history-meta {
+
+    color:
+        #5f7c91 !important;
+
+}
+
+#sql .sql-empty-history {
+
+    color:
+        #627f95 !important;
+
+}
+
+
+/* ============================================================
+   SQL TABLE MODAL
+============================================================ */
+
+#sql-table-modal .modal {
+
+    background:
+        #092139 !important;
+
+    border:
+        1px solid rgba(81, 157, 204, 0.25) !important;
+
+    color:
+        #dceeff !important;
+
+}
+
+#sql-table-modal .modal-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2d49,
+            #092139
+        ) !important;
+
+    border-bottom:
+        1px solid rgba(83, 149, 190, 0.16) !important;
+
+}
+
+#sql-table-modal .modal-header h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql-table-modal .modal-header p {
+
+    color:
+        #7897ae !important;
+
+}
+
+#sql-table-modal .modal-close {
+
+    background:
+        rgba(255,255,255,0.07) !important;
+
+    border:
+        1px solid rgba(92, 156, 198, 0.18) !important;
+
+    color:
+        #b6cddd !important;
+
+}
+
+#sql-table-modal .modal-close:hover {
+
+    background:
+        rgba(31, 136, 226, 0.14) !important;
+
+    color:
+        #ffffff !important;
+
+}
+
+#sql-table-modal .sql-table-modal-content {
+
+    background:
+        #071b2d !important;
+
+}
+
+#sql-table-modal .sql-modal-table th {
+
+    background:
+        #0c304c !important;
+
+    color:
+        #7bb9d9 !important;
+
+    border-bottom:
+        1px solid rgba(82, 151, 193, 0.20) !important;
+
+}
+
+#sql-table-modal .sql-modal-table td {
+
+    background:
+        transparent !important;
+
+    color:
+        #a9c1d2 !important;
+
+    border-bottom:
+        1px solid rgba(77, 137, 174, 0.10) !important;
+
+}
+
+
+/* ============================================================
+   SQL QUERY BUILDER
+   This overlay is outside #sql, so it is separately scoped.
+============================================================ */
+
+.sql-builder-overlay {
+
+    background:
+        rgba(1, 12, 22, 0.78) !important;
+
+    backdrop-filter:
+        blur(10px) !important;
+
+}
+
+.sql-builder-modal {
+
+    background:
+        #092139 !important;
+
+    border:
+        1px solid rgba(82, 157, 203, 0.24) !important;
+
+    border-radius:
+        19px !important;
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,0.50) !important;
+
+}
+
+.sql-builder-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2e4b,
+            #092139
+        ) !important;
+
+    border-bottom:
+        1px solid rgba(85, 150, 190, 0.16) !important;
+
+}
+
+.sql-builder-header h3 {
+
+    color:
+        #ffffff !important;
+
+}
+
+.sql-builder-header h3 i {
+
+    color:
+        #4bbaff !important;
+
+}
+
+.sql-builder-header p {
+
+    color:
+        #7897ae !important;
+
+}
+
+.sql-builder-body {
+
+    background:
+        #092139 !important;
+
+}
+
+.sql-builder-group label {
+
+    color:
+        #9fb9cc !important;
+
+}
+
+.sql-builder-group select,
+.sql-builder-group input,
+.sql-builder-group textarea {
+
+    background:
+        rgba(5, 24, 40, 0.95) !important;
+
+    border:
+        1px solid rgba(85, 151, 194, 0.20) !important;
+
+    color:
+        #dceeff !important;
+
+}
+
+.sql-builder-group select:focus,
+.sql-builder-group input:focus,
+.sql-builder-group textarea:focus {
+
+    border-color:
+        #3faeff !important;
+
+    box-shadow:
+        0 0 0 4px rgba(49,157,239,0.10) !important;
+
+}
+
+.sql-builder-columns {
+
+    background:
+        rgba(5, 24, 40, 0.70) !important;
+
+    border:
+        1px solid rgba(84, 148, 190, 0.15) !important;
+
+}
+
+.sql-builder-column-option {
+
+    color:
+        #9eb8ca !important;
+
+}
+
+.sql-builder-column-option:hover {
+
+    background:
+        rgba(29, 132, 224, 0.10) !important;
+
+}
+
+.sql-builder-preview {
+
+    background:
+        #061421 !important;
+
+    border:
+        1px solid #173248 !important;
+
+    color:
+        #dceeff !important;
+
+}
+
+.sql-builder-actions {
+
+    background:
+        #071b2d !important;
+
+    border-top:
+        1px solid rgba(84, 148, 190, 0.15) !important;
+
+}
+
+
+
+/* ============================================================
+   RESPONSIVE DATABASE CENTER
+============================================================ */
+
+@media (max-width: 900px) {
+
+    #relationships .eer-stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    #relationships .mapping-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    #relationships .mapping-card {
+
+        border-right:
+            none !important;
+
+    }
+
+    #eer-diagram .eer-toolbar {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    #relationships .eer-stats {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    #relationships .mapping-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    #sql .sql-workspace {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+/* ------------------------------------------------------------
+   RELATIONSHIP DIAMONDS
+------------------------------------------------------------ */
+
+#eer-diagram .eer-relationship-node,
+#eer-diagram .eer-relationship-node:hover {
+
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg) !important;
+
+}
+
+
+/* ------------------------------------------------------------
+   ISA TRIANGLES
+------------------------------------------------------------ */
+
+#eer-diagram .eer-isa-node,
+#eer-diagram .eer-isa-node:hover {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ------------------------------------------------------------
+   UNION U
+------------------------------------------------------------ */
+
+#eer-diagram .eer-union-node,
+#eer-diagram .eer-union-node:hover {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ------------------------------------------------------------
+   ATTRIBUTE OVALS
+------------------------------------------------------------ */
+
+#eer-diagram .eer-attribute-node,
+#eer-diagram .eer-attribute-node:hover {
+
+    transform:
+        none !important;
+
+}
+
+/* ============================================================
+   AIRTRACK EER — ABSOLUTE POSITION LOCK
+   Prevent ANY hover/focus/selected state from moving
+   EER entities, relationships, ISA and UNION nodes.
+============================================================ */
+
+
+/* ============================================================
+   ENTITY BOXES
+============================================================ */
+
+#eer-diagram .eer-node,
+#eer-diagram .eer-node:hover,
+#eer-diagram .eer-node:focus,
+#eer-diagram .eer-node:active,
+#eer-diagram .eer-node.eer-selected,
+#eer-diagram .eer-node.eer-related {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ============================================================
+   WEAK ENTITY BOXES
+============================================================ */
+
+#eer-diagram .eer-weak-entity,
+#eer-diagram .eer-weak-entity:hover,
+#eer-diagram .eer-weak-entity:focus,
+#eer-diagram .eer-weak-entity:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ============================================================
+   SUBTYPE / CONCEPT BOXES
+============================================================ */
+
+#eer-diagram .eer-concept,
+#eer-diagram .eer-concept:hover,
+#eer-diagram .eer-concept:focus,
+#eer-diagram .eer-concept:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ============================================================
+   RELATIONSHIP DIAMONDS
+============================================================ */
+
+#eer-diagram .eer-relationship-node,
+#eer-diagram .eer-relationship-node:hover,
+#eer-diagram .eer-relationship-node:focus,
+#eer-diagram .eer-relationship-node:active {
+
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg) !important;
+
+}
+
+
+/* ============================================================
+   ISA TRIANGLES
+============================================================ */
+
+#eer-diagram .eer-isa-node,
+#eer-diagram .eer-isa-node:hover,
+#eer-diagram .eer-isa-node:focus,
+#eer-diagram .eer-isa-node:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ============================================================
+   UNION "U"
+============================================================ */
+
+#eer-diagram .eer-union-node,
+#eer-diagram .eer-union-node:hover,
+#eer-diagram .eer-union-node:focus,
+#eer-diagram .eer-union-node:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ============================================================
+   ATTRIBUTES
+   Keep these fixed too.
+============================================================ */
+
+#eer-diagram .eer-attribute-node,
+#eer-diagram .eer-attribute-node:hover,
+#eer-diagram .eer-attribute-node:focus,
+#eer-diagram .eer-attribute-node:active {
+
+    transform:
+        none !important;
+
+}
+
+
+/* ============================================================
+   ATTRIBUTE LABELS
+============================================================ */
+
+#eer-diagram .eer-isa-label {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ============================================================
+   PREVENT BUTTON HOVER FROM ALTERING EER GEOMETRY
+============================================================ */
+
+#eer-diagram .eer-entity-layer button:hover {
+
+    transform:
+        inherit;
+
+}
+
+
+/*
+   The rules above intentionally have higher specificity
+   and !important, so the generic global:
+
+       button:hover {
+           transform: translateY(-1px);
+       }
+
+   cannot move the EER objects.
+*/
+
+
+/* ============================================================
+   DO NOT ANIMATE POSITION
+============================================================ */
+
+#eer-diagram .eer-node,
+#eer-diagram .eer-relationship-node,
+#eer-diagram .eer-isa-node,
+#eer-diagram .eer-union-node,
+#eer-diagram .eer-attribute-node {
+
+    transition-property:
+        background-color,
+        background,
+        border-color,
+        box-shadow,
+        color,
+        opacity !important;
+
+}
+/* ============================================================
+   FINAL EER GEOMETRY LOCK
+   EER objects must NEVER move on hover.
+============================================================ */
+
+
+/* ---------- ENTITIES ---------- */
+
+#eer-diagram-area .eer-node,
+#eer-diagram-area .eer-node:hover,
+#eer-diagram-area .eer-node:focus,
+#eer-diagram-area .eer-node:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ---------- RELATIONSHIP DIAMONDS ---------- */
+
+#eer-diagram-area .eer-relationship-node,
+#eer-diagram-area .eer-relationship-node:hover,
+#eer-diagram-area .eer-relationship-node:focus,
+#eer-diagram-area .eer-relationship-node:active {
+
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg) !important;
+
+}
+
+
+/* ---------- ISA TRIANGLE ---------- */
+
+#eer-diagram-area .eer-isa-node,
+#eer-diagram-area .eer-isa-node:hover,
+#eer-diagram-area .eer-isa-node:focus,
+#eer-diagram-area .eer-isa-node:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ---------- UNION CATEGORY U ---------- */
+
+#eer-diagram-area .eer-union-node,
+#eer-diagram-area .eer-union-node:hover,
+#eer-diagram-area .eer-union-node:focus,
+#eer-diagram-area .eer-union-node:active {
+
+    transform:
+        translate(-50%, -50%) !important;
+
+}
+
+
+/* ---------- EER HOVER = VISUAL ONLY ---------- */
+
+#eer-diagram-area .eer-node:hover {
+    border-color: #2563eb;
+}
+
+#eer-diagram-area .eer-relationship-node:hover {
+    background: #ffedd5;
+    border-color: #ea580c;
+}
+
+#eer-diagram-area .eer-union-node:hover {
+    background: #f3e8ff;
+}
+
+#eer-diagram-area .eer-isa-node:hover {
+    filter: brightness(0.98);
+}
+
+
+/* ---------- REMOVE TRANSFORM ANIMATION ---------- */
+
+#eer-diagram-area .eer-node,
+#eer-diagram-area .eer-relationship-node,
+#eer-diagram-area .eer-isa-node,
+#eer-diagram-area .eer-union-node {
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease !important;
+
+}
+/* ============================================================
+   NORMAL EER DIAGRAM STYLE
+   No Home Page / Premium Effects
+   ============================================================ */
+
+.eer-diagram-area {
+    position: relative;
+    background: #ffffff !important;
+    border: 1px solid #d9dee7 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+
+/* Entity */
+.eer-node {
+    background: #ffffff !important;
+    color: #172033 !important;
+    border: 2px solid #334155 !important;
+    border-radius: 5px !important;
+    box-shadow: none !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    transition: none !important;
+}
+
+.eer-node:hover,
+.eer-node:focus,
+.eer-node:active {
+    background: #ffffff !important;
+    color: #172033 !important;
+    border-color: #334155 !important;
+    box-shadow: none !important;
+
+    transform: translate(-50%, -50%) !important;
+}
+
+
+/* Relationship diamond */
+.eer-relationship-node {
+    background: #ffffff !important;
+    border: 2px solid #334155 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg) !important;
+
+    transition: none !important;
+}
+
+.eer-relationship-node span {
+    color: #172033 !important;
+
+    transform: rotate(-45deg) !important;
+}
+
+.eer-relationship-node:hover,
+.eer-relationship-node:focus,
+.eer-relationship-node:active {
+    background: #ffffff !important;
+    border-color: #334155 !important;
+    box-shadow: none !important;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg) !important;
+}
+
+
+/* ISA triangle */
+.eer-isa-node {
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    border-bottom-color: #ffffff !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    filter: none !important;
+    transition: none !important;
+}
+
+.eer-isa-node:hover,
+.eer-isa-node:focus,
+.eer-isa-node:active {
+    filter: none !important;
+
+    transform: translate(-50%, -50%) !important;
+}
+
+
+/* Union / Category U */
+.eer-union-node {
+    background: #ffffff !important;
+    color: #172033 !important;
+
+    border: 2px solid #334155 !important;
+    box-shadow: none !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    transition: none !important;
+}
+
+.eer-union-node:hover,
+.eer-union-node:focus,
+.eer-union-node:active {
+    background: #ffffff !important;
+    color: #172033 !important;
+
+    border-color: #334155 !important;
+    box-shadow: none !important;
+
+    transform: translate(-50%, -50%) !important;
+}
+
+
+/* EER labels */
+.eer-label,
+.eer-cardinality {
+    color: #334155 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+
+/* Relationship lines */
+.eer-canvas svg line,
+.eer-canvas svg polyline,
+.eer-canvas svg path,
+.eer-diagram-area svg line,
+.eer-diagram-area svg polyline,
+.eer-diagram-area svg path {
+    stroke: #334155 !important;
+    stroke-width: 2 !important;
+}
+
+
+/* Disable generic button effects ONLY inside EER */
+.eer-diagram-area button {
+    animation: none !important;
+}
+
+.eer-diagram-area button:hover {
+    transform: inherit;
+}
+
+
+/* Explicitly lock EER geometry */
+.eer-diagram-area .eer-node:hover {
+    transform: translate(-50%, -50%) !important;
+}
+
+.eer-diagram-area .eer-relationship-node:hover {
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg) !important;
+}
+
+.eer-diagram-area .eer-isa-node:hover {
+    transform: translate(-50%, -50%) !important;
+}
+
+.eer-diagram-area .eer-union-node:hover {
+    transform: translate(-50%, -50%) !important;
+}
