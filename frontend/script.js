@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "https://airline-reservation-baggage-system.onrender.com/api";
 let passengers = [];
 let reservations = [];
 let airports = [];
