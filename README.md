@@ -5,7 +5,7 @@
 > **Course:** Database Management Systems (DA-2 Project)
 > **Institution:** Vellore Institute of Technology, B.Tech CSE
 > **Focus:** Relational database design, normalization, and REST API engineering on top of a rigorously modeled MySQL schema.
-
+> **Live Demo:** [https://airline-reservation-frontend-8bns.onrender.com](https://airline-reservation-frontend-8bns.onrender.com)
 ---
 
 ## 1. Project Overview
@@ -301,7 +301,38 @@ python -m http.server 5500
 Then open **`http://localhost:5500/index.html`** in your browser. The landing page links into `dashboard.html`, which drives all reservation, flight, passenger, baggage, and payment operations against the running backend at `http://localhost:8080/api`.
 
 ---
+---
 
+## 6. Deployment
+
+The application is deployed to the cloud with the frontend, backend, and database hosted as three separate services.
+
+**Live application:** [https://airline-reservation-frontend-8bns.onrender.com](https://airline-reservation-frontend-8bns.onrender.com)
+
+### Deployment Technologies
+
+- **GitHub** – Source code management and version control.
+- **Render** – Hosting for both frontend and backend.
+- **Docker** – Containerizes the Spring Boot backend for deployment.
+- **Java 25 + Spring Boot** – Backend REST API.
+- **Maven** – Builds and manages the Java project.
+- **JDBC + JdbcTemplate** – Connects the backend to MySQL and executes SQL queries.
+- **Aiven MySQL** – Cloud-hosted production database.
+- **Environment Variables** – Stores database connection details securely.
+- **CORS** – Allows communication between the separately deployed frontend and backend.
+- **REST API** – Connects the HTML/CSS/JavaScript frontend with the Java backend.
+
+### Deployment Flow
+
+```text
+GitHub
+   ↓
+Render Frontend
+   ↓ REST API
+Render Backend (Docker + Spring Boot)
+   ↓ JDBC
+Aiven MySQL
+```
 ## Repository Structure
 
 ```text
