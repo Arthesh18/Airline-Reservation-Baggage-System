@@ -1,4 +1,4 @@
-#  ✈️ Airline Reservation & Baggage Tracking System
+#   Airline Reservation & Baggage Tracking System
 
 **A full-stack, database-driven web application for managing airline reservations, passengers, flights, ticketing, payments, and end-to-end baggage tracking.**
 
