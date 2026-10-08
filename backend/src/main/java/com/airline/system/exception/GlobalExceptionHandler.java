@@ -1,5 +1,7 @@
 package com.airline.system.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -11,10 +13,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     // Duplicate primary key
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<ApiError> handleDuplicateKey(
             DuplicateKeyException ex) {
+
+        logger.error("Duplicate key error", ex);
 
         String message = ex.getMostSpecificCause().getMessage();
 
@@ -40,6 +47,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> handleDatabaseError(
             DataIntegrityViolationException ex) {
+
+        logger.error("Database integrity error", ex);
 
         String message = ex.getMostSpecificCause().getMessage();
 
@@ -92,6 +101,11 @@ public class GlobalExceptionHandler {
     // Unexpected errors
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneralError(Exception ex) {
+
+        // IMPORTANT:
+        // This prints the complete exception and stack trace
+        // into the Render application logs.
+        logger.error("UNEXPECTED SERVER ERROR", ex);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiError(
