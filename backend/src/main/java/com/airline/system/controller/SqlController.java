@@ -18,7 +18,7 @@ public class SqlController {
 
     public SqlController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }S
+    }
 
 
     /* =====================================================
