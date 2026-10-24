@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,6 +16,7 @@
     <link
         rel="stylesheet"
         href="airport-home.css">
+    <link rel="stylesheet" href="route-finder.css">
     <link
     rel="stylesheet"
     href="airport-home-premium.css">
@@ -69,7 +70,7 @@
     onclick="window.location.href='dashboard.html'">
 
     <span>Enter Dashboard</span>
-    <span>→</span>
+    <span>â†’</span>
 
 </button>
 
@@ -78,7 +79,7 @@
                     type="button"
                     onclick="showTeam()">
 
-                    👥
+                    ðŸ‘¥
 
                     <span>
                         Team
@@ -150,7 +151,7 @@
                     <div class="main-search">
 
                         <span class="search-symbol">
-                            ⌕
+                            âŒ•
                         </span>
 
                         <input
@@ -207,7 +208,7 @@
                         Enter Dashboard
 
                         <span>
-                            →
+                            â†’
                         </span>
 
                     </button>
@@ -249,7 +250,7 @@
                                 </div>
 
                                 <b>
-                                    ✈
+                                    âœˆ
                                 </b>
 
                             </div>
@@ -297,7 +298,7 @@
                             </span>
 
                             <div class="big-icon">
-                                👥
+                                ðŸ‘¥
                             </div>
 
                             <span class="card-label">
@@ -315,7 +316,7 @@
                             </p>
 
                             <span class="open-arrow">
-                                Open →
+                                Open â†’
                             </span>
 
                         </div>
@@ -333,7 +334,7 @@
                             </span>
 
                             <div class="big-icon">
-                                ▣
+                                â–£
                             </div>
 
                             <span class="card-label">
@@ -350,7 +351,7 @@
                             </p>
 
                             <span class="open-arrow">
-                                Open →
+                                Open â†’
                             </span>
 
                         </div>
@@ -386,7 +387,7 @@
                             <div class="station-content">
 
                                 <div class="station-icon">
-                                    🎫
+                                    ðŸŽ«
                                 </div>
 
                                 <div>
@@ -430,7 +431,7 @@
 
                             <div class="plane">
 
-                                ✈
+                                âœˆ
 
                             </div>
 
@@ -452,7 +453,7 @@
                             <div class="station-content">
 
                                 <div class="station-icon">
-                                    ₹
+                                    â‚¹
                                 </div>
 
                                 <div>
@@ -508,7 +509,7 @@
                                 </div>
 
                                 <b>
-                                    🧳
+                                    ðŸ§³
                                 </b>
 
                             </div>
@@ -518,11 +519,11 @@
 
                                 <div class="bags">
 
-                                    <span>🧳</span>
-                                    <span>👜</span>
-                                    <span>🧳</span>
-                                    <span>🧳</span>
-                                    <span>👜</span>
+                                    <span>ðŸ§³</span>
+                                    <span>ðŸ‘œ</span>
+                                    <span>ðŸ§³</span>
+                                    <span>ðŸ§³</span>
+                                    <span>ðŸ‘œ</span>
 
                                 </div>
 
@@ -540,7 +541,7 @@
                                 <button
                                     onclick="event.stopPropagation(); openModule('tracking')">
 
-                                    Track baggage →
+                                    Track baggage â†’
 
                                 </button>
 
@@ -559,7 +560,7 @@
                             <div class="building">
 
                                 <span>
-                                    ⌖
+                                    âŒ–
                                 </span>
 
                             </div>
@@ -623,7 +624,7 @@
                             onclick="openModule('employees')">
 
                             <div class="staff-symbol">
-                                ◉
+                                â—‰
                             </div>
 
                             <div>
@@ -687,15 +688,15 @@
                         <button
                             onclick="openModule('ticket-baggage')">
 
-                            🎫
+                            ðŸŽ«
 
                             <span>
                                 TICKET
                             </span>
 
-                            ↔
+                            â†”
 
-                            🧳
+                            ðŸ§³
 
                             <span>
                                 BAGGAGE
@@ -707,7 +708,7 @@
                         <button
                             onclick="openModule('passenger-phones')">
 
-                            ☎
+                            â˜Ž
 
                             Passenger Contacts
 
@@ -717,7 +718,7 @@
                         <button
                             onclick="openModule('relationships')">
 
-                            ◇
+                            â—‡
 
                             Database Schema
 
@@ -727,7 +728,7 @@
                         <button
                             onclick="openModule('eer-diagram')">
 
-                            ◇
+                            â—‡
 
                             EER Diagram
 
@@ -737,7 +738,7 @@
                         <button
                             onclick="openModule('sql')">
 
-                            ▤
+                            â–¤
 
                             SQL Console
 
@@ -754,6 +755,49 @@
             <!-- =====================================================
                  LIVE DATABASE SUMMARY
             ====================================================== -->
+
+            <!-- =====================================================
+     NEO4J ROUTE FINDER
+====================================================== -->
+
+<section class="route-finder">
+    <div class="route-finder-heading">
+        <span>NEO4J GRAPH ROUTING</span>
+        <h2>Find Your Route</h2>
+        <p>Discover flight connections between airports.</p>
+    </div>
+
+    <form id="route-form" class="route-form">
+        <div class="route-field">
+            <label for="route-source">From</label>
+            <select id="route-source" required>
+                <option value="MAA">Chennai (MAA)</option>
+                <option value="DEL">New Delhi (DEL)</option>
+                <option value="BOM">Mumbai (BOM)</option>
+                <option value="BLR">Bengaluru (BLR)</option>
+                <option value="HYD">Hyderabad (HYD)</option>
+            </select>
+        </div>
+
+        <div class="route-field">
+            <label for="route-destination">To</label>
+            <select id="route-destination" required>
+                <option value="BOM">Mumbai (BOM)</option>
+                <option value="DEL">New Delhi (DEL)</option>
+                <option value="MAA">Chennai (MAA)</option>
+                <option value="BLR">Bengaluru (BLR)</option>
+                <option value="HYD">Hyderabad (HYD)</option>
+            </select>
+        </div>
+
+        <button type="submit" id="route-search-button">
+            Find Route
+        </button>
+    </form>
+
+    <p id="route-status" role="status" aria-live="polite"></p>
+    <div id="route-results" aria-live="polite"></div>
+</section>
 
             <section class="database-summary">
 
@@ -785,10 +829,10 @@
 
                     <div class="summary-card">
 
-                        <span>👥</span>
+                        <span>ðŸ‘¥</span>
 
                         <strong id="count-passengers">
-                            —
+                            â€”
                         </strong>
 
                         <small>
@@ -800,10 +844,10 @@
 
                     <div class="summary-card">
 
-                        <span>▣</span>
+                        <span>â–£</span>
 
                         <strong id="count-reservations">
-                            —
+                            â€”
                         </strong>
 
                         <small>
@@ -815,10 +859,10 @@
 
                     <div class="summary-card">
 
-                        <span>✈</span>
+                        <span>âœˆ</span>
 
                         <strong id="count-flights">
-                            —
+                            â€”
                         </strong>
 
                         <small>
@@ -830,10 +874,10 @@
 
                     <div class="summary-card">
 
-                        <span>🎫</span>
+                        <span>ðŸŽ«</span>
 
                         <strong id="count-tickets">
-                            —
+                            â€”
                         </strong>
 
                         <small>
@@ -845,10 +889,10 @@
 
                     <div class="summary-card">
 
-                        <span>🧳</span>
+                        <span>ðŸ§³</span>
 
                         <strong id="count-baggage">
-                            —
+                            â€”
                         </strong>
 
                         <small>
@@ -860,10 +904,10 @@
 
                     <div class="summary-card">
 
-                        <span>⌖</span>
+                        <span>âŒ–</span>
 
                         <strong id="count-airports">
-                            —
+                            â€”
                         </strong>
 
                         <small>
@@ -893,7 +937,7 @@
                 onclick="closeTeam()"
                 class="popup-close">
 
-                ×
+                Ã—
 
             </button>
 
@@ -927,7 +971,10 @@
 
 
     <script src="airport-home.js"></script>
+    <script src="route-finder.js"></script>
 
 </body>
 
 </html>
+
+
