@@ -32,14 +32,12 @@ public class PaymentController {
     public ResponseEntity<?> getPayment(
             @PathVariable String id) {
 
-        Payment payment = paymentService.getPayment(id);
+        Payment payment =
+                paymentService.getPayment(id);
 
         if (payment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Payment Not Found",
-                            "No payment exists with ID " + id + "."
-                    ));
+                    .body(new ApiError("Payment Not Found", "Payment not found: " + id));
         }
 
         return ResponseEntity.ok(payment);
@@ -56,7 +54,7 @@ public class PaymentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePayment(
+    public ResponseEntity<?> updatePayment(
             @PathVariable String id,
             @Valid @RequestBody Payment payment) {
 
@@ -65,7 +63,7 @@ public class PaymentController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Payment not found: " + id);
+                    .body(new ApiError("Payment Not Found", "Payment not found: " + id));
         }
 
         return ResponseEntity.ok(
@@ -74,7 +72,7 @@ public class PaymentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePayment(
+    public ResponseEntity<?> deletePayment(
             @PathVariable String id) {
 
         boolean deleted =
@@ -82,7 +80,7 @@ public class PaymentController {
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Payment not found: " + id);
+                    .body(new ApiError("Payment Not Found", "Payment not found: " + id));
         }
 
         return ResponseEntity.ok(

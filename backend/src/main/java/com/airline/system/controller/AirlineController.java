@@ -1,5 +1,6 @@
 package com.airline.system.controller;
 
+import com.airline.system.exception.ApiError;
 import com.airline.system.model.Airline;
 import com.airline.system.service.AirlineService;
 import jakarta.validation.Valid;
@@ -32,7 +33,7 @@ public class AirlineController {
 
         if (airline == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new com.airline.system.exception.ApiError(
+                    .body(new ApiError(
                             "Airline Not Found",
                             "No airline exists with ID " + id + "."
                     ));
@@ -52,7 +53,7 @@ public class AirlineController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAirline(
+    public ResponseEntity<?> updateAirline(
             @PathVariable String id,
             @Valid @RequestBody Airline airline) {
 
@@ -60,21 +61,21 @@ public class AirlineController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Airline not found: " + id);
+                    .body(new ApiError("Airline Not Found", "Airline not found: " + id));
         }
 
         return ResponseEntity.ok("Airline updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAirline(
+    public ResponseEntity<?> deleteAirline(
             @PathVariable String id) {
 
         boolean deleted = airlineService.deleteAirline(id);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Airline not found: " + id);
+                    .body(new ApiError("Airline Not Found", "Airline not found: " + id));
         }
 
         return ResponseEntity.ok("Airline deleted successfully");

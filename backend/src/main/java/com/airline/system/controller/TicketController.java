@@ -23,9 +23,7 @@ public class TicketController {
 
     @GetMapping
     public ResponseEntity<List<Ticket>> getAllTickets() {
-        return ResponseEntity.ok(
-                ticketService.getAllTickets()
-        );
+        return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
     @GetMapping("/{reservationID}/{ticketNo}")
@@ -33,20 +31,11 @@ public class TicketController {
             @PathVariable String reservationID,
             @PathVariable String ticketNo) {
 
-        Ticket ticket = ticketService.getTicket(
-                reservationID,
-                ticketNo
-        );
+        Ticket ticket = ticketService.getTicket(reservationID, ticketNo);
 
         if (ticket == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Ticket Not Found",
-                            "No ticket exists for Reservation ID "
-                                    + reservationID
-                                    + " and Ticket No "
-                                    + ticketNo + "."
-                    ));
+                    .body(new ApiError("Ticket Not Found", "Ticket not found: " + ticketNo + " in reservation " + reservationID));
         }
 
         return ResponseEntity.ok(ticket);
@@ -63,7 +52,7 @@ public class TicketController {
     }
 
     @PutMapping("/{reservationID}/{ticketNo}")
-    public ResponseEntity<String> updateTicket(
+    public ResponseEntity<?> updateTicket(
             @PathVariable String reservationID,
             @PathVariable String ticketNo,
             @Valid @RequestBody Ticket ticket) {
@@ -76,7 +65,7 @@ public class TicketController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Ticket not found");
+                    .body(new ApiError("Ticket Not Found", "Ticket not found: " + ticketNo + " in reservation " + reservationID));
         }
 
         return ResponseEntity.ok(
@@ -85,7 +74,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/{reservationID}/{ticketNo}")
-    public ResponseEntity<String> deleteTicket(
+    public ResponseEntity<?> deleteTicket(
             @PathVariable String reservationID,
             @PathVariable String ticketNo) {
 
@@ -96,7 +85,7 @@ public class TicketController {
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Ticket not found");
+                    .body(new ApiError("Ticket Not Found", "Ticket not found: " + ticketNo + " in reservation " + reservationID));
         }
 
         return ResponseEntity.ok(

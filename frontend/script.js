@@ -1,4 +1,4 @@
-const API_BASE = "https://airline-reservation-baggage-system.onrender.com/api";
+const API_BASE = "http://localhost:8080/api";
 let passengers = [];
 let reservations = [];
 let airports = [];
@@ -183,6 +183,15 @@ async function fetchData(endpoint, options = {}) {
         contentType.includes("application/json")
     ) {
         data = await response.json();
+    } else {
+        const text = await response.text();
+        if (text) {
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = { message: text };
+            }
+        }
     }
 
 
@@ -190,6 +199,7 @@ async function fetchData(endpoint, options = {}) {
 
         const message =
             data?.message ||
+            (typeof data === "string" ? data : null) ||
             `Request failed with status ${response.status}`;
 
         throw new Error(message);
@@ -233,40 +243,28 @@ async function loadDashboard() {
         ]);
 
 
-        document.getElementById("passenger-count").textContent =
-            passengerData.length;
+        const setCount = (id, count) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = count;
+            }
+        };
 
-        document.getElementById("reservation-count").textContent =
-            reservationData.length;
+        setCount("passenger-count", passengerData.length);
+        setCount("reservation-count", reservationData.length);
+        setCount("ticket-count", ticketData.length);
+        setCount("baggage-count", baggageData.length);
+        setCount("airline-count", airlineData.length);
+        setCount("airport-count", airportData.length);
+        setCount("flight-count", flightData.length);
+        setCount("employee-count", employeeData.length);
+        setCount("payment-count", paymentData.length);
 
-        document.getElementById("ticket-count").textContent =
-            ticketData.length;
-
-        document.getElementById("baggage-count").textContent =
-            baggageData.length;
-
-        document.getElementById("airline-count").textContent =
-            airlineData.length;
-
-        document.getElementById("airport-count").textContent =
-            airportData.length;
-
-        document.getElementById("flight-count").textContent =
-            flightData.length;
-
-        document.getElementById("employee-count").textContent =
-            employeeData.length;
-
-        document.getElementById("payment-count").textContent =
-            paymentData.length;
-
-
-        document.querySelector(".system-status").textContent =
-            "● API Online";
-
-        document.querySelector(".system-status").style.color =
-            "#16a34a";
-
+        const statusEl = document.querySelector(".system-status");
+        if (statusEl) {
+            statusEl.textContent = "● API Online";
+            statusEl.style.color = "#16a34a";
+        }
 
     } catch (error) {
 
@@ -275,12 +273,11 @@ async function loadDashboard() {
             error
         );
 
-
-        document.querySelector(".system-status").textContent =
-            "● API Offline";
-
-        document.querySelector(".system-status").style.color =
-            "#dc2626";
+        const statusEl = document.querySelector(".system-status");
+        if (statusEl) {
+            statusEl.textContent = "● API Offline";
+            statusEl.style.color = "#dc2626";
+        }
     }
 }
 
@@ -806,70 +803,161 @@ async function savePassenger(event) {
 }
 
 
+/* =========================================================
+   DELETE CONFIRMATION MODAL & SAFE ACTIONS
+========================================================= */
+
+let pendingDeleteAction = null;
+
+function showDeleteConfirmation({
+    title,
+    entityName,
+    dependencies = [],
+    restriction = null,
+    confirmButtonText = "Delete Permanently"
+}) {
+    return new Promise((resolve) => {
+        if (pendingDeleteAction) {
+            pendingDeleteAction(false);
+            pendingDeleteAction = null;
+        }
+        pendingDeleteAction = resolve;
+
+        const modal = document.getElementById("delete-confirm-modal");
+        if (!modal) {
+            let msg = `${title}\n\nThis action will permanently delete ${entityName}`;
+            if (dependencies.length > 0) {
+                msg += ` and the following related records, where applicable:\n` +
+                    dependencies.map(d => `- ${d}`).join("\n");
+            } else {
+                msg += ".\n(No dependent records will be deleted)";
+            }
+            if (restriction) {
+                msg += `\n\nNote: ${restriction}`;
+            }
+            msg += `\n\nThis action cannot be undone. Do you want to continue?`;
+            resolve(window.confirm(msg));
+            return;
+        }
+
+        const titleEl = document.getElementById("delete-confirm-title");
+        if (titleEl) titleEl.textContent = title;
+
+        const nameEl = document.getElementById("delete-confirm-entity-name");
+        if (nameEl) nameEl.textContent = entityName;
+
+        const msgEl = document.getElementById("delete-confirm-message");
+        const depList = document.getElementById("delete-confirm-dependencies");
+
+        if (depList) {
+            depList.innerHTML = "";
+            if (dependencies.length > 0) {
+                if (msgEl) {
+                    msgEl.style.display = "block";
+                    msgEl.innerHTML = `This action will permanently delete <strong id="delete-confirm-entity-name">${escapeHtml(entityName)}</strong> and the following related records, where applicable:`;
+                }
+                dependencies.forEach(dep => {
+                    const li = document.createElement("li");
+                    li.textContent = dep;
+                    depList.appendChild(li);
+                });
+            } else {
+                if (msgEl) {
+                    msgEl.innerHTML = `This action will permanently delete <strong id="delete-confirm-entity-name">${escapeHtml(entityName)}</strong>. No dependent records exist or will be deleted.`;
+                }
+            }
+        }
+
+        const warningBox = document.getElementById("delete-confirm-warning-box");
+        if (warningBox) {
+            if (restriction) {
+                warningBox.textContent = restriction;
+                warningBox.style.display = "block";
+            } else {
+                warningBox.style.display = "none";
+            }
+        }
+
+        const proceedBtn = document.getElementById("delete-confirm-proceed-btn");
+        if (proceedBtn) {
+            proceedBtn.textContent = confirmButtonText;
+        }
+
+        modal.classList.add("show");
+        modal.classList.add("active");
+    });
+}
+
+function closeDeleteConfirmModal(result = false) {
+    const modal = document.getElementById("delete-confirm-modal");
+    if (modal) {
+        modal.classList.remove("show");
+        modal.classList.remove("active");
+    }
+    if (pendingDeleteAction) {
+        pendingDeleteAction(result);
+        pendingDeleteAction = null;
+    }
+}
+
+function executePendingDelete() {
+    closeDeleteConfirmModal(true);
+}
+
+window.showDeleteConfirmation = showDeleteConfirmation;
+window.closeDeleteConfirmModal = closeDeleteConfirmModal;
+window.executePendingDelete = executePendingDelete;
+
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        const modal = document.getElementById("delete-confirm-modal");
+        if (modal && (modal.classList.contains("show") || modal.classList.contains("active"))) {
+            closeDeleteConfirmModal(false);
+        }
+    }
+});
+
+
 /* =========================
    DELETE PASSENGER
 ========================= */
 
 async function deletePassenger(passengerID) {
+    if (!passengerID) {
+        showToast("Invalid passenger ID.", "error");
+        return;
+    }
 
-    const passenger =
-        passengers.find(
-            p => p.passengerID === passengerID
-        );
+    const passenger = passengers.find(p => p.passengerID === passengerID);
+    const displayName = passenger ? `${passenger.name} (${passengerID})` : passengerID;
 
-
-    const name =
-        passenger
-            ? passenger.name
-            : passengerID;
-
-
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete passenger "${name}" (${passengerID})?`
-        );
-
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Passenger ${passengerID}?`,
+        entityName: `passenger ${passengerID}${passenger ? ` (${passenger.name})` : ""}`,
+        dependencies: [
+            "Passenger phone numbers",
+            "Reservations and tickets belonging to this passenger",
+            "Associated payments",
+            "Related baggage and tracking records"
+        ]
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/passengers/${encodeURIComponent(
-                passengerID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/passengers/${encodeURIComponent(passengerID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Passenger deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Passenger and all dependent records deleted successfully.", "success");
         await loadPassengers();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Passenger delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Passenger delete error:", error);
+        showToast(error.message, "error");
     }
 }
 
@@ -1657,64 +1745,40 @@ async function saveReservation(event) {
    DELETE RESERVATION
 ========================= */
 
-async function deleteReservation(
-    reservationID
-) {
+async function deleteReservation(reservationID) {
+    if (!reservationID) {
+        showToast("Invalid reservation ID.", "error");
+        return;
+    }
 
-    const reservation =
-        reservations.find(
-            r =>
-                r.reservationID ===
-                reservationID
-        );
+    const reservation = reservations.find(r => r.reservationID === reservationID);
 
-
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete reservation "${reservationID}"?`
-        );
-
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Reservation ${reservationID}?`,
+        entityName: `reservation ${reservationID}${reservation ? ` (Passenger: ${reservation.passengerID})` : ""}`,
+        dependencies: [
+            "Tickets belonging to this reservation",
+            "Associated payments",
+            "Related baggage associations and tracking records"
+        ]
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/reservations/${encodeURIComponent(
-                reservationID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/reservations/${encodeURIComponent(reservationID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Reservation deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Reservation and dependent records deleted successfully.", "success");
         await loadReservations();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Reservation delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Reservation delete error:", error);
+        showToast(error.message, "error");
     }
 }
 
@@ -2341,53 +2405,35 @@ async function saveFlight(event) {
 ========================= */
 
 async function deleteFlight(flightID) {
+    if (!flightID) {
+        showToast("Invalid flight ID.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete flight "${flightID}"?`
-        );
+    const flight = flights.find(f => f.flightID === flightID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Flight ${flightID}?`,
+        entityName: `flight ${flightID}${flight ? ` (Airline: ${flight.airlineID}, Time: ${flight.departureTime})` : ""}`,
+        dependencies: []
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/flights/${encodeURIComponent(
-                flightID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/flights/${encodeURIComponent(flightID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Flight deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Flight deleted successfully.", "success");
         await loadFlights();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Flight delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Flight delete error:", error);
+        showToast(error.message, "error");
     }
 }
 
@@ -3103,59 +3149,39 @@ async function saveTicket(event) {
    DELETE TICKET
 ========================= */
 
-async function deleteTicket(
-    reservationID,
-    ticketNo
-) {
+async function deleteTicket(reservationID, ticketNo) {
+    if (!reservationID || !ticketNo) {
+        showToast("Invalid ticket details.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete ticket "${ticketNo}" from reservation "${reservationID}"?`
-        );
+    const ticket = tickets.find(t => t.reservationID === reservationID && t.ticketNo === ticketNo);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Ticket ${ticketNo}?`,
+        entityName: `ticket ${ticketNo} in reservation ${reservationID}${ticket && ticket.seatNo ? ` (Seat ${ticket.seatNo})` : ""}`,
+        dependencies: [
+            "Associated payments for this ticket",
+            "Related baggage associations and tracking records"
+        ]
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/tickets/${encodeURIComponent(
-                reservationID
-            )}/${encodeURIComponent(
-                ticketNo
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/tickets/${encodeURIComponent(reservationID)}/${encodeURIComponent(ticketNo)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Ticket deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Ticket and dependent records deleted successfully.", "success");
         await loadTickets();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Ticket delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Ticket delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -3667,53 +3693,38 @@ async function saveBaggage(event) {
 ========================= */
 
 async function deleteBaggage(baggageID) {
+    if (!baggageID) {
+        showToast("Invalid baggage ID.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete baggage "${baggageID}"?`
-        );
+    const item = baggage.find(b => b.baggageID === baggageID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Baggage ${baggageID}?`,
+        entityName: `baggage ${baggageID}${item ? ` (${item.weight} kg, ${item.noOfPieces} pcs)` : ""}`,
+        dependencies: [
+            "Baggage tracking and scan history records",
+            "Ticket-baggage check-in associations"
+        ]
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/baggage/${encodeURIComponent(
-                baggageID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/baggage/${encodeURIComponent(baggageID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Baggage deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Baggage and tracking records deleted successfully.", "success");
         await loadBaggage();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Baggage delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Baggage delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -4417,53 +4428,35 @@ async function savePayment(event) {
 ========================= */
 
 async function deletePayment(paymentID) {
+    if (!paymentID) {
+        showToast("Invalid payment ID.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete payment "${paymentID}"?`
-        );
+    const payment = payments.find(p => p.paymentID === paymentID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Payment ${paymentID}?`,
+        entityName: `payment ${paymentID}${payment ? ` (Amount: ₹${payment.amount}, Ticket: ${payment.ticketNo})` : ""}`,
+        dependencies: []
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/payments/${encodeURIComponent(
-                paymentID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/payments/${encodeURIComponent(paymentID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Payment deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Payment deleted successfully.", "success");
         await loadPayments();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Payment delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Payment delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -4999,53 +4992,36 @@ async function saveAirport(event) {
 ========================= */
 
 async function deleteAirport(airportID) {
+    if (!airportID) {
+        showToast("Invalid airport ID.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete airport "${airportID}"?`
-        );
+    const airport = airports.find(a => a.airportID === airportID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Airport ${airportID}?`,
+        entityName: `airport ${airportID}${airport ? ` (${airport.airportName}, ${airport.city})` : ""}`,
+        dependencies: [],
+        restriction: "Airports are shared infrastructure. Deletion will be blocked if any active reservations reference this airport as departure or arrival."
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/airports/${encodeURIComponent(
-                airportID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/airports/${encodeURIComponent(airportID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Airport deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Airport deleted successfully.", "success");
         await loadAirports();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Airport delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Airport delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -5558,53 +5534,36 @@ async function saveAirline(event) {
 ========================= */
 
 async function deleteAirline(airlineID) {
+    if (!airlineID) {
+        showToast("Invalid airline ID.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete airline "${airlineID}"?`
-        );
+    const airline = airlines.find(a => a.airlineID === airlineID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Airline ${airlineID}?`,
+        entityName: `airline ${airlineID}${airline ? ` (${airline.airlineName})` : ""}`,
+        dependencies: [],
+        restriction: "Airlines are shared operational data. Deletion will be blocked if any active flights are assigned to this airline."
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/airlines/${encodeURIComponent(
-                airlineID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/airlines/${encodeURIComponent(airlineID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Airline deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Airline deleted successfully.", "success");
         await loadAirlines();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Airline delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Airline delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -6140,53 +6099,35 @@ async function saveEmployee(event) {
 ========================= */
 
 async function deleteEmployee(employeeID) {
+    if (!employeeID) {
+        showToast("Invalid employee ID.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete employee "${employeeID}"?`
-        );
+    const employee = employees.find(e => e.employeeID === employeeID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Employee ${employeeID}?`,
+        entityName: `employee ${employeeID}${employee ? ` (${employee.name}, ${employee.designation})` : ""}`,
+        dependencies: []
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/employees/${encodeURIComponent(
-                employeeID
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/employees/${encodeURIComponent(employeeID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Employee deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Employee deleted successfully.", "success");
         await loadEmployees();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Employee delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Employee delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -6878,60 +6819,36 @@ async function saveBaggageTracking(event) {
    DELETE TRACKING
 ========================= */
 
-async function deleteBaggageTracking(
-    baggageID,
-    trackingID
-) {
+async function deleteBaggageTracking(baggageID, trackingID) {
+    if (!baggageID || !trackingID) {
+        showToast("Invalid tracking record details.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete tracking record "${baggageID} / ${trackingID}"?`
-        );
+    const record = baggageTracking.find(t => t.baggageID === baggageID && t.trackingID === trackingID);
 
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Tracking Record ${trackingID}?`,
+        entityName: `tracking scan ${trackingID} for baggage ${baggageID}${record ? ` at ${record.scanLocation}` : ""}`,
+        dependencies: []
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-
-            `/baggage-tracking/${encodeURIComponent(
-                baggageID
-            )}/${encodeURIComponent(
-                trackingID
-            )}`,
-
-            {
-                method: "DELETE"
-            }
-
+            `/baggage-tracking/${encodeURIComponent(baggageID)}/${encodeURIComponent(trackingID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Tracking record deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Tracking record deleted successfully.", "success");
         await loadBaggageTracking();
-
-
+        await loadDashboard();
     } catch (error) {
-
-        console.error(
-            "Tracking delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Tracking delete error:", error);
+        showToast(error.message, "error");
     }
 }
 /* =========================================================
@@ -7811,69 +7728,35 @@ async function saveTicketBaggage(event) {
    DELETE TICKET-BAGGAGE
 ========================= */
 
-async function deleteTicketBaggage(
-    reservationID,
-    ticketNo,
-    baggageID
-) {
+async function deleteTicketBaggage(reservationID, ticketNo, baggageID) {
+    if (!reservationID || !ticketNo || !baggageID) {
+        showToast("Invalid association details.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to remove baggage "${baggageID}" from ticket "${ticketNo}" in reservation "${reservationID}"?`
-        );
-
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Remove Baggage ${baggageID} from Ticket ${ticketNo}?`,
+        entityName: `baggage link ${baggageID} ↔ ticket ${ticketNo} (reservation ${reservationID})`,
+        dependencies: [],
+        confirmButtonText: "Remove Association"
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-
-            `/ticket-baggage/` +
-
-            `${encodeURIComponent(
-                reservationID
-            )}/` +
-
-            `${encodeURIComponent(
-                ticketNo
-            )}/` +
-
-            `${encodeURIComponent(
-                baggageID
-            )}`,
-
-            {
-                method: "DELETE"
-            }
-
+            `/ticket-baggage/${encodeURIComponent(reservationID)}/${encodeURIComponent(ticketNo)}/${encodeURIComponent(baggageID)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Baggage assignment deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Ticket-baggage association removed successfully.", "success");
         await loadTicketBaggage();
-
-
+        await loadDashboard();
     } catch (error) {
-
-        console.error(
-            "Ticket-baggage delete error:",
-            error
-        );
-
-
-        showToast(
-            error.message,
-            "error"
-        );
+        console.error("Ticket-baggage delete error:", error);
+        showToast(error.message, "error");
     }
 }/* =========================================================
    PASSENGER PHONES
@@ -8481,59 +8364,34 @@ async function savePassengerPhone(event) {
    DELETE
 --------------------------------------------------------- */
 
-async function deletePassengerPhone(
-    passengerID,
-    phone
-) {
+async function deletePassengerPhone(passengerID, phone) {
+    if (!passengerID || !phone) {
+        showToast("Invalid phone details.", "error");
+        return;
+    }
 
-    const confirmed =
-        confirm(
-            `Are you sure you want to delete phone "${phone}" for passenger "${passengerID}"?`
-        );
-
+    const confirmed = await showDeleteConfirmation({
+        title: `Warning: Delete Phone ${phone}?`,
+        entityName: `phone number ${phone} for passenger ${passengerID}`,
+        dependencies: []
+    });
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await fetchData(
-            `/passenger-phones/${encodeURIComponent(
-                passengerID
-            )}/${encodeURIComponent(
-                phone
-            )}`,
-            {
-                method: "DELETE"
-            }
+            `/passenger-phones/${encodeURIComponent(passengerID)}/${encodeURIComponent(phone)}`,
+            { method: "DELETE" }
         );
 
-
-        showToast(
-            "Passenger phone deleted successfully.",
-            "success"
-        );
-
-
+        showToast("Passenger phone deleted successfully.", "success");
         await loadPassengerPhones();
-
         await loadDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "Passenger phone delete error:",
-            error
-        );
-
-        showToast(
-            error.message ||
-            "Failed to delete passenger phone.",
-            "error"
-        );
+        console.error("Passenger phone delete error:", error);
+        showToast(error.message || "Failed to delete passenger phone.", "error");
     }
 }
 /* =========================================================

@@ -33,10 +33,7 @@ public class BaggageController {
 
         if (baggage == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Baggage Not Found",
-                            "No baggage exists with ID " + id + "."
-                    ));
+                    .body(new ApiError("Baggage Not Found", "Baggage not found: " + id));
         }
 
         return ResponseEntity.ok(baggage);
@@ -53,7 +50,7 @@ public class BaggageController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBaggage(
+    public ResponseEntity<?> updateBaggage(
             @PathVariable String id,
             @Valid @RequestBody Baggage baggage) {
 
@@ -61,21 +58,21 @@ public class BaggageController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Baggage not found: " + id);
+                    .body(new ApiError("Baggage Not Found", "Baggage not found: " + id));
         }
 
         return ResponseEntity.ok("Baggage updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBaggage(
+    public ResponseEntity<?> deleteBaggage(
             @PathVariable String id) {
 
         boolean deleted = baggageService.deleteBaggage(id);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Baggage not found: " + id);
+                    .body(new ApiError("Baggage Not Found", "Baggage not found: " + id));
         }
 
         return ResponseEntity.ok("Baggage deleted successfully");

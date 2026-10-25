@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS FLIGHT (
     CONSTRAINT fk_flight_airline
         FOREIGN KEY (AirlineID)
         REFERENCES AIRLINES(AirlineID)
+        ON DELETE RESTRICT
 );
 
 
@@ -93,15 +94,18 @@ CREATE TABLE IF NOT EXISTS RESERVATION (
 
     CONSTRAINT fk_reservation_passenger
         FOREIGN KEY (PassengerID)
-        REFERENCES PASSENGER(PassengerID),
+        REFERENCES PASSENGER(PassengerID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_reservation_departure
         FOREIGN KEY (DepartureAirportID)
-        REFERENCES AIRPORT(AirportID),
+        REFERENCES AIRPORT(AirportID)
+        ON DELETE RESTRICT,
 
     CONSTRAINT fk_reservation_arrival
         FOREIGN KEY (ArrivalAirportID)
         REFERENCES AIRPORT(AirportID)
+        ON DELETE RESTRICT
 );
 
 
@@ -120,6 +124,7 @@ CREATE TABLE IF NOT EXISTS TICKET (
     CONSTRAINT fk_ticket_reservation
         FOREIGN KEY (ReservationID)
         REFERENCES RESERVATION(ReservationID)
+        ON DELETE CASCADE
 );
 
 
@@ -137,6 +142,7 @@ CREATE TABLE IF NOT EXISTS PAYMENT (
     CONSTRAINT fk_payment_ticket
         FOREIGN KEY (ReservationID, TicketNo)
         REFERENCES TICKET(ReservationID, TicketNo)
+        ON DELETE CASCADE
 );
 
 
@@ -155,6 +161,7 @@ CREATE TABLE IF NOT EXISTS BAGGAGE_TRACKING (
     CONSTRAINT fk_tracking_baggage
         FOREIGN KEY (BaggageID)
         REFERENCES BAGGAGE(BaggageID)
+        ON DELETE CASCADE
 );
 
 
@@ -176,11 +183,13 @@ CREATE TABLE IF NOT EXISTS TICKET_BAGGAGE (
 
     CONSTRAINT fk_ticket_baggage_ticket
         FOREIGN KEY (ReservationID, TicketNo)
-        REFERENCES TICKET(ReservationID, TicketNo),
+        REFERENCES TICKET(ReservationID, TicketNo)
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_ticket_baggage_baggage
         FOREIGN KEY (BaggageID)
         REFERENCES BAGGAGE(BaggageID)
+        ON DELETE CASCADE
 );
 
 
@@ -197,4 +206,5 @@ CREATE TABLE IF NOT EXISTS PASSENGER_PHONE (
     CONSTRAINT fk_passenger_phone
         FOREIGN KEY (PassengerID)
         REFERENCES PASSENGER(PassengerID)
+        ON DELETE CASCADE
 );

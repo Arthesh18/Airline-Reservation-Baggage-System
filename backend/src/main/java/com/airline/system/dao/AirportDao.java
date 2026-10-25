@@ -97,4 +97,10 @@ public class AirportDao {
 
         return jdbcTemplate.update(sql, id);
     }
+
+    public int countReservationsByAirportId(String airportId) {
+        String sql = "SELECT COUNT(*) FROM RESERVATION WHERE DepartureAirportID = ? OR ArrivalAirportID = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, airportId, airportId);
+        return count != null ? count : 0;
+    }
 }

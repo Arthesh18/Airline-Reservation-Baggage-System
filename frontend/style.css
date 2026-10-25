@@ -654,7 +654,8 @@ nav {
     padding: 20px;
 }
 
-.modal-overlay.show {
+.modal-overlay.show,
+.modal-overlay.active {
     display: flex;
 }
 
@@ -917,7 +918,8 @@ nav {
     backdrop-filter: blur(3px);
 }
 
-.modal-overlay.show {
+.modal-overlay.show,
+.modal-overlay.active {
     display: flex;
 }
 
@@ -11489,4 +11491,93 @@ select option {
 
 .eer-diagram-area .eer-union-node:hover {
     transform: translate(-50%, -50%) !important;
+}
+
+
+/* =========================================================
+   DELETE CONFIRMATION MODAL
+   ========================================================= */
+
+#delete-confirm-modal.show,
+#delete-confirm-modal.active {
+    display: flex !important;
+}
+
+.delete-confirm-modal {
+    max-width: 520px !important;
+    border-top: 4px solid var(--danger, #dc2626) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45) !important;
+}
+
+.delete-modal-header h3 {
+    color: #ef4444 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.delete-modal-body {
+    padding: 24px 28px;
+    font-size: 14.5px;
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+.delete-confirm-message {
+    margin-bottom: 12px;
+    font-size: 14.5px;
+    color: #e2e8f0;
+}
+
+.delete-confirm-message strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.delete-dependencies-list {
+    margin: 12px 0 16px 20px;
+    padding: 0;
+    list-style-type: disc;
+    color: #94a3b8;
+}
+
+.delete-dependencies-list li {
+    margin-bottom: 6px;
+    font-size: 13.5px;
+    color: #cbd5e1;
+}
+
+.delete-confirm-caution {
+    margin-top: 16px;
+    font-weight: 600;
+    color: #f87171;
+    font-size: 13.5px;
+}
+
+.delete-warning-box {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: #fca5a5;
+    font-size: 13px;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+.danger-btn {
+    background: #dc2626 !important;
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.danger-btn:hover {
+    background: #b91c1c !important;
+    transform: translateY(-1px);
 }

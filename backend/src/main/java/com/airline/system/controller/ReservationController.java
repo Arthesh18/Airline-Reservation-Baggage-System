@@ -17,7 +17,9 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(
+            ReservationService reservationService
+    ) {
         this.reservationService = reservationService;
     }
 
@@ -37,10 +39,7 @@ public class ReservationController {
 
         if (reservation == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Reservation Not Found",
-                            "No reservation exists with ID " + id + "."
-                    ));
+                    .body(new ApiError("Reservation Not Found", "Reservation not found: " + id));
         }
 
         return ResponseEntity.ok(reservation);
@@ -57,7 +56,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateReservation(
+    public ResponseEntity<?> updateReservation(
             @PathVariable String id,
             @Valid @RequestBody Reservation reservation) {
 
@@ -66,7 +65,7 @@ public class ReservationController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Reservation not found: " + id);
+                    .body(new ApiError("Reservation Not Found", "Reservation not found: " + id));
         }
 
         return ResponseEntity.ok(
@@ -75,7 +74,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteReservation(
+    public ResponseEntity<?> deleteReservation(
             @PathVariable String id) {
 
         boolean deleted =
@@ -83,7 +82,7 @@ public class ReservationController {
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Reservation not found: " + id);
+                    .body(new ApiError("Reservation Not Found", "Reservation not found: " + id));
         }
 
         return ResponseEntity.ok(

@@ -33,10 +33,7 @@ public class EmployeeController {
 
         if (employee == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Employee Not Found",
-                            "No employee exists with ID " + id + "."
-                    ));
+                    .body(new ApiError("Employee Not Found", "Employee not found: " + id));
         }
 
         return ResponseEntity.ok(employee);
@@ -53,7 +50,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEmployee(
+    public ResponseEntity<?> updateEmployee(
             @PathVariable String id,
             @Valid @RequestBody Employee employee) {
 
@@ -61,21 +58,21 @@ public class EmployeeController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Employee not found: " + id);
+                    .body(new ApiError("Employee Not Found", "Employee not found: " + id));
         }
 
         return ResponseEntity.ok("Employee updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployee(
+    public ResponseEntity<?> deleteEmployee(
             @PathVariable String id) {
 
         boolean deleted = employeeService.deleteEmployee(id);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Employee not found: " + id);
+                    .body(new ApiError("Employee Not Found", "Employee not found: " + id));
         }
 
         return ResponseEntity.ok("Employee deleted successfully");

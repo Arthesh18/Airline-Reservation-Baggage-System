@@ -33,10 +33,7 @@ public class FlightController {
 
         if (flight == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Flight Not Found",
-                            "No flight exists with ID " + id + "."
-                    ));
+                    .body(new ApiError("Flight Not Found", "Flight not found: " + id));
         }
 
         return ResponseEntity.ok(flight);
@@ -53,7 +50,7 @@ public class FlightController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateFlight(
+    public ResponseEntity<?> updateFlight(
             @PathVariable String id,
             @Valid @RequestBody Flight flight) {
 
@@ -61,21 +58,21 @@ public class FlightController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Flight not found: " + id);
+                    .body(new ApiError("Flight Not Found", "Flight not found: " + id));
         }
 
         return ResponseEntity.ok("Flight updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFlight(
+    public ResponseEntity<?> deleteFlight(
             @PathVariable String id) {
 
         boolean deleted = flightService.deleteFlight(id);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Flight not found: " + id);
+                    .body(new ApiError("Flight Not Found", "Flight not found: " + id));
         }
 
         return ResponseEntity.ok("Flight deleted successfully");

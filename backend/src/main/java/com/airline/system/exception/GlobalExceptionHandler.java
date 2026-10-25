@@ -52,30 +52,57 @@ public class GlobalExceptionHandler {
 
         String message = ex.getMostSpecificCause().getMessage();
 
-        if (message != null &&
-                message.toLowerCase().contains("foreign key")) {
+        if (message != null) {
+            String lower = message.toLowerCase();
 
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiError(
-                            "Invalid Foreign Key",
-                            "The operation refers to a record that does not exist."
-                    ));
-        }
+            if (lower.contains("cannot delete or update a parent row")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ApiError(
+                                "Foreign Key Constraint Violation",
+                                "Cannot delete or modify this record because related dependent records exist."
+                        ));
+            }
 
-        if (message != null &&
-                message.toLowerCase().contains("constraint")) {
+            if (lower.contains("cannot add or update a child row")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ApiError(
+                                "Invalid Foreign Key",
+                                "The operation refers to a record that does not exist."
+                        ));
+            }
 
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiError(
-                            "Database Constraint Error",
-                            "The operation violates a database constraint."
-                    ));
+            if (lower.contains("foreign key")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ApiError(
+                                "Foreign Key Constraint Violation",
+                                "The operation violates a foreign key constraint."
+                        ));
+            }
+
+            if (lower.contains("constraint")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ApiError(
+                                "Database Constraint Error",
+                                "The operation violates a database constraint."
+                        ));
+            }
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError(
                         "Database Error",
                         "The operation could not be completed because of a database constraint."
+                ));
+    }
+
+    // Business rule restrictions (e.g. deleting shared airports with active reservations)
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiError> handleIllegalState(IllegalStateException ex) {
+        logger.warn("Operation not allowed: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ApiError(
+                        "Operation Not Allowed",
+                        ex.getMessage()
                 ));
     }
 
@@ -102,9 +129,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneralError(Exception ex) {
 
-        // IMPORTANT:
-        // This prints the complete exception and stack trace
-        // into the Render application logs.
         logger.error("UNEXPECTED SERVER ERROR", ex);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

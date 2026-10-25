@@ -104,4 +104,9 @@ public class TicketDao {
                 ticketNo
         );
     }
+
+    public List<String> findBaggageIdsByTicket(String reservationId, String ticketNo) {
+        String sql = "SELECT DISTINCT BaggageID FROM TICKET_BAGGAGE WHERE ReservationID = ? AND TicketNo = ?";
+        return jdbcTemplate.queryForList(sql, String.class, reservationId, ticketNo);
+    }
 }

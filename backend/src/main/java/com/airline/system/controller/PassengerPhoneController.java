@@ -42,13 +42,7 @@ public class PassengerPhoneController {
 
         if (passengerPhone == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Passenger Phone Not Found",
-                            "No phone record exists for Passenger ID "
-                                    + passengerID
-                                    + " and phone "
-                                    + phone + "."
-                    ));
+                    .body(new ApiError("Phone Not Found", "Passenger phone not found: " + phone + " for passenger " + passengerID));
         }
 
         return ResponseEntity.ok(passengerPhone);
@@ -65,7 +59,7 @@ public class PassengerPhoneController {
     }
 
     @PutMapping("/{passengerID}/{phone}")
-    public ResponseEntity<String> updatePhone(
+    public ResponseEntity<?> updatePhone(
             @PathVariable String passengerID,
             @PathVariable String phone,
             @Valid @RequestBody PassengerPhone passengerPhone) {
@@ -79,7 +73,7 @@ public class PassengerPhoneController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Passenger phone not found");
+                    .body(new ApiError("Phone Not Found", "Passenger phone not found: " + phone + " for passenger " + passengerID));
         }
 
         return ResponseEntity.ok(
@@ -88,7 +82,7 @@ public class PassengerPhoneController {
     }
 
     @DeleteMapping("/{passengerID}/{phone}")
-    public ResponseEntity<String> deletePhone(
+    public ResponseEntity<?> deletePhone(
             @PathVariable String passengerID,
             @PathVariable String phone) {
 
@@ -100,7 +94,7 @@ public class PassengerPhoneController {
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Passenger phone not found");
+                    .body(new ApiError("Phone Not Found", "Passenger phone not found: " + phone + " for passenger " + passengerID));
         }
 
         return ResponseEntity.ok(

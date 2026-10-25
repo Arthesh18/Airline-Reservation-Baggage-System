@@ -1,5 +1,6 @@
 package com.airline.system.controller;
 
+import com.airline.system.exception.ApiError;
 import com.airline.system.model.Passenger;
 import com.airline.system.service.PassengerService;
 import jakarta.validation.Valid;
@@ -34,7 +35,7 @@ public class PassengerController {
 
         if (passenger == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Passenger not found: " + id);
+                    .body(new ApiError("Passenger Not Found", "Passenger not found: " + id));
         }
 
         return ResponseEntity.ok(passenger);
@@ -53,7 +54,7 @@ public class PassengerController {
 
     // UPDATE passenger
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePassenger(
+    public ResponseEntity<?> updatePassenger(
             @PathVariable String id,
             @Valid @RequestBody Passenger passenger) {
 
@@ -61,7 +62,7 @@ public class PassengerController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Passenger not found: " + id);
+                    .body(new ApiError("Passenger Not Found", "Passenger not found: " + id));
         }
 
         return ResponseEntity.ok("Passenger updated successfully");
@@ -69,14 +70,14 @@ public class PassengerController {
 
     // DELETE passenger
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePassenger(
+    public ResponseEntity<?> deletePassenger(
             @PathVariable String id) {
 
         boolean deleted = passengerService.deletePassenger(id);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Passenger not found: " + id);
+                    .body(new ApiError("Passenger Not Found", "Passenger not found: " + id));
         }
 
         return ResponseEntity.ok("Passenger deleted successfully");

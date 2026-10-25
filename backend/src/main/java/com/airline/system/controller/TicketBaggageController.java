@@ -35,27 +35,19 @@ public class TicketBaggageController {
             @PathVariable String ticketNo,
             @PathVariable String baggageID) {
 
-        TicketBaggage record =
+        TicketBaggage item =
                 ticketBaggageService.getTicketBaggage(
                         reservationID,
                         ticketNo,
                         baggageID
                 );
 
-        if (record == null) {
+        if (item == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Ticket Baggage Record Not Found",
-                            "No record exists for Reservation ID "
-                                    + reservationID
-                                    + ", Ticket No "
-                                    + ticketNo
-                                    + " and Baggage ID "
-                                    + baggageID + "."
-                    ));
+                    .body(new ApiError("Ticket Baggage Not Found", "Ticket baggage record not found"));
         }
 
-        return ResponseEntity.ok(record);
+        return ResponseEntity.ok(item);
     }
 
     @PostMapping
@@ -69,7 +61,7 @@ public class TicketBaggageController {
     }
 
     @PutMapping("/{reservationID}/{ticketNo}/{baggageID}")
-    public ResponseEntity<String> updateTicketBaggage(
+    public ResponseEntity<?> updateTicketBaggage(
             @PathVariable String reservationID,
             @PathVariable String ticketNo,
             @PathVariable String baggageID,
@@ -85,7 +77,7 @@ public class TicketBaggageController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Ticket baggage record not found");
+                    .body(new ApiError("Ticket Baggage Not Found", "Ticket baggage record not found"));
         }
 
         return ResponseEntity.ok(
@@ -94,7 +86,7 @@ public class TicketBaggageController {
     }
 
     @DeleteMapping("/{reservationID}/{ticketNo}/{baggageID}")
-    public ResponseEntity<String> deleteTicketBaggage(
+    public ResponseEntity<?> deleteTicketBaggage(
             @PathVariable String reservationID,
             @PathVariable String ticketNo,
             @PathVariable String baggageID) {
@@ -108,7 +100,7 @@ public class TicketBaggageController {
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Ticket baggage record not found");
+                    .body(new ApiError("Ticket Baggage Not Found", "Ticket baggage record not found"));
         }
 
         return ResponseEntity.ok(

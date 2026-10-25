@@ -92,4 +92,10 @@ public class AirlineDao {
 
         return jdbcTemplate.update(sql, id);
     }
+
+    public int countFlightsByAirlineId(String airlineId) {
+        String sql = "SELECT COUNT(*) FROM FLIGHT WHERE AirlineID = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, airlineId);
+        return count != null ? count : 0;
+    }
 }

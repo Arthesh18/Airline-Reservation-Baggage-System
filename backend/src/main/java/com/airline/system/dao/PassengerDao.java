@@ -112,4 +112,20 @@ public class PassengerDao {
 
         return jdbcTemplate.update(sql, id);
     }
+
+    public List<String> findBaggageIdsByPassengerId(String passengerId) {
+        String sql = """
+                SELECT DISTINCT tb.BaggageID
+                FROM TICKET_BAGGAGE tb
+                JOIN RESERVATION r ON tb.ReservationID = r.ReservationID
+                WHERE r.PassengerID = ?
+                """;
+        return jdbcTemplate.queryForList(sql, String.class, passengerId);
+    }
+
+    public int countTicketBaggageByBaggageId(String baggageId) {
+        String sql = "SELECT COUNT(*) FROM TICKET_BAGGAGE WHERE BaggageID = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, baggageId);
+        return count != null ? count : 0;
+    }
 }

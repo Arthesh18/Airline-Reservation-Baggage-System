@@ -3,10 +3,12 @@ package com.airline.system.service;
 import com.airline.system.dao.PassengerPhoneDao;
 import com.airline.system.model.PassengerPhone;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PassengerPhoneService {
 
     private final PassengerPhoneDao passengerPhoneDao;
@@ -15,6 +17,7 @@ public class PassengerPhoneService {
         this.passengerPhoneDao = passengerPhoneDao;
     }
 
+    @Transactional(readOnly = true)
     public List<PassengerPhone> getAllPhones() {
         return passengerPhoneDao.findAll();
     }
@@ -48,6 +51,16 @@ public class PassengerPhoneService {
     public boolean deletePhone(
             String passengerID,
             String phone) {
+
+        if (passengerID == null || passengerID.trim().isEmpty() ||
+                phone == null || phone.trim().isEmpty()) {
+            return false;
+        }
+
+        PassengerPhone existing = passengerPhoneDao.findById(passengerID, phone);
+        if (existing == null) {
+            return false;
+        }
 
         return passengerPhoneDao.delete(
                 passengerID,

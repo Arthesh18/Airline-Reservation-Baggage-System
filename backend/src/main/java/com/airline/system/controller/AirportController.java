@@ -53,7 +53,7 @@ public class AirportController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAirport(
+    public ResponseEntity<?> updateAirport(
             @PathVariable String id,
             @Valid @RequestBody Airport airport) {
 
@@ -61,21 +61,21 @@ public class AirportController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Airport not found: " + id);
+                    .body(new ApiError("Airport Not Found", "Airport not found: " + id));
         }
 
         return ResponseEntity.ok("Airport updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAirport(
+    public ResponseEntity<?> deleteAirport(
             @PathVariable String id) {
 
         boolean deleted = airportService.deleteAirport(id);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Airport not found: " + id);
+                    .body(new ApiError("Airport Not Found", "Airport not found: " + id));
         }
 
         return ResponseEntity.ok("Airport deleted successfully");

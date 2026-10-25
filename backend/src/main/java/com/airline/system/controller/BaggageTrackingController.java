@@ -42,13 +42,7 @@ public class BaggageTrackingController {
 
         if (tracking == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(
-                            "Tracking Record Not Found",
-                            "No tracking record exists for Baggage ID "
-                                    + baggageID
-                                    + " and Tracking ID "
-                                    + trackingID + "."
-                    ));
+                    .body(new ApiError("Tracking Not Found", "Tracking record not found: " + trackingID + " for baggage " + baggageID));
         }
 
         return ResponseEntity.ok(tracking);
@@ -65,7 +59,7 @@ public class BaggageTrackingController {
     }
 
     @PutMapping("/{baggageID}/{trackingID}")
-    public ResponseEntity<String> updateTracking(
+    public ResponseEntity<?> updateTracking(
             @PathVariable String baggageID,
             @PathVariable String trackingID,
             @Valid @RequestBody BaggageTracking tracking) {
@@ -79,7 +73,7 @@ public class BaggageTrackingController {
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Tracking record not found");
+                    .body(new ApiError("Tracking Not Found", "Tracking record not found: " + trackingID + " for baggage " + baggageID));
         }
 
         return ResponseEntity.ok(
@@ -88,7 +82,7 @@ public class BaggageTrackingController {
     }
 
     @DeleteMapping("/{baggageID}/{trackingID}")
-    public ResponseEntity<String> deleteTracking(
+    public ResponseEntity<?> deleteTracking(
             @PathVariable String baggageID,
             @PathVariable String trackingID) {
 
@@ -100,7 +94,7 @@ public class BaggageTrackingController {
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Tracking record not found");
+                    .body(new ApiError("Tracking Not Found", "Tracking record not found: " + trackingID + " for baggage " + baggageID));
         }
 
         return ResponseEntity.ok(

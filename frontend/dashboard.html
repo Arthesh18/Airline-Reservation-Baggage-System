@@ -131,6 +131,7 @@
                 </div>
 
                 <div class="topbar-right">
+                    <span class="system-status">● API Online</span>
                     
 
                     
@@ -4150,6 +4151,45 @@ Tip: Ctrl + Enter to execute the query."></textarea>
     </div>
 
 </div>
+
+    <!-- =====================================================
+         DELETE CONFIRMATION MODAL
+    ====================================================== -->
+    <div id="delete-confirm-modal" class="modal-overlay" onclick="if (event.target === this) closeDeleteConfirmModal(false)">
+        <div class="modal delete-confirm-modal">
+            <div class="modal-header delete-modal-header">
+                <div>
+                    <h3 id="delete-confirm-title">Warning: Delete Record?</h3>
+                    <p id="delete-confirm-subtitle">Confirm permanent deletion</p>
+                </div>
+                <button type="button" class="modal-close" onclick="closeDeleteConfirmModal(false)">
+                    ×
+                </button>
+            </div>
+            <div class="delete-modal-body">
+                <p id="delete-confirm-message" class="delete-confirm-message">
+                    This action will permanently delete <strong id="delete-confirm-entity-name">record</strong> and the following related records, where applicable:
+                </p>
+                <ul id="delete-confirm-dependencies" class="delete-dependencies-list">
+                    <!-- Populated dynamically -->
+                </ul>
+                <div id="delete-confirm-warning-box" class="delete-warning-box" style="display: none;">
+                    <!-- Restriction details -->
+                </div>
+                <p class="delete-confirm-caution">
+                    This action cannot be undone. Do you want to continue?
+                </p>
+            </div>
+            <div class="modal-actions delete-modal-actions">
+                <button type="button" class="secondary-btn" id="delete-confirm-cancel-btn" onclick="closeDeleteConfirmModal(false)">
+                    Cancel
+                </button>
+                <button type="button" class="danger-btn" id="delete-confirm-proceed-btn" onclick="executePendingDelete()">
+                    Delete Permanently
+                </button>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
     <script src="dashboard-router.js"></script>
 </body>

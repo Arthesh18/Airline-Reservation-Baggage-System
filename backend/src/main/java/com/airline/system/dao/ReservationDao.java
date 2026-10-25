@@ -110,4 +110,9 @@ public class ReservationDao {
 
         return jdbcTemplate.update(sql, id);
     }
+
+    public List<String> findBaggageIdsByReservationId(String reservationId) {
+        String sql = "SELECT DISTINCT BaggageID FROM TICKET_BAGGAGE WHERE ReservationID = ?";
+        return jdbcTemplate.queryForList(sql, String.class, reservationId);
+    }
 }
