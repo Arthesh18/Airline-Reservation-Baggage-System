@@ -17,16 +17,13 @@ public class BaggageTrackingController {
 
     private final BaggageTrackingService baggageTrackingService;
 
-    public BaggageTrackingController(
-            BaggageTrackingService baggageTrackingService) {
+    public BaggageTrackingController(BaggageTrackingService baggageTrackingService) {
         this.baggageTrackingService = baggageTrackingService;
     }
 
     @GetMapping
     public ResponseEntity<List<BaggageTracking>> getAllTracking() {
-        return ResponseEntity.ok(
-                baggageTrackingService.getAllTracking()
-        );
+        return ResponseEntity.ok(baggageTrackingService.getAllTracking());
     }
 
     @GetMapping("/{baggageID}/{trackingID}")
@@ -34,11 +31,7 @@ public class BaggageTrackingController {
             @PathVariable String baggageID,
             @PathVariable String trackingID) {
 
-        BaggageTracking tracking =
-                baggageTrackingService.getTracking(
-                        baggageID,
-                        trackingID
-                );
+        BaggageTracking tracking = baggageTrackingService.getTracking(baggageID, trackingID);
 
         if (tracking == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -48,10 +41,18 @@ public class BaggageTrackingController {
         return ResponseEntity.ok(tracking);
     }
 
-    @PostMapping
-    public ResponseEntity<String> addTracking(
-            @Valid @RequestBody BaggageTracking tracking) {
+    /**
+     * Timeline endpoint for baggage journey tracking across checkpoints.
+     */
+    @GetMapping("/timeline/{baggageID}")
+    public ResponseEntity<List<BaggageTracking>> getBaggageTimeline(
+            @PathVariable String baggageID) {
 
+        return ResponseEntity.ok(baggageTrackingService.getBaggageTimeline(baggageID));
+    }
+
+    @PostMapping
+    public ResponseEntity<String> addTracking(@Valid @RequestBody BaggageTracking tracking) {
         baggageTrackingService.addTracking(tracking);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -64,21 +65,14 @@ public class BaggageTrackingController {
             @PathVariable String trackingID,
             @Valid @RequestBody BaggageTracking tracking) {
 
-        boolean updated =
-                baggageTrackingService.updateTracking(
-                        baggageID,
-                        trackingID,
-                        tracking
-                );
+        boolean updated = baggageTrackingService.updateTracking(baggageID, trackingID, tracking);
 
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiError("Tracking Not Found", "Tracking record not found: " + trackingID + " for baggage " + baggageID));
         }
 
-        return ResponseEntity.ok(
-                "Baggage tracking record updated successfully"
-        );
+        return ResponseEntity.ok("Baggage tracking record updated successfully");
     }
 
     @DeleteMapping("/{baggageID}/{trackingID}")
@@ -86,19 +80,13 @@ public class BaggageTrackingController {
             @PathVariable String baggageID,
             @PathVariable String trackingID) {
 
-        boolean deleted =
-                baggageTrackingService.deleteTracking(
-                        baggageID,
-                        trackingID
-                );
+        boolean deleted = baggageTrackingService.deleteTracking(baggageID, trackingID);
 
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiError("Tracking Not Found", "Tracking record not found: " + trackingID + " for baggage " + baggageID));
         }
 
-        return ResponseEntity.ok(
-                "Baggage tracking record deleted successfully"
-        );
+        return ResponseEntity.ok("Baggage tracking record deleted successfully");
     }
 }

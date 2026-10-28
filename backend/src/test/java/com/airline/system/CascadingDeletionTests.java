@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,6 +80,7 @@ class CascadingDeletionTests {
     @AfterEach
     void cleanTestData() {
         // Clean up in reverse dependency order
+        jdbcTemplate.update("DELETE FROM FLIGHT_STATUS_HISTORY WHERE FlightID = ?", TEST_FLIGHT);
         jdbcTemplate.update("DELETE FROM BAGGAGE_TRACKING WHERE TrackingID = ?", TEST_TRACKING_1);
         jdbcTemplate.update("DELETE FROM TICKET_BAGGAGE WHERE ReservationID IN (?, ?)", TEST_RES_1, TEST_RES_2);
         jdbcTemplate.update("DELETE FROM PAYMENT WHERE PaymentID = ?", TEST_PAYMENT_1);
@@ -111,9 +113,9 @@ class CascadingDeletionTests {
         passengerPhoneService.addPhone(new PassengerPhone(TEST_PASSENGER_1, TEST_PHONE_1));
         passengerPhoneService.addPhone(new PassengerPhone(TEST_PASSENGER_1, TEST_PHONE_2));
 
-        // 5. Baggage
+        // 5. Baggage & Baggage Tracking with TIMESTAMPTZ
         baggageService.addBaggage(new Baggage(TEST_BAGGAGE_1, 2, new BigDecimal("23.50")));
-        baggageTrackingService.addTracking(new BaggageTracking(TEST_BAGGAGE_1, TEST_TRACKING_1, "Security Scan", LocalTime.of(11, 0)));
+        baggageTrackingService.addTracking(new BaggageTracking(TEST_BAGGAGE_1, TEST_TRACKING_1, "Security Scan", OffsetDateTime.now()));
 
         // 6. Reservation for Passenger 1
         reservationService.addReservation(new Reservation(TEST_RES_1, TEST_PASSENGER_1, "Confirmed", "Economy",

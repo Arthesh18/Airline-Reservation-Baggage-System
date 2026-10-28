@@ -1,9 +1,13 @@
 package com.airline.system.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 public class BaggageTracking {
 
@@ -17,17 +21,29 @@ public class BaggageTracking {
     private String scanLocation;
 
     @NotNull(message = "Scan time is required")
-    private LocalTime scanTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private OffsetDateTime scanTime;
 
     public BaggageTracking() {
     }
 
     public BaggageTracking(String baggageID, String trackingID,
-                           String scanLocation, LocalTime scanTime) {
+                           String scanLocation, OffsetDateTime scanTime) {
         this.baggageID = baggageID;
         this.trackingID = trackingID;
         this.scanLocation = scanLocation;
-        this.scanTime = scanTime;
+        this.scanTime = scanTime != null ? scanTime : OffsetDateTime.now();
+    }
+
+    /**
+     * Backwards-compatible constructor converting LocalTime to OffsetDateTime with current date.
+     */
+    public BaggageTracking(String baggageID, String trackingID,
+                           String scanLocation, LocalTime scanTime) {
+        this(baggageID, trackingID, scanLocation,
+                scanTime != null
+                        ? scanTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toOffsetDateTime()
+                        : OffsetDateTime.now());
     }
 
     public String getBaggageID() {
@@ -54,11 +70,11 @@ public class BaggageTracking {
         this.scanLocation = scanLocation;
     }
 
-    public LocalTime getScanTime() {
+    public OffsetDateTime getScanTime() {
         return scanTime;
     }
 
-    public void setScanTime(LocalTime scanTime) {
+    public void setScanTime(OffsetDateTime scanTime) {
         this.scanTime = scanTime;
     }
 }

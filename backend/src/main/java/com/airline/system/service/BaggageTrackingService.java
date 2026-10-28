@@ -5,6 +5,7 @@ import com.airline.system.model.BaggageTracking;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -27,17 +28,26 @@ public class BaggageTrackingService {
         return baggageTrackingDao.findById(baggageID, trackingID);
     }
 
+    @Transactional(readOnly = true)
+    public BaggageTracking getTracking(String baggageID, String trackingID, OffsetDateTime scanTime) {
+        return baggageTrackingDao.findById(baggageID, trackingID, scanTime);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BaggageTracking> getBaggageTimeline(String baggageID) {
+        return baggageTrackingDao.findTimelineByBaggageId(baggageID);
+    }
+
     public void addTracking(BaggageTracking tracking) {
         baggageTrackingDao.save(tracking);
     }
 
-    public boolean updateTracking(String baggageID, String trackingID,
-                                  BaggageTracking tracking) {
-        return baggageTrackingDao.update(
-                baggageID,
-                trackingID,
-                tracking
-        ) > 0;
+    public boolean updateTracking(String baggageID, String trackingID, BaggageTracking tracking) {
+        return baggageTrackingDao.update(baggageID, trackingID, tracking) > 0;
+    }
+
+    public boolean updateTracking(String baggageID, String trackingID, OffsetDateTime scanTime, BaggageTracking tracking) {
+        return baggageTrackingDao.update(baggageID, trackingID, scanTime, tracking) > 0;
     }
 
     public boolean deleteTracking(String baggageID, String trackingID) {
@@ -51,9 +61,10 @@ public class BaggageTrackingService {
             return false;
         }
 
-        return baggageTrackingDao.delete(
-                baggageID,
-                trackingID
-        ) > 0;
+        return baggageTrackingDao.delete(baggageID, trackingID) > 0;
+    }
+
+    public boolean deleteTracking(String baggageID, String trackingID, OffsetDateTime scanTime) {
+        return baggageTrackingDao.delete(baggageID, trackingID, scanTime) > 0;
     }
 }
