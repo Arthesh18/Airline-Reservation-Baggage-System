@@ -6361,17 +6361,76 @@ function renderBaggageTrackingTable(data) {
 
 
 /* =========================
-   FORMAT TIME
+   FORMAT TRACKING TIMESTAMP
 ========================= */
 
 function formatTrackingTime(time) {
-
     if (!time) {
         return "";
     }
 
+    const d = new Date(time);
+    if (isNaN(d.getTime())) {
+        return String(time).replace("T", " ");
+    }
 
-    return String(time).substring(0, 5);
+    const pad = (n) => String(n).padStart(2, "0");
+    const year = d.getFullYear();
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const hours = pad(d.getHours());
+    const minutes = pad(d.getMinutes());
+    const seconds = pad(d.getSeconds());
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function formatDateTimeLocalInput(time) {
+    if (!time) {
+        return "";
+    }
+
+    const d = new Date(time);
+    if (isNaN(d.getTime())) {
+        return "";
+    }
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const year = d.getFullYear();
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const hours = pad(d.getHours());
+    const minutes = pad(d.getMinutes());
+    const seconds = pad(d.getSeconds());
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
+function toIsoWithLocalOffset(dateTimeLocalStr) {
+    if (!dateTimeLocalStr) {
+        return "";
+    }
+
+    const d = new Date(dateTimeLocalStr);
+    if (isNaN(d.getTime())) {
+        return dateTimeLocalStr;
+    }
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const year = d.getFullYear();
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const hours = pad(d.getHours());
+    const minutes = pad(d.getMinutes());
+    const seconds = pad(d.getSeconds());
+
+    const offsetMinutes = -d.getTimezoneOffset();
+    const sign = offsetMinutes >= 0 ? "+" : "-";
+    const absOffset = Math.abs(offsetMinutes);
+    const offsetHours = pad(Math.floor(absOffset / 60));
+    const offsetMins = pad(absOffset % 60);
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`;
 }
 
 
@@ -6428,6 +6487,14 @@ function filterBaggageTracking() {
             ||
 
             String(
+                record.scanTime
+            )
+            .toLowerCase()
+            .includes(search)
+
+            ||
+
+            formatTrackingTime(
                 record.scanTime
             )
             .toLowerCase()
@@ -6551,6 +6618,10 @@ async function openBaggageTrackingModal() {
         "baggage-tracking-form"
     ).reset();
 
+    document.getElementById(
+        "scanTime"
+    ).value = formatDateTimeLocalInput(new Date());
+
 
     document.getElementById(
         "trackingBaggageID"
@@ -6650,7 +6721,7 @@ async function openEditBaggageTracking(
     document.getElementById(
         "scanTime"
     ).value =
-        formatTrackingTime(
+        formatDateTimeLocalInput(
             record.scanTime
         );
 
@@ -6696,11 +6767,17 @@ async function saveBaggageTracking(event) {
     event.preventDefault();
 
 
-    const scanTime =
+    const rawScanTime =
         document.getElementById(
             "scanTime"
         ).value;
 
+    if (!rawScanTime) {
+        showToast("Please enter a valid scan date and time.", "error");
+        return;
+    }
+
+    const formattedScanTime = toIsoWithLocalOffset(rawScanTime);
 
     const tracking = {
 
@@ -6720,7 +6797,7 @@ async function saveBaggageTracking(event) {
             ).value.trim(),
 
         scanTime:
-            scanTime + ":00"
+            formattedScanTime
     };
 
 
@@ -11686,7 +11763,7 @@ const sqlTableDefinitions = {
             ["BaggageID", "VARCHAR(10)"],
             ["TrackingID", "VARCHAR(10)"],
             ["ScanLocation", "VARCHAR(100)"],
-            ["ScanTime", "TIME"]
+            ["ScanTime", "TIMESTAMPTZ"]
         ]
     },
 

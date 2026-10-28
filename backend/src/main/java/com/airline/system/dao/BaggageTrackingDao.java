@@ -5,9 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 @Repository
@@ -16,10 +14,7 @@ public class BaggageTrackingDao {
     private final JdbcTemplate jdbcTemplate;
 
     private final RowMapper<BaggageTracking> rowMapper = (rs, rowNum) -> {
-        Timestamp ts = rs.getTimestamp("ScanTime");
-        OffsetDateTime scanTime = ts != null
-                ? ts.toInstant().atOffset(ZoneOffset.UTC)
-                : null;
+        OffsetDateTime scanTime = rs.getObject("ScanTime", OffsetDateTime.class);
 
         return new BaggageTracking(
                 rs.getString("BaggageID"),
@@ -60,7 +55,7 @@ public class BaggageTrackingDao {
                 rowMapper,
                 baggageID,
                 trackingID,
-                scanTime != null ? Timestamp.from(scanTime.toInstant()) : null
+                scanTime
         );
 
         return records.isEmpty() ? null : records.get(0);
@@ -119,7 +114,7 @@ public class BaggageTrackingDao {
                 tracking.getBaggageID(),
                 tracking.getTrackingID(),
                 tracking.getScanLocation(),
-                Timestamp.from(scanTime.toInstant())
+                scanTime
         );
     }
 
@@ -140,19 +135,33 @@ public class BaggageTrackingDao {
         return jdbcTemplate.update(
                 sql,
                 tracking.getScanLocation(),
-                Timestamp.from(newScanTime.toInstant()),
+                newScanTime,
                 baggageID,
                 trackingID,
-                Timestamp.from(scanTime.toInstant())
+                scanTime
         );
     }
 
     public int update(String baggageID, String trackingID, BaggageTracking tracking) {
-        BaggageTracking existing = findById(baggageID, trackingID);
-        if (existing == null) {
-            return 0;
-        }
-        return update(baggageID, trackingID, existing.getScanTime(), tracking);
+        String sql = """
+                UPDATE BAGGAGE_TRACKING
+                SET ScanLocation = ?,
+                    ScanTime = ?
+                WHERE BaggageID = ?
+                  AND TrackingID = ?
+                """;
+
+        OffsetDateTime newScanTime = tracking.getScanTime() != null
+                ? tracking.getScanTime()
+                : OffsetDateTime.now();
+
+        return jdbcTemplate.update(
+                sql,
+                tracking.getScanLocation(),
+                newScanTime,
+                baggageID,
+                trackingID
+        );
     }
 
     public int delete(String baggageID, String trackingID, OffsetDateTime scanTime) {
@@ -167,7 +176,7 @@ public class BaggageTrackingDao {
                 sql,
                 baggageID,
                 trackingID,
-                Timestamp.from(scanTime.toInstant())
+                scanTime
         );
     }
 
