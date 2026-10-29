@@ -59,6 +59,21 @@ const sectionTitles = {
 
 function showSection(sectionId) {
 
+    const navigation =
+        document.querySelector(".dashboard-navigation");
+
+    if (navigation) {
+        navigation.classList.remove("open");
+    }
+
+    if (
+        sectionId === "flight-status-history" ||
+        sectionId === "flight_status_history"
+    ) {
+        openFlightStatusHistoryTable();
+        return;
+    }
+
     document.querySelectorAll(".content-section")
         .forEach(section =>
             section.classList.remove("active")
@@ -913,6 +928,10 @@ window.addEventListener("keydown", (e) => {
         const modal = document.getElementById("delete-confirm-modal");
         if (modal && (modal.classList.contains("show") || modal.classList.contains("active"))) {
             closeDeleteConfirmModal(false);
+        }
+        const sqlTableModal = document.getElementById("sql-table-modal");
+        if (sqlTableModal && (sqlTableModal.classList.contains("show") || sqlTableModal.classList.contains("active"))) {
+            closeSQLTableModal();
         }
     }
 });
@@ -8503,7 +8522,7 @@ function selectEERTable(tableName) {
 
         AIRLINES: ["FLIGHT"],
 
-        FLIGHT: ["AIRLINES"],
+        FLIGHT: ["AIRLINES", "FLIGHT_STATUS_HISTORY"],
 
         PASSENGER: [
             "RESERVATION",
@@ -8550,7 +8569,11 @@ function selectEERTable(tableName) {
             "PASSENGER"
         ],
 
-        EMPLOYEE: []
+        EMPLOYEE: [],
+
+        FLIGHT_STATUS_HISTORY: [
+            "FLIGHT"
+        ]
     };
 
 
@@ -8693,7 +8716,8 @@ const eerEntities = {
             "DepartureTime"
         ],
         relationships: [
-            "Operated by AIRLINES"
+            "Operated by AIRLINES",
+            "Has FLIGHT_STATUS_HISTORY"
         ],
         crudSection: "flights"
     },
@@ -8804,6 +8828,27 @@ const eerEntities = {
             "Tracks BAGGAGE"
         ],
         crudSection: "tracking"
+    },
+
+    FLIGHT_STATUS_HISTORY: {
+        title: "FLIGHT_STATUS_HISTORY",
+        type: "entity",
+        description: "Stores historical timeline of flight status transitions.",
+        table: "FLIGHT_STATUS_HISTORY",
+        pk: ["HistoryID"],
+        fk: ["FlightID"],
+        attributes: [
+            "HistoryID",
+            "FlightID",
+            "PreviousStatus",
+            "NewStatus",
+            "ChangeTimestamp",
+            "Remarks"
+        ],
+        relationships: [
+            "Belongs to FLIGHT"
+        ],
+        crudSection: null
     },
 
     DOMESTIC_PASSENGER: {
@@ -11783,6 +11828,18 @@ const sqlTableDefinitions = {
             ["PassengerID", "VARCHAR(10)"],
             ["Phone", "VARCHAR(20)"]
         ]
+    },
+
+    FLIGHT_STATUS_HISTORY: {
+        endpoint: "/flight-status-history",
+        columns: [
+            ["HistoryID", "BIGINT"],
+            ["FlightID", "VARCHAR(10)"],
+            ["PreviousStatus", "VARCHAR(30)"],
+            ["NewStatus", "VARCHAR(30)"],
+            ["ChangeTimestamp", "TIMESTAMPTZ"],
+            ["Remarks", "VARCHAR(255)"]
+        ]
     }
 };
 /* =========================================================
@@ -13470,11 +13527,11 @@ function renderSQLBuilderProcedural() {
             <div class="sql-builder-info">
 
                 <strong>
-                    MySQL Procedural SQL
+                    Procedural SQL
                 </strong>
 
                 <p>
-                    Build MySQL procedural constructs
+                    Build procedural SQL constructs
                     such as variables, conditions,
                     loops and stored procedures.
                 </p>
@@ -13562,11 +13619,11 @@ function renderSQLBuilderProcedural() {
         <div class="sql-builder-info">
 
             <strong>
-                MySQL Procedural SQL
+                Procedural SQL
             </strong>
 
             <p>
-                Build MySQL procedural constructs
+                Build procedural SQL constructs
                 such as variables, conditions,
                 loops and stored procedures.
             </p>
@@ -15332,36 +15389,42 @@ function initializeSQLConsole() {
 function populateSQLTables() {
 
     const container = document.getElementById("sql-table-list");
-
-    if (!container) {
-        return;
-    }
+    const dropdown = document.getElementById("sql-console-table-select");
 
     sqlTables = Object.keys(sqlTableDefinitions);
 
-    container.innerHTML = "";
+    if (container) {
+        container.innerHTML = "";
 
-    sqlTables.forEach(tableName => {
+        sqlTables.forEach(tableName => {
 
-        const button = document.createElement("button");
+            const button = document.createElement("button");
 
-        button.type = "button";
-        button.className = "sql-table-item";
+            button.type = "button";
+            button.className = "sql-table-item";
 
-        button.innerHTML = `
-            <span>
-                <i class="fa-solid fa-table"></i>
-                ${tableName}
-            </span>
-            <i class="fa-solid fa-chevron-right"></i>
-        `;
+            button.innerHTML = `
+                <span>
+                    <i class="fa-solid fa-table"></i>
+                    ${tableName}
+                </span>
+                <i class="fa-solid fa-chevron-right"></i>
+            `;
 
-        button.onclick = function () {
-            selectSQLTable(tableName, button);
-        };
+            button.onclick = function () {
+                selectSQLTable(tableName, button);
+            };
 
-        container.appendChild(button);
-    });
+            container.appendChild(button);
+        });
+    }
+
+    if (dropdown) {
+        dropdown.innerHTML = sqlTables.map(tableName => {
+            const selected = tableName === (sqlSelectedTable || "PASSENGER") ? "selected" : "";
+            return `<option value="${tableName}" ${selected}>${tableName}</option>`;
+        }).join("");
+    }
 
     const count = document.getElementById("sql-table-count");
 
@@ -15397,6 +15460,11 @@ function selectSQLTable(tableName, clickedButton = null) {
     }
 
     showSQLTableInfo(tableName);
+
+    const tableDropdown = document.getElementById("sql-console-table-select");
+    if (tableDropdown && tableDropdown.value !== tableName) {
+        tableDropdown.value = tableName;
+    }
 
     const editor = document.getElementById("sql-editor");
 
@@ -16002,6 +16070,25 @@ function showSQLStatus(type, message) {
    COMPLETE TABLE VIEWER
 ========================================================= */
 
+function formatSQLColumnHeader(column) {
+    if (!column) return "";
+    return column
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function openFlightStatusHistoryTable() {
+    const navigation =
+        document.querySelector(".dashboard-navigation");
+
+    if (navigation) {
+        navigation.classList.remove("open");
+    }
+
+    viewSQLCompleteTable("FLIGHT_STATUS_HISTORY");
+}
+
 async function viewSQLCompleteTable(tableName) {
 
     const definition =
@@ -16017,6 +16104,9 @@ async function viewSQLCompleteTable(tableName) {
     const title =
         document.getElementById("sql-table-modal-title");
 
+    const subtitle =
+        document.getElementById("sql-table-modal-subtitle");
+
     const content =
         document.getElementById("sql-table-modal-content");
 
@@ -16025,7 +16115,17 @@ async function viewSQLCompleteTable(tableName) {
     }
 
     if (title) {
-        title.textContent = tableName;
+        title.textContent =
+            tableName === "FLIGHT_STATUS_HISTORY"
+                ? "Flight Status History"
+                : tableName;
+    }
+
+    if (subtitle) {
+        subtitle.textContent =
+            tableName === "FLIGHT_STATUS_HISTORY"
+                ? "Complete flight status transition history"
+                : "Complete table data";
     }
 
     content.innerHTML = `
@@ -16101,7 +16201,7 @@ function renderSQLModalTable(rows) {
     columns.forEach(column => {
 
         headerHTML += `
-            <th>${escapeSQLHTML(column)}</th>
+            <th>${escapeSQLHTML(formatSQLColumnHeader(column))}</th>
         `;
 
     });
@@ -16118,6 +16218,14 @@ function renderSQLModalTable(rows) {
 
             if (value === null || value === undefined) {
                 value = "NULL";
+            } else if (
+                typeof value === "string" &&
+                /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value)
+            ) {
+                value =
+                    typeof formatTrackingTime === "function"
+                        ? formatTrackingTime(value)
+                        : value.replace("T", " ");
             }
 
             bodyHTML += `
@@ -16159,6 +16267,10 @@ function closeSQLTableModal() {
         modal.classList.remove("show");
     }
 }
+
+window.openFlightStatusHistoryTable = openFlightStatusHistoryTable;
+window.viewSQLCompleteTable = viewSQLCompleteTable;
+window.closeSQLTableModal = closeSQLTableModal;
 
 
 /* =========================================================

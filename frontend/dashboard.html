@@ -226,6 +226,11 @@
             Passenger Phones
         </button>
 
+        <button type="button" onclick="openFlightStatusHistoryTable()">
+            <span>⏱</span>
+            Flight Status History
+        </button>
+
 
         
     </div>
@@ -2721,7 +2726,7 @@
             <div class="eer-stat-icon">▦</div>
             <div>
                 <span>Tables</span>
-                <strong>12</strong>
+                <strong>13</strong>
             </div>
         </div>
 
@@ -2729,7 +2734,7 @@
             <div class="eer-stat-icon">🔗</div>
             <div>
                 <span>Relationships</span>
-                <strong>11</strong>
+                <strong>12</strong>
             </div>
         </div>
 
@@ -2745,7 +2750,7 @@
             <div class="eer-stat-icon">↔</div>
             <div>
                 <span>Foreign Keys</span>
-                <strong>11</strong>
+                <strong>12</strong>
             </div>
         </div>
 
@@ -3207,6 +3212,47 @@
             </div>
 
 
+            <!-- FLIGHT STATUS HISTORY -->
+
+            <div
+                class="eer-table"
+                data-table="FLIGHT_STATUS_HISTORY"
+                onclick="selectEERTable('FLIGHT_STATUS_HISTORY')">
+
+                <div class="eer-table-header">
+                    <span>⏱</span>
+                    FLIGHT_STATUS_HISTORY
+                </div>
+
+                <div class="eer-field pk-field">
+                    <span class="key-icon">PK</span>
+                    HistoryID
+                </div>
+
+                <div class="eer-field">
+                    FlightID
+                    <span class="fk-mini">FK</span>
+                </div>
+
+                <div class="eer-field">
+                    PreviousStatus
+                </div>
+
+                <div class="eer-field">
+                    NewStatus
+                </div>
+
+                <div class="eer-field">
+                    ChangeTimestamp
+                </div>
+
+                <div class="eer-field">
+                    Remarks
+                </div>
+
+            </div>
+
+
             <!-- RELATIONSHIP INFORMATION -->
 
             <div class="eer-relationship-info">
@@ -3264,6 +3310,12 @@
                         <strong>PASSENGER → PASSENGER_PHONE</strong>
                         <span>1 : N</span>
                         <p>A passenger can have multiple phone numbers.</p>
+                    </div>
+
+                    <div class="eer-relationship">
+                        <strong>FLIGHT → FLIGHT_STATUS_HISTORY</strong>
+                        <span>1 : N</span>
+                        <p>One flight can have multiple status change events.</p>
                     </div>
 
                 </div>
@@ -3600,6 +3652,19 @@
         </div>
 
         <div class="sql-toolbar-right">
+
+            <div class="sql-table-dropdown-wrapper">
+                <label for="sql-console-table-select">
+                    <i class="fa-solid fa-table"></i>
+                    Table:
+                </label>
+                <select
+                    id="sql-console-table-select"
+                    class="sql-table-select"
+                    onchange="selectSQLTable(this.value)">
+                    <option value="">Select Table</option>
+                </select>
+            </div>
 
             <button
                 type="button"
@@ -3972,57 +4037,6 @@ Tip: Ctrl + Enter to execute the query."></textarea>
     </div>
 
 
-    <!-- =====================================================
-         VIEW TABLE MODAL
-    ====================================================== -->
-
-    <div
-        id="sql-table-modal"
-        class="modal-overlay">
-
-        <div class="modal sql-table-modal">
-
-            <div class="modal-header">
-
-                <div>
-
-                    <h3 id="sql-table-modal-title">
-                        Table
-                    </h3>
-
-                    <p id="sql-table-modal-subtitle">
-                        Complete table data
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    onclick="closeSQLTableModal()">
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-            </div>
-
-
-            <div
-                id="sql-table-modal-content"
-                class="sql-table-modal-content">
-
-                <div class="loading-state">
-                    Loading table...
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
 
     <!-- =====================================================
          QUERY HISTORY PANEL
@@ -4154,6 +4168,57 @@ Tip: Ctrl + Enter to execute the query."></textarea>
 </div>
 
     <!-- =====================================================
+         VIEW TABLE MODAL
+    ====================================================== -->
+    <div
+        id="sql-table-modal"
+        class="modal-overlay"
+        onclick="if (event.target === this) closeSQLTableModal()">
+
+        <div class="modal sql-table-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h3 id="sql-table-modal-title">
+                        Table
+                    </h3>
+
+                    <p id="sql-table-modal-subtitle">
+                        Complete table data
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeSQLTableModal()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="sql-table-modal-content"
+                class="sql-table-modal-content">
+
+                <div class="loading-state">
+                    Loading table...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
          DELETE CONFIRMATION MODAL
     ====================================================== -->
     <div id="delete-confirm-modal" class="modal-overlay" onclick="if (event.target === this) closeDeleteConfirmModal(false)">
@@ -4191,7 +4256,7 @@ Tip: Ctrl + Enter to execute the query."></textarea>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
-    <script src="dashboard-router.js"></script>
+    <script src="script.js?v=2026102902"></script>
+    <script src="dashboard-router.js?v=2026102902"></script>
 </body>
 </html>

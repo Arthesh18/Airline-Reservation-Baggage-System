@@ -79,6 +79,19 @@
 
 
         if (
+            hash === "flight-status-history" ||
+            hash === "flight_status_history"
+        ) {
+            if (typeof window.openFlightStatusHistoryTable === "function") {
+                window.openFlightStatusHistoryTable();
+            } else if (typeof window.viewSQLCompleteTable === "function") {
+                window.viewSQLCompleteTable("FLIGHT_STATUS_HISTORY");
+            }
+            return;
+        }
+
+
+        if (
             validSections.includes(hash)
         ) {
 

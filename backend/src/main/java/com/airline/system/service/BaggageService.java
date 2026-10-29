@@ -45,7 +45,7 @@ public class BaggageService {
             return false;
         }
 
-        // MySQL cascades deletion to BAGGAGE_TRACKING and TICKET_BAGGAGE
+        // PostgreSQL cascades deletion to BAGGAGE_TRACKING and TICKET_BAGGAGE
         return baggageDao.delete(id) > 0;
     }
 }

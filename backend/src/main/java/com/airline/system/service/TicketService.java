@@ -64,7 +64,7 @@ public class TicketService {
         // Identify baggage items linked to this ticket
         List<String> baggageIds = ticketDao.findBaggageIdsByTicket(reservationID, ticketNo);
 
-        // Delete ticket: MySQL cascades to payment and ticket_baggage
+        // Delete ticket: PostgreSQL cascades to payment and ticket_baggage
         ticketDao.delete(reservationID, ticketNo);
 
         // Clean up orphaned baggage and their tracking records

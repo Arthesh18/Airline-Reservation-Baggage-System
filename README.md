@@ -4,7 +4,7 @@
 
 > **Course:** Database Management Systems (DA-2 Project)
 > **Institution:** Vellore Institute of Technology, B.Tech CSE
-> **Focus:** Relational database design, normalization, and REST API engineering on top of a rigorously modeled MySQL schema.
+> **Focus:** Relational database design, normalization, and REST API engineering on top of a rigorously modeled PostgreSQL/TimescaleDB schema.
 > **Live Demo:** [https://airline-reservation-frontend-8bns.onrender.com](https://airline-reservation-frontend-8bns.onrender.com)
 ---
 
@@ -39,6 +39,7 @@ The domain was first modeled as an Enhanced Entity-Relationship diagram capturin
   - `Baggage` and `BaggageTracking` — baggage items and their multi-scan tracking history, keyed on `(baggageID, trackingID)`
   - `TicketBaggage` — the many-to-many link between tickets and checked baggage, keyed on `(reservationID, ticketNo, baggageID)`
   - `Payment` — tied to a specific `Reservation`/`Ticket` pair
+  - `FlightStatusHistory` — tracks historical flight status transitions and audit logs tied to `Flight`
 
 ### 2.2 Relational Schema Mapping
 The EER model was mapped to relational tables following standard mapping rules: strong entities became base relations with single-attribute or composite primary keys; multivalued attributes (e.g., passenger phone numbers) were extracted into their own relations rather than being denormalized into repeating columns; and many-to-many relationships (e.g., tickets ↔ baggage) were resolved into bridge/associative relations carrying composite primary keys built from the foreign keys of the participating entities.
@@ -68,7 +69,7 @@ A dedicated `SqlController` (`/api/sql/**`) exposes ad-hoc query execution, live
 | Backend Framework | **Java 25**, **Spring Boot 4.1.1** (Spring Web MVC) |
 | Build & Dependency Management | **Apache Maven**, with the Maven Wrapper (`mvnw` / `mvnw.cmd`) |
 | Data Access | **Spring JDBC (`JdbcTemplate`)** — direct, parameterized SQL (no JPA/Hibernate abstraction) |
-| Database | **MySQL** (via `mysql-connector-j`), connection pooled with **HikariCP** |
+| Database | **TimescaleDB / PostgreSQL** (via org.postgresql:postgresql), connection pooled with **HikariCP** |
 | Validation | Spring Boot Starter Validation |
 | Frontend | **Vanilla HTML5, CSS3, and JavaScript** (no frontend framework) |
 | Dev Tooling | Spring Boot DevTools (hot reload) |
@@ -92,7 +93,7 @@ A dedicated `SqlController` (`/api/sql/**`) exposes ad-hoc query execution, live
     ▼
 ┌─────────────────────────────────────────────┐
 │                  DATABASE                    │
-│       MySQL — schema: airline_system         │
+│       TimescaleDB / PostgreSQL                 │
 └─────────────────────────────────────────────┘
 ```
 
@@ -226,7 +227,7 @@ The **frontend dashboard** (`dashboard.html` + `script.js` + `dashboard-router.j
 
 ### Prerequisites
 - **JDK 25** (or later, matching `pom.xml`'s `<java.version>`)
-- **MySQL Server 8.0+**
+- **TimescaleDB / PostgreSQL 14+** (Timescale Cloud or local PostgreSQL with TimescaleDB extension)
 - Maven is *not* required to be installed separately — the project ships the **Maven Wrapper** (`mvnw`)
 
 ### 5.1 Clone the repository
@@ -238,7 +239,7 @@ cd Airline-Reservation-Baggage-System
 
 ### 5.2 Provision the database
 
-Create the schema and an application user in MySQL, matching the credentials expected by `backend/src/main/resources/application.properties` (adjust as needed):
+Execute database/schema_timescale.sql and database/sample_data.sql against your TimescaleDB database:
 
 ```sql
 CREATE DATABASE airline_system;
@@ -247,17 +248,17 @@ GRANT ALL PRIVILEGES ON airline_system.* TO 'airline_app'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-Then create the tables (`Airline`, `Airport`, `Flight`, `Passenger`, `PassengerPhone`, `Reservation`, `Ticket`, `Baggage`, `BaggageTracking`, `TicketBaggage`, `Payment`, `Employee`) according to the BCNF-normalized schema described in Section 2, with primary/foreign keys matching the field names used in the DAO layer (e.g., `FlightID`, `AirlineID`, `DepartureTime` for `FLIGHT`). Once the backend is running, the built-in **SQL Console** (`/api/sql/execute`) can also be used to run and verify DDL directly against the connected database.
+Then create the tables (`Airline`, `Airport`, `Flight`, `Passenger`, `PassengerPhone`, `Reservation`, `Ticket`, `Baggage`, `BaggageTracking`, `TicketBaggage`, `Payment`, `Employee`, `FlightStatusHistory`) according to the BCNF-normalized schema described in Section 2, with primary/foreign keys matching the field names used in the DAO layer (e.g., `FlightID`, `AirlineID`, `DepartureTime` for `FLIGHT`). Once the backend is running, the built-in **SQL Console** (`/api/sql/execute`) can also be used to run and verify DDL directly against the connected database.
 
 ### 5.3 Configure the connection
 
 Update `backend/src/main/resources/application.properties` with your local database credentials:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/airline_system?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
-spring.datasource.username=airline_app
-spring.datasource.password=your_password_here
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:postgresql://:/?sslmode=
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.driver-class-name=org.postgresql.Driver
 ```
 
 > ⚠️ **Note:** Do not commit real credentials. Prefer environment variables or a local `.env`/`application-local.properties` override that is excluded via `.gitignore`.
@@ -316,8 +317,8 @@ The application is deployed to the cloud with the frontend, backend, and databas
 - **Docker** – Containerizes the Spring Boot backend for deployment.
 - **Java 25 + Spring Boot** – Backend REST API.
 - **Maven** – Builds and manages the Java project.
-- **JDBC + JdbcTemplate** – Connects the backend to MySQL and executes SQL queries.
-- **Aiven MySQL** – Cloud-hosted production database.
+- **JDBC + JdbcTemplate** – Connects the backend to PostgreSQL/TimescaleDB and executes SQL queries.
+- **Timescale Cloud** – Cloud-hosted TimescaleDB PostgreSQL database.
 - **Environment Variables** – Stores database connection details securely.
 - **CORS** – Allows communication between the separately deployed frontend and backend.
 - **REST API** – Connects the HTML/CSS/JavaScript frontend with the Java backend.
@@ -331,7 +332,7 @@ Render Frontend
    ↓ REST API
 Render Backend (Docker + Spring Boot)
    ↓ JDBC
-Aiven MySQL
+Timescale Cloud
 ```
 ## Repository Structure
 

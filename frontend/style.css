@@ -4493,6 +4493,34 @@ nav {
     gap: 8px;
 }
 
+.sql-table-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #ffffff;
+    border: 1px solid #dbe3ee;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.sql-table-dropdown-wrapper i {
+    color: #64748b;
+}
+
+.sql-table-select {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    cursor: pointer;
+    font-family: inherit;
+}
+
 .sql-tool-btn,
 .sql-history-btn {
     border: 1px solid #dbe3ee;

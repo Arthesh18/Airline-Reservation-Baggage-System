@@ -23,13 +23,14 @@ public class FlightDao {
                 ORDER BY FlightID
                 """;
 
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
-                new Flight(
-                        rs.getString("FlightID"),
-                        rs.getString("AirlineID"),
-                        rs.getTime("DepartureTime").toLocalTime()
-                )
-        );
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            java.sql.Time depTime = rs.getTime("DepartureTime");
+            return new Flight(
+                    rs.getString("FlightID"),
+                    rs.getString("AirlineID"),
+                    depTime != null ? depTime.toLocalTime() : null
+            );
+        });
     }
 
     public Flight findById(String id) {
@@ -40,12 +41,14 @@ public class FlightDao {
                 WHERE FlightID = ?
                 """;
 
-        List<Flight> flights = jdbcTemplate.query(sql, (rs, rowNum) ->
-                new Flight(
-                        rs.getString("FlightID"),
-                        rs.getString("AirlineID"),
-                        rs.getTime("DepartureTime").toLocalTime()
-                ), id);
+        List<Flight> flights = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            java.sql.Time depTime = rs.getTime("DepartureTime");
+            return new Flight(
+                    rs.getString("FlightID"),
+                    rs.getString("AirlineID"),
+                    depTime != null ? depTime.toLocalTime() : null
+            );
+        }, id);
 
         return flights.isEmpty() ? null : flights.get(0);
     }
