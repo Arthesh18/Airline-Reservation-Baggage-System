@@ -125,6 +125,20 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    // Static resource not found (returns 404 instead of 500)
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ApiError> handleNoResourceFound(
+            org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+
+        logger.debug("Static resource not found: {}", ex.getResourcePath());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(
+                        "Not Found",
+                        "The requested resource was not found: " + ex.getResourcePath()
+                ));
+    }
+
     // Unexpected errors
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneralError(Exception ex) {

@@ -1,5 +1,10 @@
 const AIRTRACK_API =
-    "http://localhost:8080/api";
+    (window.location.protocol === "file:" ||
+     ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") &&
+      window.location.port !== "" &&
+      window.location.port !== "8080"))
+        ? "http://localhost:8080/api"
+        : "/api";
 
 
 /* =========================================================

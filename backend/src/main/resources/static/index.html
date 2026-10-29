@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        AirTrack | Airport Operations
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="airport-home.css">
+</head>
+
+
+<body>
+
+    <div class="airport-home">
+
+
+        <!-- =====================================================
+             TOP NAVIGATION
+        ====================================================== -->
+
+        <header class="airport-topbar">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>
+                        AIRTRACK
+                    </strong>
+
+                    <span>
+                        AIRPORT OPERATIONS
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="live-status">
+
+                    <span class="live-dot"></span>
+
+                    SYSTEM ONLINE
+
+                </div>
+                <button
+    class="home-dashboard-button"
+    type="button"
+    onclick="window.location.href='dashboard.html'">
+
+    <span>Enter Dashboard</span>
+    <span>→</span>
+
+</button>
+
+                <button
+                    class="team-button"
+                    type="button"
+                    onclick="showTeam()">
+
+                    👥
+
+                    <span>
+                        Team
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
+
+        <main>
+
+
+            <section class="hero">
+
+                <div class="hero-background">
+
+                    <div class="hero-grid"></div>
+
+                    <div class="hero-glow glow-one"></div>
+
+                    <div class="hero-glow glow-two"></div>
+
+                </div>
+
+
+                <div class="hero-content">
+
+
+                    <div class="hero-label">
+
+                        <span class="live-dot"></span>
+
+                        AIRLINE RESERVATION &
+                        BAGGAGE TRACKING SYSTEM
+
+                    </div>
+
+
+                    <h1>
+
+                        Welcome to
+                        <span>AirTrack</span>
+
+                    </h1>
+
+
+                    <p>
+
+                        Explore the airport.
+                        Manage operations.
+                        Control the database.
+
+                    </p>
+
+
+
+                    <!-- =================================================
+                         GLOBAL SEARCH
+                    ================================================== -->
+
+                    <div class="main-search">
+
+                        <span class="search-symbol">
+                            ⌕
+                        </span>
+
+                        <input
+                            id="airport-search"
+                            type="text"
+                            placeholder="Search passengers, flights, tickets, baggage, reservations..."
+                            autocomplete="off">
+
+                        <kbd>
+                            CTRL K
+                        </kbd>
+
+                    </div>
+
+
+                    <div
+                        id="search-results"
+                        class="search-results">
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 AIRPORT ENVIRONMENT
+            ====================================================== -->
+
+            <section class="airport-scene">
+
+
+                <div class="scene-header">
+
+                    <div>
+
+                        <span>
+                            TERMINAL MAP
+                        </span>
+
+                        <h2>
+                            Airport Operations Center
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        class="dashboard-button"
+                        onclick="enterDashboard()">
+
+                        Enter Dashboard
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TERMINAL
+                ================================================== -->
+
+                <div class="terminal">
+
+
+                    <!-- TOP TERMINAL -->
+
+                    <div class="terminal-top">
+
+
+                        <!-- DEPARTURE BOARD -->
+
+                        <div
+                            class="terminal-card departure-board"
+                            onclick="openModule('flights')">
+
+                            <div class="card-heading">
+
+                                <div>
+
+                                    <span>
+                                        DEPARTURES
+                                    </span>
+
+                                    <h3>
+                                        Flight Information
+                                    </h3>
+
+                                </div>
+
+                                <b>
+                                    ✈
+                                </b>
+
+                            </div>
+
+
+                            <div class="flight-header">
+
+                                <span>
+                                    FLIGHT
+                                </span>
+
+                                <span>
+                                    TIME
+                                </span>
+
+                                <span>
+                                    AIRLINE
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                id="flight-list"
+                                class="flight-list">
+
+                                <div class="loading">
+                                    Loading...
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PASSENGER CHECK-IN -->
+
+                        <div
+                            class="terminal-card checkin"
+                            onclick="openModule('passengers')">
+
+                            <span class="card-number">
+                                01
+                            </span>
+
+                            <div class="big-icon">
+                                👥
+                            </div>
+
+                            <span class="card-label">
+                                CHECK-IN
+                            </span>
+
+                            <h3>
+                                Passenger Area
+                            </h3>
+
+                            <p>
+                                Passenger records,
+                                contact information
+                                and bookings.
+                            </p>
+
+                            <span class="open-arrow">
+                                Open →
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- RESERVATION -->
+
+                        <div
+                            class="terminal-card reservation"
+                            onclick="openModule('reservations')">
+
+                            <span class="card-number">
+                                02
+                            </span>
+
+                            <div class="big-icon">
+                                ▣
+                            </div>
+
+                            <span class="card-label">
+                                BOOKING
+                            </span>
+
+                            <h3>
+                                Reservation Desk
+                            </h3>
+
+                            <p>
+                                Manage passenger
+                                flight reservations.
+                            </p>
+
+                            <span class="open-arrow">
+                                Open →
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         MIDDLE TERMINAL
+                    ================================================== -->
+
+                    <div class="terminal-middle">
+
+
+                        <!-- TICKET -->
+
+                        <div
+                            class="station ticket-station"
+                            onclick="openModule('tickets')">
+
+                            <div class="station-top">
+
+                                <span>
+                                    TICKET COUNTER
+                                </span>
+
+                                <i></i>
+
+                            </div>
+
+
+                            <div class="station-content">
+
+                                <div class="station-icon">
+                                    🎫
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        TICKETING
+                                    </span>
+
+                                    <h3>
+                                        Ticket Counter
+                                    </h3>
+
+                                    <p>
+                                        Issue and manage
+                                        passenger tickets.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- AIRCRAFT -->
+
+                        <div
+                            class="aircraft"
+                            onclick="openModule('flights')">
+
+                            <div class="runway">
+
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+
+                            </div>
+
+
+                            <div class="plane">
+
+                                ✈
+
+                            </div>
+
+
+                            <span>
+                                FLIGHT OPERATIONS
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- PAYMENT -->
+
+                        <div
+                            class="station payment-station"
+                            onclick="openModule('payments')">
+
+                            <div class="station-content">
+
+                                <div class="station-icon">
+                                    ₹
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        CHECKOUT
+                                    </span>
+
+                                    <h3>
+                                        Payment Desk
+                                    </h3>
+
+                                    <p>
+                                        View ticket
+                                        transactions.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         BAGGAGE TERMINAL
+                    ================================================== -->
+
+                    <div class="terminal-bottom">
+
+
+                        <!-- BAGGAGE -->
+
+                        <div
+                            class="terminal-card baggage"
+                            onclick="openModule('baggage')">
+
+                            <div class="card-heading">
+
+                                <div>
+
+                                    <span>
+                                        TERMINAL B
+                                    </span>
+
+                                    <h3>
+                                        Baggage Conveyor
+                                    </h3>
+
+                                </div>
+
+                                <b>
+                                    🧳
+                                </b>
+
+                            </div>
+
+
+                            <div class="conveyor">
+
+                                <div class="bags">
+
+                                    <span>🧳</span>
+                                    <span>👜</span>
+                                    <span>🧳</span>
+                                    <span>🧳</span>
+                                    <span>👜</span>
+
+                                </div>
+
+                                <div class="belt"></div>
+
+                            </div>
+
+
+                            <div class="baggage-footer">
+
+                                <span>
+                                    Checked baggage
+                                </span>
+
+                                <button
+                                    onclick="event.stopPropagation(); openModule('tracking')">
+
+                                    Track baggage →
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- AIRPORT -->
+
+                        <div
+                            class="terminal-card airport-info"
+                            onclick="openModule('airports')">
+
+                            <div class="building">
+
+                                <span>
+                                    ⌖
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    INFORMATION
+                                </span>
+
+                                <h3>
+                                    Airport Control
+                                </h3>
+
+                                <p>
+                                    Airports, destinations
+                                    and terminals.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- AIRLINE -->
+
+                        <div
+                            class="terminal-card airline-info"
+                            onclick="openModule('airlines')">
+
+                            <div class="airline-symbol">
+                                A
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    AIRLINE SERVICES
+                                </span>
+
+                                <h3>
+                                    Airline Counters
+                                </h3>
+
+                                <p>
+                                    Airlines and IATA
+                                    identification.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- STAFF -->
+
+                        <div
+                            class="terminal-card staff-info"
+                            onclick="openModule('employees')">
+
+                            <div class="staff-symbol">
+                                ◉
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    STAFF ONLY
+                                </span>
+
+                                <h3>
+                                    Operations Staff
+                                </h3>
+
+                                <p>
+                                    Employee and
+                                    operations records.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         DATABASE CONNECTION HUB
+                    ================================================== -->
+
+                    <div class="database-hub">
+
+                        <div class="hub-line"></div>
+
+                        <div class="hub-circle">
+
+                            <strong>
+                                DB
+                            </strong>
+
+                            <small>
+                                TIMESCALE
+                            </small>
+
+                        </div>
+
+                        <div class="hub-label">
+                            DATABASE CENTER
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         RELATIONSHIP STRIP
+                    ================================================== -->
+
+                    <div class="relationship-strip">
+
+
+                        <button
+                            onclick="openModule('ticket-baggage')">
+
+                            🎫
+
+                            <span>
+                                TICKET
+                            </span>
+
+                            ↔
+
+                            🧳
+
+                            <span>
+                                BAGGAGE
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            onclick="openModule('passenger-phones')">
+
+                            ☎
+
+                            Passenger Contacts
+
+                        </button>
+
+
+                        <button
+                            onclick="openModule('relationships')">
+
+                            ◇
+
+                            Database Schema
+
+                        </button>
+
+
+                        <button
+                            onclick="openModule('eer-diagram')">
+
+                            ◇
+
+                            EER Diagram
+
+                        </button>
+
+
+                        <button
+                            onclick="openModule('sql')">
+
+                            ▤
+
+                            SQL Console
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================================
+                 LIVE DATABASE SUMMARY
+            ====================================================== -->
+
+            <section class="database-summary">
+
+
+                <div class="summary-heading">
+
+                    <div>
+
+                        <span>
+                            LIVE DATABASE
+                        </span>
+
+                        <h2>
+                            System Overview
+                        </h2>
+
+                    </div>
+
+                    <p>
+                        Data loaded directly from
+                        the AirTrack backend
+                    </p>
+
+                </div>
+
+
+                <div class="summary-grid">
+
+
+                    <div class="summary-card">
+
+                        <span>👥</span>
+
+                        <strong id="count-passengers">
+                            —
+                        </strong>
+
+                        <small>
+                            PASSENGERS
+                        </small>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <span>▣</span>
+
+                        <strong id="count-reservations">
+                            —
+                        </strong>
+
+                        <small>
+                            RESERVATIONS
+                        </small>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <span>✈</span>
+
+                        <strong id="count-flights">
+                            —
+                        </strong>
+
+                        <small>
+                            FLIGHTS
+                        </small>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <span>🎫</span>
+
+                        <strong id="count-tickets">
+                            —
+                        </strong>
+
+                        <small>
+                            TICKETS
+                        </small>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <span>🧳</span>
+
+                        <strong id="count-baggage">
+                            —
+                        </strong>
+
+                        <small>
+                            BAGGAGE
+                        </small>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <span>⌖</span>
+
+                        <strong id="count-airports">
+                            —
+                        </strong>
+
+                        <small>
+                            AIRPORTS
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+
+        <!-- =====================================================
+             TEAM POPUP
+        ====================================================== -->
+
+        <div
+            id="team-popup"
+            class="team-popup">
+
+            <button
+                onclick="closeTeam()"
+                class="popup-close">
+
+                ×
+
+            </button>
+
+            <span>
+                PROJECT TEAM
+            </span>
+
+            <h3>
+                AirTrack
+            </h3>
+
+            <div class="team-member">
+                <b>AR</b>
+                Arthesh
+            </div>
+
+            <div class="team-member">
+                <b>PA</b>
+                Parth
+            </div>
+
+            <div class="team-member">
+                <b>TH</b>
+                Tharshitha
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <script src="airport-home.js"></script>
+
+</body>
+
+</html>

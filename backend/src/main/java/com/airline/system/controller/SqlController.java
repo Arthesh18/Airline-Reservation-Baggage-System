@@ -8,11 +8,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/sql")
-@CrossOrigin(origins = {
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
-        "https://airline-reservation-frontend-8bns.onrender.com"
-})
+@CrossOrigin(origins = "*")
 public class SqlController {
 
     private final JdbcTemplate jdbcTemplate;
